@@ -39,4 +39,4 @@ jobs:
             docker pull  ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest
             docker stop news-sumary || true
             docker rm news-sumary || true
-            docker run -d -p 3000:3000 --name news-sumary  ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest
+            docker run -d -p 3000:3000 --name news-sumary -e PORT=3000  ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest

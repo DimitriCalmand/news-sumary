@@ -1,5 +1,6 @@
 from flask import Flask, render_template_string
 import sqlite3
+import os
 
 app = Flask(__name__)
 
@@ -48,4 +49,4 @@ def index():
     return render_template_string(TEMPLATE, articles=articles)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=os.environ.get("PORT", 3000), debug=True)
