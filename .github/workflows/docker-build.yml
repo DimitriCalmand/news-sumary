@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build, Push and Deploy Docker Image
 
 on:
   push:
@@ -13,21 +13,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Connexion à DockerHub (ou GitHub Container Registry)
+      # 2. Connexion à Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 3. Build et Push
-      - name: Build and push Docker image
+      # 3. Configurer Docker Buildx pour multi-arch
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # 4. Build et Push multi-architecture
+      - name: Build and push multi-arch Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest
 
+      # 5. Déploiement sur Raspberry Pi via SSH
       - name: Deploy to Raspberry Pi
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -36,7 +42,10 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
           script: |
-            docker pull  ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest
             docker stop news-sumary || true
             docker rm news-sumary || true
-            docker run -d -p 3000:3000 --name news-sumary -e PORT=3000  ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest
+            docker run -d -p 3000:3000 --name news-sumary \
+              -e PORT=3000 \
+              -e DEBUG=False \
+              ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest

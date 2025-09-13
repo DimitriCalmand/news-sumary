@@ -12,8 +12,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY src/ ./src
 
 # Définit la variable d'environnement Flask
-ENV PORT=5000
-
+ENV PORT=80
+ENV DEBUG=True
 ENV FLASK_APP=src/app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=$PORT
