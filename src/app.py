@@ -15,7 +15,7 @@ TEMPLATE = """
 </head>
 <body class="bg-light">
     <div class="container py-4">
-        <h1 class="mb-4">📰 Mes articles collectés</h1>
+        <h1 class="mb-4">📰 Mes articles collecté</h1>
         {% if articles %}
             <div class="list-group">
                 {% for a in articles %}
@@ -51,4 +51,5 @@ def index():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     debug = os.environ.get("DEBUG", "True").lower() in ("true", "1", "yes")
-    app.run(host="0.0.0.0", port=port, debug=debug)
+    print(f"Starting server on port {port} with debug={debug}")
+    app.run(host="0.0.0.0", port=port, debug=True)

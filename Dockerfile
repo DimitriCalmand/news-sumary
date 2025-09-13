@@ -22,4 +22,4 @@ ENV FLASK_RUN_PORT=$PORT
 EXPOSE $PORT
 
 # Commande de lancement
-CMD ["flask", "run"]
+CMD ["python","-u","src/app.py"]
