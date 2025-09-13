@@ -1,0 +1,42 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Récupération du code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Connexion à DockerHub (ou GitHub Container Registry)
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 3. Build et Push
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest
+
+      - name: Deploy to Raspberry Pi
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.PI_HOST }}
+          username: ${{ secrets.PI_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: 22
+          script: |
+            docker pull  ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest
+            docker stop news-sumary || true
+            docker rm news-sumary || true
+            docker run -d -p 3000:3000 --name news-sumary  ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest
