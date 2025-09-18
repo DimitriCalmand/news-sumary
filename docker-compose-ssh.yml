@@ -2,12 +2,12 @@ version: '3.8'
 
 services:
   backend:
-    image: votre_nom_utilisateur_dockerhub/news-backend:latest
+    image: dimitriEpita/news-backend:latest
     networks:
       - app-network
 
   frontend:
-    image: votre_nom_utilisateur_dockerhub/news-frontend:latest
+    image: dimitriEpita/news-frontend:latest
     ports:
       - "3000:8000"
     networks:
