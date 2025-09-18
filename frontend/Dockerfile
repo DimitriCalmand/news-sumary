@@ -7,8 +7,10 @@ WORKDIR /app
 RUN pip install --upgrade pip
 # Installe les dépendances
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install flask
+RUN pip install streamlit
 
+ENV API_URL="http://backend:8000/api/articles"
 # Copie le code source
 COPY src/ ./src
 
