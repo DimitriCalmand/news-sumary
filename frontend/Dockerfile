@@ -4,6 +4,7 @@ FROM python:3.11-slim
 # Crée un répertoire pour l'app
 WORKDIR /app
 
+RUN pip install --upgrade pip
 # Installe les dépendances
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
