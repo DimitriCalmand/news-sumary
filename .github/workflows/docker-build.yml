@@ -25,16 +25,35 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       # 4. Build et Push multi-architecture
-      - name: Build and push multi-arch Docker image
+      - name: Build and push frontend Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./frontend  # Specify the path to your frontend Dockerfile
           push: true
           platforms: linux/amd64,linux/arm/v7,linux/arm64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/news-frontend:latest
 
-      # 5. Déploiement sur Raspberry Pi via SSH
-      - name: Deploy to Raspberry Pi
+      - name: Build and push backend Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend  # Specify the path to your backend Dockerfile
+          push: true
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/news-backend:latest
+
+        # 5. Copier le fichier docker-compose.yml
+      - name: Copy docker-compose.yml to Raspberry Pi
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.PI_HOST }}
+          username: ${{ secrets.PI_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: 22
+          source: "./docker-compose-ssh.yml" # Assurez-vous que le chemin est correct depuis la racine du dépôt
+          target: "/Disk/Programmation/Intern/News-sumary" # Chemin de destination sur la Raspberry Pi
+
+      # 6. Déploiement sur Raspberry Pi via SSH
+      - name: Deploy with docker-compose
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.PI_HOST }}
@@ -42,10 +61,18 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
           script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest
-            docker stop news-sumary || true
-            docker rm news-sumary || true
-            docker run -d -p 3000:3000 --name news-sumary \
-              -e PORT=3000 \
-              -e DEBUG=False \
-              ${{ secrets.DOCKERHUB_USERNAME }}/news-sumary:latest
+            echo "Navigating to the directory with docker-compose.yml..."
+            # Allez dans le répertoire où vous avez copié le fichier
+            cd /Disk/Programmation/Intern/News-sumary
+            
+            echo "Pulling the latest images..."
+
+            # Spécifiez le nom du fichier avec l'option -f
+            docker-compose -f docker-compose-ssh.yml pull
+            
+            echo "Bringing up the containers with docker-compose..."
+            # Spécifiez le nom du fichier avec l'option -f
+            docker-compose -f docker-compose-ssh.yml up -d --build
+            
+            echo "Deployment complete!"
+

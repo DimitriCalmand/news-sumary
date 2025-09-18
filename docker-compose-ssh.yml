@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  backend:
+    image: votre_nom_utilisateur_dockerhub/news-backend:latest
+    networks:
+      - app-network
+
+  frontend:
+    image: votre_nom_utilisateur_dockerhub/news-frontend:latest
+    ports:
+      - "3000:8000"
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
+networks:
+  app-network:
+    driver: bridge
