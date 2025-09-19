@@ -1,0 +1,34 @@
+{
+  "models": [
+    {
+      "name": "gemini 1.5 flash (Do not use)",
+      "id": "gemini-1.5-flash",
+      "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+      "apikey": "AIzaSyAGWlLpot8bwSMH1YoWYaOv8zqPhjx9Vi8",
+      "llm": "gemini"
+
+
+    },
+    {
+      "name": "ministral 3B",
+      "id": "ministral-3b-2410",
+      "url": "https://api.mistral.ai/v1/chat/completions",
+      "apikey": "OzIUxs4rWrgEI4jglLLVYJzwtBsdshJL",
+      "llm": "mistral"
+    },
+    {
+      "name": "mistral small",
+      "id": "mistral-small-2501",
+      "url": "https://api.mistral.ai/v1/chat/completions",
+      "apikey": "OzIUxs4rWrgEI4jglLLVYJzwtBsdshJL",
+      "llm": "mistral"
+    },
+    {
+      "name": "deep seek v3",
+      "id": "deepseek-chat",
+      "url": "https://api.deepseek.com/chat/completions",
+      "apikey": "sk-6060f1b2ef87432e8b157fd178c557d7",
+      "llm": "deepseek"
+    }
+  ]
+}

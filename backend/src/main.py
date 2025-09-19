@@ -1,114 +1,103 @@
-import requests
-from bs4 import BeautifulSoup
-import json
-import time
-import os
-import threading
-from flask import Flask, jsonify
+"""
+News Summary Backend - Main Application Entry Point
 
-JSON_FILE = "./data/articles_seen.json"
-app = Flask(__name__)
-articles_cache = []  # Cache en mémoire pour les articles
+A Flask-based backend service that scrapes TechCrunch AI articles
+and provides a REST API for accessing them.
 
-def get_title_and_links():
-    url = "https://techcrunch.com/category/artificial-intelligence/"
-    classe_des_titres = "loop-card__title"
-    titres = []
-    liens = []
+Features:
+- Automatic article scraping from TechCrunch AI category
+- In-memory caching for better performance
+- RESTful API with pagination support
+- Article pretreatment status tracking
+- Health monitoring endpoints
+
+Architecture:
+- config.py: Configuration constants and settings
+- models.py: Data models and article management
+- cache.py: In-memory caching system
+- scraper.py: TechCrunch scraping functionality
+- routes.py: Flask API routes and endpoints
+- main.py: Application initialization and startup
+"""
+
+from flask import Flask
+from flask_cors import CORS
+
+# Import our modular components
+from config import CORS_ORIGINS, get_port, DEBUG_LOGGING
+from routes import register_routes
+from scraper import start_scraper
+from cache import article_cache
+
+
+def create_app():
+    """Create and configure the Flask application"""
+    app = Flask(__name__)
+    
+    # Configure CORS for frontend communication
+    CORS(app, origins=CORS_ORIGINS)
+    
+    # Register all API routes
+    register_routes(app)
+    
+    if DEBUG_LOGGING:
+        print("[MAIN] Flask application created and configured")
+    
+    return app
+
+
+def initialize_services():
+    """Initialize all background services"""
     try:
-        reponse = requests.get(url)
-        reponse.raise_for_status()
-        soup = BeautifulSoup(reponse.text, 'html.parser')
-        titres_et_liens = soup.find_all(class_=classe_des_titres)
-        if titres_et_liens:
-            for element in titres_et_liens:
-                lien = element.find('a')
-                if lien and 'href' in lien.attrs:
-                    titre_texte = element.text.strip()
-                    lien_href = lien['href']
-                    titres.append(titre_texte)
-                    liens.append(lien_href)
-            return titres, liens
-        else:
-            return [], []
-    except requests.exceptions.RequestException as e:
-        print(f"Erreur lors de la requête HTTP: {e}")
-        return [], []
+        # Initialize the article cache
+        article_cache.get_articles(force_refresh=True)
+        if DEBUG_LOGGING:
+            print("[MAIN] Article cache initialized")
+        
+        # Start the background scraping service
+        start_scraper()
+        if DEBUG_LOGGING:
+            print("[MAIN] Background scraping service started")
+            
+    except Exception as e:
+        if DEBUG_LOGGING:
+            print(f"[MAIN] Error initializing services: {e}")
+        raise
 
-def get_article_content(url):
-    classe_paragraphe = "wp-block-paragraph"
-    res = ""
+
+def main():
+    """Main application entry point"""
     try:
-        reponse = requests.get(url)
-        reponse.raise_for_status()
-        soup = BeautifulSoup(reponse.text, 'html.parser')
-        paragraphes = soup.find_all('p', class_=classe_paragraphe)
-        if paragraphes:
-            for para in paragraphes:
-                res += para.text.strip() + "\n"
-                res += "-" * 20 + "\n"
-        else:
-            res += f"Aucun paragraphe avec la classe '{classe_paragraphe}' n'a été trouvé sur cette page."
-        return res
-    except requests.exceptions.RequestException as e:
-        print(f"Erreur lors de la requête HTTP : {e}")
-        return f"Erreur lors de la requête HTTP : {e}"
-
-def load_seen_articles():
-    if os.path.exists(JSON_FILE):
-        with open(JSON_FILE, "r", encoding="utf-8") as f:
-            try:
-                return json.load(f)
-            except Exception:
-                return []
-    return []
-
-def save_seen_articles(articles):
-    with open(JSON_FILE, "w", encoding="utf-8") as f:
-        json.dump(articles, f, ensure_ascii=False, indent=2)
-
-def scraper_loop():
-    global articles_cache
-    print("Démarrage du thread de scraping...")
-    while True:
-        seen_articles = load_seen_articles()
-        seen_titles = {a["title"] for a in seen_articles}
-        titres, liens = get_title_and_links()
-        new_articles = []
-        for titre, lien in zip(titres, liens):
-            if titre not in seen_titles:
-                contenu = get_article_content(lien)
-                article = {
-                    "title": titre,
-                    "url": lien,
-                    "content": contenu
-                }
-                seen_articles.append(article)
-                new_articles.append(article)
+        # Create Flask application
+        app = create_app()
         
-        if new_articles:
-            print(f"{len(new_articles)} nouvel(s) article(s) trouvé(s) et ajouté(s) au fichier JSON.")
-            save_seen_articles(seen_articles)
-        else:
-            print("Aucun nouvel article trouvé.")
+        # Initialize all services
+        initialize_services()
         
-        # Mettre à jour le cache en mémoire pour l'API
-        articles_cache = seen_articles
+        # Get configuration
+        port = get_port()
         
-        print("Attente de 30 minutes avant la prochaine vérification...")
-        time.sleep(1800)
+        if DEBUG_LOGGING:
+            print(f"[MAIN] Starting News Summary Backend on port {port}")
+            print(f"[MAIN] Health check: http://localhost:{port}/health")
+            print(f"[MAIN] API documentation: http://localhost:{port}/api/")
+        
+        # Start the Flask application
+        app.run(
+            host='0.0.0.0',
+            port=port,
+            debug=False,  # Disable Flask debug mode in production
+            threaded=True  # Enable multi-threading
+        )
+        
+    except KeyboardInterrupt:
+        if DEBUG_LOGGING:
+            print("\n[MAIN] Shutting down gracefully...")
+    except Exception as e:
+        if DEBUG_LOGGING:
+            print(f"[MAIN] Fatal error: {e}")
+        raise
 
-@app.route('/api/articles', methods=['GET'])
-def get_articles():
-    with open(JSON_FILE, "r", encoding="utf-8") as f:
-        articles = json.load(f)
-    return jsonify(articles)
-
-def start_scraper():
-    scraper_thread = threading.Thread(target=scraper_loop, daemon=True)
-    scraper_thread.start()
 
 if __name__ == "__main__":
-    start_scraper()
-    articles_cache = load_seen_articles()
-    app.run(host='0.0.0.0', port=8000)
+    main()

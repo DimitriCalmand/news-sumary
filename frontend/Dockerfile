@@ -1,25 +1,33 @@
-# Image Python légère
-FROM python:3.11-slim
+# Étape 1: Build de l'application React
+FROM node:20-alpine AS build
 
-# Crée un répertoire pour l'app
+# Définit le répertoire de travail
 WORKDIR /app
 
-# Upgrade pip and install build dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libffi-dev \
-    python3-dev \
-    && rm -rf /var/lib/apt/lists/*
+# Copie les fichiers de configuration des dépendances
+COPY package.json package-lock.json* ./
 
-RUN pip install --upgrade pip
-
-# Installe les dépendances
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-ENV API_URL="http://backend:8000/api/articles"
+# Nettoie le cache npm et installe les dépendances
+RUN npm cache clean --force && \
+    npm install
 
 # Copie le code source
-COPY src/ ./src
+COPY . .
 
-CMD ["streamlit", "run", "src/app.py", "--server.port", "8000", "--server.address", "0.0.0.0"]
+# Build l'application pour la production
+RUN npm run build
+
+# Étape 2: Serveur Nginx pour servir l'application
+FROM nginx:alpine
+
+# Copie les fichiers buildés depuis l'étape précédente
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copie la configuration Nginx personnalisée
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose le port 80
+EXPOSE 80
+
+# Démarre Nginx
+CMD ["nginx", "-g", "daemon off;"]
