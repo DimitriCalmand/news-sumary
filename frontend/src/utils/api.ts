@@ -35,4 +35,44 @@ export const newsApi = {
     const response = await api.get('unpretreat');
     return response.data;
   },
+
+  // Update article rating
+  updateRating: async (id: number, rating: number): Promise<void> => {
+    await api.put(`articles/${id}/rating`, { rating });
+  },
+
+  // Add reading time to article
+  addReadingTime: async (id: number, seconds: number): Promise<void> => {
+    await api.post(`articles/${id}/reading-time`, { seconds });
+  },
+
+  // Update article comments
+  updateComments: async (id: number, comments: string): Promise<void> => {
+    await api.put(`articles/${id}/comments`, { comments });
+  },
+
+  // Update article tags
+  updateTags: async (id: number, tags: string[]): Promise<void> => {
+    await api.put(`articles/${id}/tags`, { tags });
+  },
+
+  // Get all available tags
+  getAllTags: async (): Promise<string[]> => {
+    const response = await api.get('tags');
+    return response.data.tags;
+  },
+
+  // Filter articles by tags and/or rating
+  filterArticles: async (filters: { tags?: string[]; min_rating?: number }): Promise<Article[]> => {
+    const params = new URLSearchParams();
+    if (filters.tags) {
+      filters.tags.forEach(tag => params.append('tags', tag));
+    }
+    if (filters.min_rating) {
+      params.append('min_rating', filters.min_rating.toString());
+    }
+
+    const response = await api.get(`articles/filter?${params}`);
+    return response.data;
+  },
 };

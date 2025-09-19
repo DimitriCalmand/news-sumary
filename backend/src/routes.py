@@ -216,6 +216,181 @@ def refresh_cache():
         return jsonify({"error": f"Error refreshing cache: {str(e)}"}), 500
 
 
+@api_bp.route('/articles/<int:article_id>/rating', methods=['PUT'])
+def update_article_rating(article_id: int):
+    """Update article rating (1-5 stars)"""
+    start_time = time.time()
+    log_request("update_article_rating", start_time, article_id=article_id)
+    
+    try:
+        data = request.get_json()
+        if not data or 'rating' not in data:
+            return jsonify({"error": "Rating is required"}), 400
+        
+        rating = data['rating']
+        if not isinstance(rating, int) or not 1 <= rating <= 5:
+            return jsonify({"error": "Rating must be an integer between 1 and 5"}), 400
+        
+        success = ArticleManager.update_article_rating(article_id, rating)
+        if success:
+            # Clear cache to ensure fresh data
+            article_cache.clear_cache()
+            log_response("update_article_rating", start_time, article_id=article_id, rating=rating)
+            return jsonify({"message": "Rating updated successfully", "rating": rating})
+        else:
+            return jsonify({"error": "Article not found"}), 404
+    
+    except Exception as e:
+        log_response("update_article_rating", start_time, status="error", error=str(e))
+        return jsonify({"error": f"Error updating rating: {str(e)}"}), 500
+
+
+@api_bp.route('/articles/<int:article_id>/reading-time', methods=['POST'])
+def add_reading_time(article_id: int):
+    """Add reading time to article (cumulative)"""
+    start_time = time.time()
+    log_request("add_reading_time", start_time, article_id=article_id)
+    
+    try:
+        data = request.get_json()
+        if not data or 'seconds' not in data:
+            return jsonify({"error": "Seconds is required"}), 400
+        
+        seconds = data['seconds']
+        if not isinstance(seconds, int) or seconds < 0:
+            return jsonify({"error": "Seconds must be a positive integer"}), 400
+        print(seconds)
+        success = ArticleManager.add_reading_time(article_id, seconds)
+        if success:
+            # Clear cache to ensure fresh data
+            article_cache.clear_cache()
+            log_response("add_reading_time", start_time, article_id=article_id, seconds=seconds)
+            return jsonify({"message": "Reading time added successfully", "seconds_added": seconds})
+        else:
+            return jsonify({"error": "Article not found"}), 404
+    
+    except Exception as e:
+        log_response("add_reading_time", start_time, status="error", error=str(e))
+        return jsonify({"error": f"Error adding reading time: {str(e)}"}), 500
+
+
+@api_bp.route('/articles/<int:article_id>/comments', methods=['PUT'])
+def update_article_comments(article_id: int):
+    """Update article comments"""
+    start_time = time.time()
+    log_request("update_article_comments", start_time, article_id=article_id)
+    
+    try:
+        data = request.get_json()
+        if not data or 'comments' not in data:
+            return jsonify({"error": "Comments is required"}), 400
+        
+        comments = data['comments']
+        if not isinstance(comments, str):
+            return jsonify({"error": "Comments must be a string"}), 400
+        
+        success = ArticleManager.update_article_comments(article_id, comments)
+        if success:
+            # Clear cache to ensure fresh data
+            article_cache.clear_cache()
+            log_response("update_article_comments", start_time, article_id=article_id)
+            return jsonify({"message": "Comments updated successfully", "comments": comments})
+        else:
+            return jsonify({"error": "Article not found"}), 404
+    
+    except Exception as e:
+        log_response("update_article_comments", start_time, status="error", error=str(e))
+        return jsonify({"error": f"Error updating comments: {str(e)}"}), 500
+
+
+@api_bp.route('/articles/<int:article_id>/tags', methods=['PUT'])
+def update_article_tags(article_id: int):
+    """Update article tags"""
+    start_time = time.time()
+    log_request("update_article_tags", start_time, article_id=article_id)
+    
+    try:
+        data = request.get_json()
+        if not data or 'tags' not in data:
+            return jsonify({"error": "Tags is required"}), 400
+        
+        tags = data['tags']
+        if not isinstance(tags, list) or not all(isinstance(tag, str) for tag in tags):
+            return jsonify({"error": "Tags must be a list of strings"}), 400
+        
+        success = ArticleManager.update_article_tags(article_id, tags)
+        if success:
+            # Clear cache to ensure fresh data
+            article_cache.clear_cache()
+            log_response("update_article_tags", start_time, article_id=article_id, tags=tags)
+            return jsonify({"message": "Tags updated successfully", "tags": tags})
+        else:
+            return jsonify({"error": "Article not found"}), 404
+    
+    except Exception as e:
+        log_response("update_article_tags", start_time, status="error", error=str(e))
+        return jsonify({"error": f"Error updating tags: {str(e)}"}), 500
+
+
+@api_bp.route('/tags', methods=['GET'])
+def get_all_tags():
+    """Get all unique tags from all articles"""
+    start_time = time.time()
+    log_request("get_all_tags", start_time)
+    
+    try:
+        tags = ArticleManager.get_all_tags()
+        log_response("get_all_tags", start_time, tag_count=len(tags))
+        return jsonify({"tags": tags})
+    
+    except Exception as e:
+        log_response("get_all_tags", start_time, status="error", error=str(e))
+        return jsonify({"error": f"Error getting tags: {str(e)}"}), 500
+
+
+@api_bp.route('/articles/filter', methods=['GET'])
+def filter_articles():
+    """Filter articles by tags and/or rating"""
+    start_time = time.time()
+    
+    tags = request.args.getlist('tags')  # Permet plusieurs tags: ?tags=tech&tags=ai
+    min_rating = request.args.get('min_rating', type=int)
+    
+    log_request("filter_articles", start_time, tags=tags, min_rating=min_rating)
+    
+    try:
+        articles = ArticleManager.load_articles()
+        
+        # Filter by tags if provided
+        if tags:
+            filtered_by_tags = []
+            for article in articles:
+                article_tags = article.get("tags", [])
+                if any(tag in article_tags for tag in tags):
+                    filtered_by_tags.append(article)
+            articles = filtered_by_tags
+        
+        # Filter by rating if provided
+        if min_rating is not None:
+            filtered_by_rating = []
+            for article in articles:
+                rating = article.get("rating")
+                if rating is not None and rating >= min_rating:
+                    filtered_by_rating.append(article)
+            articles = filtered_by_rating
+        
+        # Add IDs to articles
+        for i, article in enumerate(articles):
+            article["id"] = i
+        
+        log_response("filter_articles", start_time, article_count=len(articles))
+        return jsonify(articles)
+    
+    except Exception as e:
+        log_response("filter_articles", start_time, status="error", error=str(e))
+        return jsonify({"error": f"Error filtering articles: {str(e)}"}), 500
+
+
 def register_routes(app):
     """Register all API routes with the Flask app"""
     app.register_blueprint(api_bp)

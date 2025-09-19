@@ -1,11 +1,11 @@
 {
   "models": [
     {
-      "name": "gemini 1.5 flash (Do not use)",
-      "id": "gemini-1.5-flash",
-      "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
-      "apikey": "AIzaSyAGWlLpot8bwSMH1YoWYaOv8zqPhjx9Vi8",
-      "llm": "gemini"
+      "name": "magistral small",
+      "id": "magistral-small-latest",
+      "url": "https://api.mistral.ai/v1/chat/completions",
+      "apikey": "S07zd26zbUzcgqb8NJpOWWPE7XenV8Am",
+      "llm": "mistral"
     },
     {
       "name": "ministral 3B",

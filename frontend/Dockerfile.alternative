@@ -1,0 +1,44 @@
+# Alternative Dockerfile for problematic builds
+# This version uses a different approach to handle Rollup native dependencies
+FROM node:20-bullseye-slim AS build
+
+# Install system dependencies required for native builds
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    build-essential \
+    g++ \
+    make \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install dependencies with specific flags to handle native modules
+RUN npm ci --only=production=false --ignore-engines --force && \
+    npm rebuild && \
+    npm cache clean --force
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
+
+# Production stage
+FROM nginx:alpine
+
+# Copy built files
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

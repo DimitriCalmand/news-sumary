@@ -1,16 +1,31 @@
-import { newsApi } from '../utils/api';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, ExternalLink, RefreshCw } from 'lucide-react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { newsApi } from '../utils/api';
+import { AutoReadingTimer } from './AutoReadingTimer';
+import { CommentsEditor } from './CommentsEditor';
 import { LoadingSpinner } from './LoadingSpinner';
 import { MarkdownRenderer } from './MarkdownRenderer';
+import { StarRating } from './StarRating';
+import { TagsEditor } from './TagsEditor';
 import { Button } from './ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 
 export function ArticleDetail() {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const articleId = id ? parseInt(id, 10) : 0;
+
+  console.log('ArticleDetail - URL id:', id, 'parsed articleId:', articleId);
+
+  // Force refresh when articleId changes
+  useEffect(() => {
+    if (articleId) {
+      console.log('Invalidating queries for articleId:', articleId);
+      queryClient.invalidateQueries({ queryKey: ['article'] });
+    }
+  }, [articleId, queryClient]);
 
   const {
     data: article,
@@ -21,8 +36,54 @@ export function ArticleDetail() {
     queryKey: ['article', articleId],
     queryFn: () => newsApi.getArticle(articleId),
     enabled: !!articleId,
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 0, // Toujours refetch
+    refetchOnMount: true,
   });
+
+  const handleRatingUpdate = async (rating: number) => {
+    if (!article) return;
+    try {
+      await newsApi.updateRating(articleId, rating);
+      // Invalider le cache pour recharger les données
+      queryClient.invalidateQueries({ queryKey: ['article', articleId] });
+      queryClient.invalidateQueries({ queryKey: ['articles'] });
+    } catch (error) {
+      console.error('Error updating rating:', error);
+    }
+  };
+
+  const handleReadingTimeUpdate = async (timeSpent: number) => {
+    if (!article) return;
+    try {
+      await newsApi.addReadingTime(articleId, timeSpent);
+      // Note: Pas besoin d'invalider le cache ici car on met à jour en continu
+    } catch (error) {
+      console.error('Error updating reading time:', error);
+    }
+  };
+
+  const handleCommentsUpdate = async (comments: string) => {
+    if (!article) return;
+    try {
+      await newsApi.updateComments(articleId, comments);
+      // Invalider le cache pour recharger les données
+      queryClient.invalidateQueries({ queryKey: ['article', articleId] });
+    } catch (error) {
+      console.error('Error updating comments:', error);
+    }
+  };
+
+  const handleTagsUpdate = async (tags: string[]) => {
+    if (!article) return;
+    try {
+      await newsApi.updateTags(articleId, tags);
+      // Invalider le cache pour recharger les données
+      queryClient.invalidateQueries({ queryKey: ['article', articleId] });
+      queryClient.invalidateQueries({ queryKey: ['articles'] });
+    } catch (error) {
+      console.error('Error updating tags:', error);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -41,7 +102,7 @@ export function ArticleDetail() {
       <div className="min-h-screen bg-slate-50 p-4">
         <div className="max-w-4xl mx-auto">
           <div className="mb-6">
-            <Button variant="outline" onClick={() => navigate('/')} className="gap-2">
+            <Button variant="outline" onClick={() => window.location.href = '/'} className="gap-2">
               <ArrowLeft className="h-4 w-4" />
               Retour à la liste
             </Button>
@@ -56,9 +117,9 @@ export function ArticleDetail() {
                 <RefreshCw className="h-4 w-4" />
                 Réessayer
               </Button>
-              <Link to="/">
-                <Button>Retour à la liste</Button>
-              </Link>
+              <Button onClick={() => window.location.href = '/'}>
+                Retour à la liste
+              </Button>
             </div>
           </div>
         </div>
@@ -71,7 +132,7 @@ export function ArticleDetail() {
       <div className="max-w-4xl mx-auto">
         {/* Navigation */}
         <div className="mb-6">
-          <Button variant="outline" onClick={() => navigate('/')} className="gap-2">
+          <Button variant="outline" onClick={() => window.location.href = '/'} className="gap-2">
             <ArrowLeft className="h-4 w-4" />
             Retour à la liste
           </Button>
@@ -111,9 +172,68 @@ export function ArticleDetail() {
           </CardContent>
         </Card>
 
+        {/* Article Management */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {/* Rating */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Évaluation</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div>
+                <h4 className="text-sm font-medium text-slate-700 mb-3">Noter cet article</h4>
+                <StarRating
+                  rating={article.rating || 0}
+                  onRatingChange={handleRatingUpdate}
+                  size="lg"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Auto Reading Timer */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Temps de lecture</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AutoReadingTimer
+                initialTime={article.time_spent || 0}
+                onTimeUpdate={handleReadingTimeUpdate}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Tags */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Tags</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <TagsEditor
+                initialTags={article.tags || []}
+                onTagsChange={handleTagsUpdate}
+              />
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Comments */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="text-lg">Mes commentaires</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CommentsEditor
+              initialComments={article.comments || ''}
+              onSave={handleCommentsUpdate}
+            />
+          </CardContent>
+        </Card>
+
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3 sm:justify-between">
-          <Button variant="outline" onClick={() => navigate('/')} className="gap-2">
+          <Button variant="outline" onClick={() => window.location.href = '/'} className="gap-2">
             <ArrowLeft className="h-4 w-4" />
             Retour à la liste
           </Button>

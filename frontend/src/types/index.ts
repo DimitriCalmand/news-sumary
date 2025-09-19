@@ -4,6 +4,10 @@ export interface Article {
   url: string;
   content: string;
   has_been_pretreat: boolean;
+  rating?: number; // 1-5 stars
+  time_spent: number; // seconds
+  comments: string;
+  tags: string[];
 }
 
 export interface ArticleTitle {
@@ -11,6 +15,9 @@ export interface ArticleTitle {
   title: string;
   url: string;
   has_been_pretreat: boolean;
+  rating?: number;
+  time_spent: number;
+  tags: string[];
 }
 
 export interface PaginationInfo {
@@ -28,4 +35,30 @@ export interface TitlesResponse {
 export interface ArticlesResponse {
   articles: Article[];
   pagination: PaginationInfo;
+}
+
+// Types pour les nouvelles API
+export interface RatingUpdate {
+  rating: number; // 1-5
+}
+
+export interface ReadingTimeUpdate {
+  seconds: number;
+}
+
+export interface CommentsUpdate {
+  comments: string;
+}
+
+export interface TagsUpdate {
+  tags: string[];
+}
+
+export interface TagsResponse {
+  tags: string[];
+}
+
+export interface FilterParams {
+  tags?: string[];
+  min_rating?: number;
 }
