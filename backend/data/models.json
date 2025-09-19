@@ -16,7 +16,7 @@
     },
     {
       "name": "mistral small",
-      "id": "mistral-small-2501",
+      "id": "mistral-small-latest",
       "url": "https://api.mistral.ai/v1/chat/completions",
       "apikey": "S07zd26zbUzcgqb8NJpOWWPE7XenV8Am",
       "llm": "mistral"

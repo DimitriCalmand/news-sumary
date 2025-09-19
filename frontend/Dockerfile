@@ -9,7 +9,8 @@ COPY package.json package-lock.json* ./
 
 # Nettoie le cache npm et installe les dépendances
 RUN npm cache clean --force && \
-    npm install
+    rm -rf node_modules package-lock.json && \
+    npm install --no-optional --prefer-offline
 
 # Copie le code source
 COPY . .

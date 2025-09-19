@@ -27,6 +27,10 @@ DEFAULT_PORT = 3001
 DEBUG_LOGGING = True
 FLASK_DEBUG = True  # Active le hot reload en développement
 
+# AI  model settings
+MODEL_CONFIG_FILE = "./data/models.json"
+PROMPT_MESSAGE = "Tu vas recevoir un article.\n1) Fais un résumé clair et concis au début.\n2) Réécris ensuite l'article en ajoutant des emojis pertinents, en mettant en **gras** certains mots, et en structurant le texte avec des sections et titres si nécessaire, sans modifier le contenu ni l'ordre des idées.\n3) Ne renvoie rien d'autre que le résumé suivi du nouvel article, sans ajouter de message ou commentaire hors du texte."
+
 def get_port():
     """Get the port from environment variable or use default"""
     return int(os.getenv("PORT", DEFAULT_PORT))

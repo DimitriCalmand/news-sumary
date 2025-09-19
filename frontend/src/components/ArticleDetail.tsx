@@ -1,8 +1,9 @@
-import { newsApi } from '@/utils/api';
+import { newsApi } from '../utils/api';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, ExternalLink, RefreshCw } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { LoadingSpinner } from './LoadingSpinner';
+import { MarkdownRenderer } from './MarkdownRenderer';
 import { Button } from './ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 
@@ -103,15 +104,10 @@ export function ArticleDetail() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="prose prose-slate max-w-none">
-              {article.content.split('\n').map((paragraph, index) => (
-                paragraph.trim() && (
-                  <p key={index} className="mb-4 text-slate-700 leading-relaxed">
-                    {paragraph}
-                  </p>
-                )
-              ))}
-            </div>
+            <MarkdownRenderer
+              content={article.content}
+              className="min-h-0"
+            />
           </CardContent>
         </Card>
 

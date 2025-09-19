@@ -1,5 +1,5 @@
-import type { ArticleTitle } from '@/types';
-import { newsApi } from '@/utils/api';
+import type { ArticleTitle } from '../types';
+import { newsApi } from '../utils/api';
 import { useQuery } from '@tanstack/react-query';
 import { ExternalLink, RefreshCw } from 'lucide-react';
 import { useState } from 'react';

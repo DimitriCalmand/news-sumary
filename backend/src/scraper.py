@@ -186,7 +186,7 @@ class ScrapingService:
                 # Wait before next iteration
                 if DEBUG_LOGGING:
                     print(f"[SCRAPING_SERVICE] Waiting {SCRAPING_INTERVAL} seconds before next check...")
-                ai.pretreat_articles(new_articles)
+                ai.pretreat_articles()
                 # Sleep in small chunks to allow for graceful shutdown
                 for _ in range(SCRAPING_INTERVAL):
                     if not self.running:
