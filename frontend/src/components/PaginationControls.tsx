@@ -1,6 +1,6 @@
-import { cn } from '../lib/utils';
-import { Button } from './ui/Button';
+import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from './ui/Button';
 
 interface PaginationControlsProps {
   currentPage: number;
@@ -18,7 +18,7 @@ export function PaginationControls({
   className
 }: PaginationControlsProps) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  
+
   const handlePrevious = () => {
     if (currentPage > 1) {
       onPageChange(currentPage - 1);
@@ -39,7 +39,7 @@ export function PaginationControls({
   const getPageNumbers = () => {
     const pages = [];
     const maxVisible = 5;
-    
+
     if (totalPages <= maxVisible) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
@@ -47,22 +47,22 @@ export function PaginationControls({
     } else {
       const start = Math.max(1, currentPage - 2);
       const end = Math.min(totalPages, start + maxVisible - 1);
-      
+
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
-      
+
       if (start > 1) {
         pages.unshift('...');
         pages.unshift(1);
       }
-      
+
       if (end < totalPages) {
         pages.push('...');
         pages.push(totalPages);
       }
     }
-    
+
     return pages;
   };
 
@@ -74,7 +74,7 @@ export function PaginationControls({
       <div className="text-sm text-slate-600">
         Affichage {startItem}-{endItem} sur {totalItems} articles
       </div>
-      
+
       <div className="flex items-center gap-1">
         <Button
           variant="outline"
@@ -85,7 +85,7 @@ export function PaginationControls({
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        
+
         {getPageNumbers().map((page, index) => (
           <div key={index}>
             {page === '...' ? (
@@ -102,7 +102,7 @@ export function PaginationControls({
             )}
           </div>
         ))}
-        
+
         <Button
           variant="outline"
           size="sm"

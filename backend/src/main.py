@@ -20,14 +20,13 @@ Architecture:
 - main.py: Application initialization and startup
 """
 
+from cache import article_cache
+# Import our modular components
+from config import CORS_ORIGINS, DEBUG_LOGGING, get_port, is_development
 from flask import Flask
 from flask_cors import CORS
-
-# Import our modular components
-from config import CORS_ORIGINS, get_port, DEBUG_LOGGING
 from routes import register_routes
 from scraper import start_scraper
-from cache import article_cache
 
 
 def create_app():
@@ -42,6 +41,7 @@ def create_app():
     
     if DEBUG_LOGGING:
         print("[MAIN] Flask application created and configured")
+        print("[MAIN] 🔥 HOT RELOAD TEST - FILE MODIFIED!")
     
     return app
 
@@ -86,7 +86,8 @@ def main():
         app.run(
             host='0.0.0.0',
             port=port,
-            debug=False,  # Disable Flask debug mode in production
+            debug=is_development(),  # Active le hot reload en développement
+            use_reloader=is_development(),  # Reload automatique des fichiers
             threaded=True  # Enable multi-threading
         )
         

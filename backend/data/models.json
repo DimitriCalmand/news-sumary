@@ -6,21 +6,19 @@
       "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
       "apikey": "AIzaSyAGWlLpot8bwSMH1YoWYaOv8zqPhjx9Vi8",
       "llm": "gemini"
-
-
     },
     {
       "name": "ministral 3B",
       "id": "ministral-3b-2410",
       "url": "https://api.mistral.ai/v1/chat/completions",
-      "apikey": "OzIUxs4rWrgEI4jglLLVYJzwtBsdshJL",
+      "apikey": "S07zd26zbUzcgqb8NJpOWWPE7XenV8Am",
       "llm": "mistral"
     },
     {
       "name": "mistral small",
       "id": "mistral-small-2501",
       "url": "https://api.mistral.ai/v1/chat/completions",
-      "apikey": "OzIUxs4rWrgEI4jglLLVYJzwtBsdshJL",
+      "apikey": "S07zd26zbUzcgqb8NJpOWWPE7XenV8Am",
       "llm": "mistral"
     },
     {

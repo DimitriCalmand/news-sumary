@@ -3,12 +3,15 @@ Scraper module for News Summary Backend
 Contains all TechCrunch scraping functionality
 """
 
+import threading
+import time
+from typing import List, Tuple
+
+import ai as ai
 import requests
 from bs4 import BeautifulSoup
-import time
-import threading
-from typing import List, Tuple
-from config import TECHCRUNCH_URL, TITLE_CLASS, PARAGRAPH_CLASS, SCRAPING_INTERVAL, DEBUG_LOGGING
+from config import (DEBUG_LOGGING, PARAGRAPH_CLASS, SCRAPING_INTERVAL,
+                    TECHCRUNCH_URL, TITLE_CLASS)
 from models import Article, ArticleManager
 
 
@@ -126,7 +129,9 @@ class TechCrunchScraper:
                     has_been_pretreat=False
                 )
                 new_articles.append(article)
-                
+                existing_titles.add(title)
+                existing_urls.add(link)
+
                 # Add small delay between requests to be respectful
                 time.sleep(1)
         
@@ -181,12 +186,13 @@ class ScrapingService:
                 # Wait before next iteration
                 if DEBUG_LOGGING:
                     print(f"[SCRAPING_SERVICE] Waiting {SCRAPING_INTERVAL} seconds before next check...")
-                
+                ai.pretreat_articles(new_articles)
                 # Sleep in small chunks to allow for graceful shutdown
                 for _ in range(SCRAPING_INTERVAL):
                     if not self.running:
                         break
                     time.sleep(1)
+
                     
             except Exception as e:
                 if DEBUG_LOGGING:

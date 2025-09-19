@@ -4,11 +4,11 @@ Contains all Flask API routes and endpoints
 """
 
 import time
-from flask import Blueprint, jsonify, request
-from config import DEBUG_LOGGING
-from cache import article_cache
-from models import ArticleManager
 
+from cache import article_cache
+from config import DEBUG_LOGGING
+from flask import Blueprint, jsonify, request
+from models import ArticleManager
 
 # Create a Blueprint for API routes
 api_bp = Blueprint('api', __name__, url_prefix='/api')
@@ -160,34 +160,6 @@ def get_unpretreat_articles():
         return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 
-@api_bp.route('/article/<int:article_id>/pretreat', methods=['POST'])
-def mark_article_pretreat(article_id):
-    """Route POST for marking an article as pretreated"""
-    start_time = time.time()
-    log_request("mark_article_pretreat", start_time, article_id=article_id)
-    
-    try:
-        success = ArticleManager.mark_article_as_pretreat(article_id)
-        
-        if success:
-            # Update cache after modification
-            article_cache.update_cache_after_modification()
-            
-            log_response("mark_article_pretreat", start_time, article_id=article_id)
-            return jsonify({
-                "success": True,
-                "message": f"Article {article_id} marked as pretreated"
-            })
-        else:
-            log_response("mark_article_pretreat", start_time, "failed", article_id=article_id)
-            return jsonify({
-                "success": False,
-                "message": "Unable to mark article"
-            }), 400
-            
-    except Exception as e:
-        log_response("mark_article_pretreat", start_time, "error", error=str(e))
-        return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 
 @api_bp.route('/length', methods=['GET'])
@@ -212,7 +184,7 @@ def get_articles_length():
 def health_check():
     """Health check endpoint for Docker and monitoring"""
     return jsonify({
-        "status": "healthy",
+        "status": "healthy 🔥 HOT RELOAD WORKS!",
         "service": "news-summary-backend",
         "cache_info": article_cache.get_cache_info()
     }), 200

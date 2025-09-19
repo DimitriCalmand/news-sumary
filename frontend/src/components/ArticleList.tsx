@@ -1,19 +1,19 @@
+import type { ArticleTitle } from '@/types';
+import { newsApi } from '@/utils/api';
+import { useQuery } from '@tanstack/react-query';
+import { ExternalLink, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { newsApi } from '../utils/api';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
-import { Button } from './ui/Button';
-import { PaginationControls } from './PaginationControls';
 import { LoadingSpinner } from './LoadingSpinner';
-import { ExternalLink, RefreshCw } from 'lucide-react';
-import type { ArticleTitle } from '../types';
+import { PaginationControls } from './PaginationControls';
+import { Button } from './ui/Button';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 
 const ARTICLES_PER_PAGE = 20;
 
 export function ArticleList() {
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   // Query for total count
   const { data: totalCount, refetch: refetchCount } = useQuery({
     queryKey: ['articleCount'],
@@ -22,11 +22,11 @@ export function ArticleList() {
   });
 
   // Query for paginated titles
-  const { 
-    data: titlesData, 
-    isLoading, 
-    error, 
-    refetch: refetchTitles 
+  const {
+    data: titlesData,
+    isLoading,
+    error,
+    refetch: refetchTitles
   } = useQuery({
     queryKey: ['articleTitles', currentPage],
     queryFn: () => newsApi.getTitles(currentPage, ARTICLES_PER_PAGE),
@@ -109,9 +109,9 @@ export function ArticleList() {
                             Traité
                           </span>
                         )}
-                        <a 
-                          href={article.url} 
-                          target="_blank" 
+                        <a
+                          href={article.url}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors"
                         >

@@ -25,6 +25,7 @@ DEFAULT_PORT = 3001
 
 # Debug settings
 DEBUG_LOGGING = True
+FLASK_DEBUG = True  # Active le hot reload en développement
 
 def get_port():
     """Get the port from environment variable or use default"""
@@ -37,3 +38,7 @@ def get_environment():
 def is_production():
     """Check if running in production"""
     return get_environment() == "production"
+
+def is_development():
+    """Check if running in development"""
+    return get_environment() == "development"

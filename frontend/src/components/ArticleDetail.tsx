@@ -1,21 +1,21 @@
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { newsApi } from '@/utils/api';
 import { useQuery } from '@tanstack/react-query';
-import { newsApi } from '../utils/api';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
-import { Button } from './ui/Button';
-import { LoadingSpinner } from './LoadingSpinner';
 import { ArrowLeft, ExternalLink, RefreshCw } from 'lucide-react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { LoadingSpinner } from './LoadingSpinner';
+import { Button } from './ui/Button';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 
 export function ArticleDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const articleId = id ? parseInt(id, 10) : 0;
 
-  const { 
-    data: article, 
-    isLoading, 
-    error, 
-    refetch 
+  const {
+    data: article,
+    isLoading,
+    error,
+    refetch
   } = useQuery({
     queryKey: ['article', articleId],
     queryFn: () => newsApi.getArticle(articleId),
@@ -90,9 +90,9 @@ export function ArticleDetail() {
                       Traité
                     </span>
                   )}
-                  <a 
-                    href={article.url} 
-                    target="_blank" 
+                  <a
+                    href={article.url}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors font-medium"
                   >
@@ -121,9 +121,9 @@ export function ArticleDetail() {
             <ArrowLeft className="h-4 w-4" />
             Retour à la liste
           </Button>
-          <a 
-            href={article.url} 
-            target="_blank" 
+          <a
+            href={article.url}
+            target="_blank"
             rel="noopener noreferrer"
           >
             <Button className="gap-2 w-full sm:w-auto">
