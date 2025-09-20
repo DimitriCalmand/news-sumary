@@ -5,6 +5,7 @@ Contains all Flask API routes and endpoints
 
 import time
 
+from ai import pretreat_articles
 from cache import article_cache
 from config import DEBUG_LOGGING
 from flask import Blueprint, jsonify, request
@@ -347,6 +348,14 @@ def get_all_tags():
         log_response("get_all_tags", start_time, status="error", error=str(e))
         return jsonify({"error": f"Error getting tags: {str(e)}"}), 500
 
+@api_bp.route('/pretreat', methods=['GET'])
+def pretreat_articles_route():
+    """Pretreat articles for better summarization"""
+    try:
+        pretreat_articles()
+        return jsonify({"message": "Articles pretreatment initiated"}), 200
+    except Exception as e:
+        return jsonify({"error": f"Error initiating pretreatment: {str(e)}"}), 500
 
 @api_bp.route('/articles/filter', methods=['GET'])
 def filter_articles():

@@ -13,11 +13,14 @@ COPY requirements.txt .
 # Installe les dépendances Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copie tout le code de l'application
-COPY . .
+# Copie le code source
+COPY src/ ./src/
 
-# Crée le répertoire data s'il n'existe pas
-RUN mkdir -p data
+# Copie le répertoire data avec les fichiers de configuration
+COPY data/ ./data/
+
+# S'assure que le répertoire data existe et que models.json est accessible
+RUN ls -la data/ && cat data/models.json
 
 # Définit les variables d'environnement
 ENV PYTHONPATH=/app

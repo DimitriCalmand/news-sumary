@@ -11,7 +11,7 @@ services:
       - PORT=3001
       - DEBUG=true
     volumes:
-      - ./data:/app/data
+      - ./data/articles_seen.json:/app/data/articles_seen.json # Monte seulement ce fichier
     networks:
       - news-network-arm64
     deploy:
