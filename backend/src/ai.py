@@ -15,9 +15,10 @@ def pretreat_articles() -> None:
             if DEBUG_LOGGING:
                 print(f"[AI] Pretreating article: {article['title']}")
             # Simulate AI processing (e.g., summarization, keyword extraction)
-            processed_content = process_article_content(article["content"], "mistral small")
+            processed_content, tags = process_article_content(article["content"], "mistral small")
             article["content"] = processed_content
             article["has_been_pretreat"] = True
+            article["tags"] = tags
             break
     ArticleManager.save_articles(articles)
     return None
@@ -34,7 +35,32 @@ def load_models_settings(model_name: str) -> dict:
         if DEBUG_LOGGING:
             print(f"[AI] Error loading model settings: {e}")
         return {}
-    
+def prepare_tag_to_str() -> str:
+    tags = ArticleManager.get_all_tags()
+    if not tags:
+        return "[No tags available]"
+    tag_str = "["
+    tag_str += ", ".join(tags)
+    tag_str += "]"
+    return tag_str
+def extract_content_and_tags(answer: str) -> tuple[str, list]:
+    """
+    if the llm answer is like this:
+    article
+    TAGS:[tag1, tag2, tag3]
+    return the list of tags
+    """
+    contents =answer.split("TAGS:")
+    if len(contents)<2:
+        return []
+    tags=contents[1].strip()
+    tags=tags.replace("[","").replace("]","").replace(".","").strip()
+    tags_list = []
+    if tags:
+        for tag in tags.split(","):
+            tags_list.append(tag.strip().lower())
+    return contents[0], tags_list
+
 def process_article_content(content: str, model_name) -> str:
     model = load_models_settings(model_name)
     if not model:
@@ -53,14 +79,15 @@ def process_article_content(content: str, model_name) -> str:
         # add a admin message to explain the task
 
         "messages": [
-            {"role": "system", "content": PROMPT_MESSAGE},
+            {"role": "system", "content": PROMPT_MESSAGE.format(tags=prepare_tag_to_str())},
             {"role": "user", "content": f"Pretreat the following article content:\n\n{content}"}
         ]
     }
     response = requests.post(url, headers=headers, json=body)
     if response.status_code == 200:
         res = response.json().get("choices", [])[0].get("message", {}).get("content", "")
-        return res
+        res, tags = extract_content_and_tags(res)
+        return res, tags
     else:
         if DEBUG_LOGGING:
             print(f"[AI] Error processing article content: {response.status_code} {response.text}")

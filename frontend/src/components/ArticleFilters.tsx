@@ -32,17 +32,20 @@ export function ArticleFilters({ onFiltersChange, className = '' }: ArticleFilte
         loadTags();
     }, []);
 
-    // Notifier les changements de filtres
+    // Notifier les changements de filtres (seulement si il y a vraiment des filtres)
     useEffect(() => {
         const filters: { tags?: string[]; min_rating?: number } = {};
+
         if (selectedTags.length > 0) {
             filters.tags = selectedTags;
         }
         if (minRating > 0) {
             filters.min_rating = minRating;
         }
+
+        // Seulement notifier si il y a des filtres ou si on reset à vide
         onFiltersChange?.(filters);
-    }, [selectedTags, minRating, onFiltersChange]);
+    }, [selectedTags, minRating]); // Supprimé onFiltersChange des dépendances
 
     const handleTagToggle = (tag: string) => {
         setSelectedTags(prev =>
@@ -136,8 +139,8 @@ export function ArticleFilters({ onFiltersChange, className = '' }: ArticleFilte
                                             key={tag}
                                             onClick={() => handleTagToggle(tag)}
                                             className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${selectedTags.includes(tag)
-                                                    ? 'bg-blue-100 text-blue-800 ring-2 ring-blue-200'
-                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                ? 'bg-blue-100 text-blue-800 ring-2 ring-blue-200'
+                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                                 }`}
                                         >
                                             {tag}
@@ -159,8 +162,8 @@ export function ArticleFilters({ onFiltersChange, className = '' }: ArticleFilte
                                                 key={tag}
                                                 onClick={() => handleTagToggle(tag)}
                                                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${selectedTags.includes(tag)
-                                                        ? 'bg-blue-100 text-blue-800 ring-2 ring-blue-200'
-                                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                    ? 'bg-blue-100 text-blue-800 ring-2 ring-blue-200'
+                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                                     }`}
                                             >
                                                 {tag}

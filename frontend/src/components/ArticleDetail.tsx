@@ -19,9 +19,41 @@ export function ArticleDetail() {
 
   console.log('ArticleDetail - URL id:', id, 'parsed articleId:', articleId);
 
+  // Validation de l'ID
+  if (!id || isNaN(articleId) || articleId < 0) {
+    console.error('Invalid article ID:', id, articleId);
+    return (
+      <div className="min-h-screen bg-slate-50 p-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-6">
+            <Button variant="outline" onClick={() => window.location.href = '/'} className="gap-2">
+              <ArrowLeft className="h-4 w-4" />
+              Retour à la liste
+            </Button>
+          </div>
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold text-red-600 mb-4">ID d'article invalide</h2>
+            <p className="text-slate-600 mb-6">
+              L'identifiant de l'article n'est pas valide: {id}
+            </p>
+            <Button onClick={() => window.location.href = '/'}>
+              Retour à la liste
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Force refresh when articleId changes
   useEffect(() => {
-    if (articleId) {
+    console.log('=== useEffect triggered ===');
+    console.log('articleId:', articleId);
+    console.log('articleId type:', typeof articleId);
+    console.log('articleId >= 0:', articleId >= 0);
+    console.log('!isNaN(articleId):', !isNaN(articleId));
+
+    if (articleId >= 0) { // Changé de if (articleId) pour permettre 0
       console.log('Invalidating queries for articleId:', articleId);
       queryClient.invalidateQueries({ queryKey: ['article'] });
     }
@@ -35,7 +67,7 @@ export function ArticleDetail() {
   } = useQuery({
     queryKey: ['article', articleId],
     queryFn: () => newsApi.getArticle(articleId),
-    enabled: !!articleId,
+    enabled: articleId >= 0 && !isNaN(articleId), // Autoriser l'ID 0
     staleTime: 0, // Toujours refetch
     refetchOnMount: true,
   });
@@ -98,6 +130,13 @@ export function ArticleDetail() {
   }
 
   if (error || !article) {
+    console.log('=== ARTICLE DETAIL ERROR ===');
+    console.log('Error:', error);
+    console.log('Article:', article);
+    console.log('ArticleId:', articleId);
+    console.log('URL id param:', id);
+    console.log('IsLoading:', isLoading);
+
     return (
       <div className="min-h-screen bg-slate-50 p-4">
         <div className="max-w-4xl mx-auto">
@@ -112,6 +151,14 @@ export function ArticleDetail() {
             <p className="text-slate-600 mb-6">
               L'article demandé n'existe pas ou n'a pas pu être chargé.
             </p>
+            <div className="bg-gray-100 p-4 rounded mb-4 text-left">
+              <p><strong>Debug info:</strong></p>
+              <p>URL ID: {id}</p>
+              <p>Parsed ArticleId: {articleId}</p>
+              <p>IsLoading: {isLoading ? 'true' : 'false'}</p>
+              <p>Error: {error ? String(error) : 'No error'}</p>
+              <p>Article: {article ? 'Found' : 'Not found'}</p>
+            </div>
             <div className="flex gap-3 justify-center">
               <Button onClick={() => refetch()} variant="outline" className="gap-2">
                 <RefreshCw className="h-4 w-4" />

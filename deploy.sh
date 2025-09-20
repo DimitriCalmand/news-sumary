@@ -13,7 +13,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-DOCKERHUB_USERNAME=${DOCKERHUB_USERNAME:-"dimitricalmand"}
+DOCKERHUB_USERNAME=${DOCKERHUB_USERNAME:-"dimitriepita"}
 BACKEND_IMAGE="news-summary-backend"
 FRONTEND_IMAGE="news-summary-frontend"
 
@@ -48,6 +48,92 @@ build_images() {
     docker build -t ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE}:latest ./frontend
     
     print_success "Images built successfully!"
+}
+
+build_multiarch() {
+    print_header
+    echo -e "${BLUE}🏗️  Building Multi-Architecture Docker images...${NC}"
+    echo -e "${YELLOW}Platforms: linux/amd64, linux/arm64${NC}"
+    
+    # Vérifier que buildx est disponible
+    if ! docker buildx version > /dev/null 2>&1; then
+        print_error "Docker Buildx n'est pas disponible. Veuillez l'installer."
+        exit 1
+    fi
+    
+    # Créer ou réutiliser un builder multi-arch
+    echo -e "${YELLOW}Configuration du builder multi-arch...${NC}"
+    if ! docker buildx inspect multiarch > /dev/null 2>&1; then
+        echo -e "${YELLOW}Création du builder 'multiarch'...${NC}"
+        docker buildx create --name multiarch --driver docker-container --use
+        docker buildx inspect --bootstrap
+    else
+        echo -e "${YELLOW}Utilisation du builder existant 'multiarch'...${NC}"
+        docker buildx use multiarch
+    fi
+    
+    # Build et push backend multi-arch
+    # echo -e "${YELLOW}Building backend (multi-arch)...${NC}"
+    # docker buildx build \
+    #     --platform linux/amd64,linux/arm64 \
+    #     -t ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE}:latest \
+    #     --push \
+    #     ./backend
+    
+    # Build et push frontend multi-arch
+    echo -e "${YELLOW}Building frontend (multi-arch)...${NC}"
+    docker buildx build \
+        --platform linux/amd64,linux/arm64 \
+        -t ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE}:latest \
+        --push \
+        ./frontend
+    
+    print_success "Images multi-architecture built and pushed successfully!"
+    echo -e "${GREEN}Images disponibles pour:${NC}"
+    echo -e "${GREEN}  • linux/amd64 (PC/Serveurs x86_64)${NC}"
+    echo -e "${GREEN}  • linux/arm64 (Raspberry Pi 4/5, Apple Silicon)${NC}"
+}
+
+build_arm64_only() {
+    print_header
+    echo -e "${BLUE}🏗️  Building ARM64 Only Docker images...${NC}"
+    echo -e "${YELLOW}Platform: linux/arm64 (Raspberry Pi)${NC}"
+    
+    # Vérifier que buildx est disponible
+    if ! docker buildx version > /dev/null 2>&1; then
+        print_error "Docker Buildx n'est pas disponible. Veuillez l'installer."
+        exit 1
+    fi
+    
+    # Créer ou réutiliser un builder multi-arch
+    echo -e "${YELLOW}Configuration du builder multi-arch...${NC}"
+    if ! docker buildx inspect multiarch > /dev/null 2>&1; then
+        echo -e "${YELLOW}Création du builder 'multiarch'...${NC}"
+        docker buildx create --name multiarch --driver docker-container --use
+        docker buildx inspect --bootstrap
+    else
+        echo -e "${YELLOW}Utilisation du builder existant 'multiarch'...${NC}"
+        docker buildx use multiarch
+    fi
+    
+    # Build et push frontend ARM64 uniquement
+    echo -e "${YELLOW}Building frontend (ARM64 only)...${NC}"
+    docker buildx build \
+        --platform linux/arm64 \
+        -t ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE}:arm64 \
+        --push \
+        ./frontend
+    
+    # Build et push backend ARM64 uniquement
+    echo -e "${YELLOW}Building backend (ARM64 only)...${NC}"
+    docker buildx build \
+        --platform linux/arm64 \
+        -t ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE}:arm64 \
+        --push \
+        ./backend
+    
+    print_success "Images ARM64 built and pushed successfully!"
+    echo -e "${GREEN}Images ARM64 disponibles avec le tag :arm64${NC}"
 }
 
 push_images() {
@@ -159,6 +245,8 @@ show_help() {
     echo ""
     echo "Commands:"
     echo "  build     - Build Docker images locally"
+    echo "  multiarch - Build and push multi-architecture images (AMD64 + ARM64)"
+    echo "  arm64     - Build and push ARM64 only images (Raspberry Pi)"
     echo "  push      - Push images to DockerHub"
     echo "  deploy    - Deploy locally (development)"
     echo "  prod      - Deploy production version"
@@ -169,6 +257,8 @@ show_help() {
     echo ""
     echo "Examples:"
     echo "  $0 build && $0 push     # Build and push to DockerHub"
+    echo "  $0 multiarch            # Build and push multi-arch (Raspberry Pi compatible)"
+    echo "  $0 arm64                # Build ARM64 only (plus rapide pour Raspberry Pi)"
     echo "  $0 deploy               # Deploy locally"
     echo "  $0 prod                 # Deploy production"
     echo ""
@@ -178,6 +268,12 @@ show_help() {
 case "${1:-help}" in
     "build")
         build_images
+        ;;
+    "multiarch")
+        build_multiarch
+        ;;
+    "arm64")
+        build_arm64_only
         ;;
     "push")
         push_images

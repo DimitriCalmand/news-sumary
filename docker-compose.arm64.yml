@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  backend:
+    image: dimitriepita/news-summary-backend:arm64
+    container_name: news-summary-backend
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - DEBUG=true
+    volumes:
+      - ./data:/app/data
+    networks:
+      - news-network-arm64
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+  frontend:
+    image: dimitriepita/news-summary-frontend:arm64
+    container_name: news-summary-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - news-network-arm64
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+networks:
+  news-network-arm64:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+
+volumes:
+  data:
+    driver: local

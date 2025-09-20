@@ -120,6 +120,15 @@ class ArticleManager:
             if DEBUG_LOGGING:
                 print(f"[MODELS] Error marking article as pretreated: {e}")
             return False
+    @staticmethod
+    def get_all_tags() -> List[str]:
+        """Get all unique tags from all articles"""
+        articles = ArticleManager.load_articles()
+        all_tags = set()
+        for article in articles:
+            tags = article.get("tags", [])
+            all_tags.update(tags)
+        return sorted(list(all_tags))
     
     @staticmethod
     def get_unpretreat_articles() -> List[Dict]:
@@ -157,6 +166,12 @@ class ArticleManager:
                 existing_titles.add(article.title)
                 existing_urls.add(article.url)
                 added_count += 1
+                # add tags, rating, comments, time_spent as default values
+                article.tags = article.tags or []
+                article.rating = article.rating or None
+                article.comments = article.comments or ""
+                article.time_spent = article.time_spent or 0
+                
         
         if added_count > 0:
             ArticleManager.save_articles(existing_articles)

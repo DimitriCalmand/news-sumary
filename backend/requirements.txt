@@ -1,4 +1,38 @@
-flask
-flask-cors
-requests
-beautifulsoup4
+# =============================================================================
+# NEWS SUMMARY BACKEND - Requirements
+# =============================================================================
+# Flask application for news scraping and article management
+# Compatible with Python 3.11+
+# =============================================================================
+
+# Core Web Framework
+Flask==3.0.3
+Werkzeug==3.0.3
+
+# CORS Support for API
+Flask-CORS==4.0.1
+
+# HTTP Requests
+requests==2.32.3
+urllib3==2.2.2
+
+# HTML Parsing & Web Scraping
+beautifulsoup4==4.12.3
+lxml==5.3.0
+
+# JSON Schema Validation (optional, for API validation)
+jsonschema==4.23.0
+
+# Security & Production
+gunicorn==22.0.0
+
+# Development & Debugging (commented out for production)
+# Werkzeug==3.0.3  # Already included above
+
+# =============================================================================
+# PRODUCTION NOTES:
+# - All versions are pinned for reproducible builds
+# - lxml added as faster XML/HTML parser for BeautifulSoup
+# - gunicorn added as production WSGI server
+# - jsonschema added for potential API validation
+# =============================================================================

@@ -1,4 +1,4 @@
-name: Deploy News Summary to Raspberry Pi
+name: Deploy News Summary ARM64 to Raspberry Pi
 
 on:
   push:
@@ -11,59 +11,77 @@ env:
   FRONTEND_IMAGE: news-summary-frontend
 
 jobs:
-  build-and-deploy:
+  build-and-deploy-arm64:
     runs-on: ubuntu-latest
+    timeout-minutes: 90  # Timeout plus long pour les builds ARM64
     
     steps:
       # 1. Récupération du code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Connexion à Docker Hub
+      # 2. Libérer de l'espace disque
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: false
+          swap-storage: true
+
+      # 3. Connexion à Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 3. Configurer Docker Buildx pour multi-arch
+      # 4. Configurer Docker Buildx pour ARM64
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      # 4. Build et Push backend pour ARM64 (Raspberry Pi)
-      - name: Build and push backend Docker image
-        uses: docker/build-push-action@v5
         with:
-          context: ./backend
-          file: ./backend/Dockerfile
-          push: true
-          platforms: linux/arm64,linux/amd64
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE }}:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE }}:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            BUILDKIT_INLINE_CACHE=1
+          driver-opts: |
+            network=host
 
-      # 5. Build et Push frontend pour ARM64 (Raspberry Pi)
-      - name: Build and push frontend Docker image
+      # 5. Build et Push frontend ARM64
+      - name: Build and push frontend ARM64 image
+        timeout-minutes: 45
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          platforms: linux/arm64,linux/amd64
+          platforms: linux/arm64
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+            NODE_OPTIONS=--max-old-space-size=4096
+
+      # 6. Build et Push backend ARM64
+      - name: Build and push backend ARM64 image
+        timeout-minutes: 30
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          platforms: linux/arm64
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE }}:arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
             BUILDKIT_INLINE_CACHE=1
 
-      # 6. Déploiement sur Raspberry Pi via SSH
-      - name: Deploy to Raspberry Pi
+      # 7. Déploiement ARM64 sur Raspberry Pi via SSH
+      - name: Deploy ARM64 to Raspberry Pi
+        timeout-minutes: 15
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.RASPI_HOST }}
@@ -71,29 +89,48 @@ jobs:
           key: ${{ secrets.RASPI_SSH_KEY }}
           port: ${{ secrets.RASPI_PORT }}
           script: |
-            # Créer le répertoire de l'application s'il n'existe pas
-            mkdir -p ~/news-summary
-            cd ~/news-summary
+            # Aller dans le bon répertoire sur Raspberry Pi
+            cd /Disk/Programmation/Intern/News-sumary
             
-            # Télécharger le docker-compose de production
-            curl -o docker-compose.prod.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker-compose.prod.yml
+            # Télécharger le docker-compose ARM64
+            curl -o docker-compose.arm64.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker-compose.arm64.yml
             
-            # Stopper les anciens conteneurs
-            docker-compose -f docker-compose.prod.yml down || true
+            # Stopper les anciens conteneurs et nettoyer
+            docker-compose -f docker-compose.arm64.yml down --remove-orphans || true
+            docker network prune -f || true
             
-            # Nettoyer les anciennes images
+            # Nettoyer les anciennes images ARM64
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE }}:arm64 || true
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:arm64 || true
             docker image prune -f
             
-            # Télécharger les nouvelles images
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE }}:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:latest
+            # Télécharger les nouvelles images ARM64
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE }}:arm64
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:arm64
             
-            # Démarrer les nouveaux conteneurs
-            docker-compose -f docker-compose.prod.yml up -d
+            # Créer le répertoire data s'il n'existe pas
+            mkdir -p data
             
-            # Vérifier que les services démarrent correctement
-            sleep 10
-            docker-compose -f docker-compose.prod.yml ps
+            # Démarrer les nouveaux conteneurs ARM64
+            docker-compose -f docker-compose.arm64.yml up -d
+            
+            # Attendre que les services démarrent
+            sleep 15
+            
+            # Vérifier le statut des conteneurs
+            echo "=== État des conteneurs ==="
+            docker-compose -f docker-compose.arm64.yml ps
+            
+            # Afficher les logs récents
+            echo "=== Logs Backend ARM64 ==="
+            docker-compose -f docker-compose.arm64.yml logs --tail=10 backend
+            echo "=== Logs Frontend ARM64 ==="
+            docker-compose -f docker-compose.arm64.yml logs --tail=10 frontend
+            
+            # Test de santé rapide
+            echo "=== Test de santé ==="
+            curl -f http://localhost:3001/health || echo "Backend health check failed"
+            curl -f http://localhost:3000 || echo "Frontend accessibility check failed"
 
 
 

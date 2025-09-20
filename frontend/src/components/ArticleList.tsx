@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { ExternalLink, RefreshCw } from 'lucide-react';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { Article, ArticleTitle } from '../types';
 import { newsApi } from '../utils/api';
 import { ArticleFilters } from './ArticleFilters';
@@ -15,15 +15,15 @@ const ARTICLES_PER_PAGE = 20;
 export function ArticleList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [activeFilters, setActiveFilters] = useState<{ tags?: string[]; min_rating?: number }>({});
-  const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
   const [showFiltered, setShowFiltered] = useState(false);
 
   // Query for total count
   const { data: totalCount, refetch: refetchCount } = useQuery({
     queryKey: ['articleCount'],
     queryFn: newsApi.getLength,
-    staleTime: 0, // Force refresh
-    refetchOnMount: true,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   // Query for paginated titles (utilisé quand pas de filtres)
@@ -35,9 +35,10 @@ export function ArticleList() {
   } = useQuery({
     queryKey: ['articleTitles', currentPage],
     queryFn: () => newsApi.getTitles(currentPage, ARTICLES_PER_PAGE),
-    enabled: !!totalCount && !showFiltered,
-    staleTime: 0, // Force refresh
-    refetchOnMount: true,
+    enabled: !showFiltered, // Simplifié: seulement vérifie qu'on n'est pas en mode filtré
+    staleTime: 30 * 1000, // 30 secondes seulement pour permettre la pagination
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   // Query pour les articles filtrés
@@ -50,28 +51,34 @@ export function ArticleList() {
     queryKey: ['filteredArticles', activeFilters],
     queryFn: () => newsApi.filterArticles(activeFilters),
     enabled: showFiltered && (Object.keys(activeFilters).length > 0),
-    staleTime: 0, // Force refresh
-    refetchOnMount: true,
+    staleTime: 1 * 60 * 1000, // 1 minute
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
-  const handleFiltersChange = (filters: { tags?: string[]; min_rating?: number }) => {
+  const handleFiltersChange = useCallback((filters: { tags?: string[]; min_rating?: number }) => {
     setActiveFilters(filters);
     const hasFilters = (filters.tags && filters.tags.length > 0) ||
       (filters.min_rating && filters.min_rating > 0);
     setShowFiltered(!!hasFilters);
     setCurrentPage(1); // Reset to first page when filters change
-
-    if (hasFilters) {
-      setFilteredArticles([]);
-    }
-  };
+  }, []); // Pas de dépendances car on ne lit que les paramètres
 
   const handlePageChange = (page: number) => {
+    console.log('Page change:', currentPage, '->', page);
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
-  const handleRefresh = async () => {
+    // Pour la pagination normale (pas filtrée), forcer le refetch
+    if (!showFiltered) {
+      // Le refetch se déclenchera automatiquement grâce au changement de queryKey
+      console.log('Page change triggered, new data should load automatically');
+    }
+
+    // Scroll après un petit délai pour laisser React faire le re-render
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  }; const handleRefresh = async () => {
     if (showFiltered) {
       await refetchFiltered();
     } else {
@@ -82,29 +89,26 @@ export function ArticleList() {
   // Déterminer quelles données afficher
   const isLoading = showFiltered ? isLoadingFiltered : isLoadingTitles;
   const error = showFiltered ? filteredError : titlesError;
-  const currentData = showFiltered ? filteredData : titlesData?.titles;
 
-  // Pour les articles filtrés, on gère la pagination côté client
-  const getPaginatedFilteredArticles = () => {
+  // Mémoriser les calculs pour éviter les re-renders constants
+  const paginatedFilteredArticles = useMemo(() => {
     if (!filteredData) return [];
     const startIndex = (currentPage - 1) * ARTICLES_PER_PAGE;
     const endIndex = startIndex + ARTICLES_PER_PAGE;
     return filteredData.slice(startIndex, endIndex);
-  };
+  }, [filteredData, currentPage]);
 
-  const getDisplayedArticles = () => {
+  const displayedArticles = useMemo(() => {
     if (showFiltered) {
-      return getPaginatedFilteredArticles();
+      return paginatedFilteredArticles;
+    } else {
+      return titlesData?.titles || [];
     }
-    return currentData || [];
-  };
+  }, [showFiltered, paginatedFilteredArticles, titlesData?.titles]);
 
-  const getTotalItemsCount = () => {
-    if (showFiltered && filteredData) {
-      return filteredData.length;
-    }
-    return totalCount || 0;
-  };
+  const totalItemsCount = useMemo(() => {
+    return showFiltered && filteredData ? filteredData.length : (totalCount || 0);
+  }, [showFiltered, filteredData, totalCount]);
 
   if (error) {
     return (
@@ -166,7 +170,7 @@ export function ArticleList() {
         {!isLoading && (
           <>
             <div className="grid gap-4 mb-8">
-              {getDisplayedArticles().map((article: ArticleTitle | Article) => (
+              {displayedArticles.map((article: ArticleTitle | Article) => (
                 <Card key={article.id} className="hover:shadow-md transition-shadow">
                   <CardHeader className="pb-3">
                     <div className="flex flex-col gap-3">
@@ -225,7 +229,19 @@ export function ArticleList() {
                       <Button
                         size="sm"
                         onClick={() => {
-                          console.log('Clicking article with ID:', article.id);
+                          console.log('=== DEBUG CLICK ===');
+                          console.log('Full article object:', article);
+                          console.log('Article ID:', article.id);
+                          console.log('Article ID type:', typeof article.id);
+                          console.log('Target URL:', `/article/${article.id}`);
+
+                          // Permettre l'ID 0 en vérifiant explicitement null/undefined
+                          if (article.id === null || article.id === undefined || typeof article.id !== 'number') {
+                            console.error('ERROR: Article ID is invalid!', article.id);
+                            alert('Erreur: ID d\'article invalide');
+                            return;
+                          }
+
                           window.location.href = `/article/${article.id}`;
                         }}
                       >
@@ -238,10 +254,10 @@ export function ArticleList() {
             </div>
 
             {/* Pagination */}
-            {getTotalItemsCount() > ARTICLES_PER_PAGE && (
+            {totalItemsCount > ARTICLES_PER_PAGE && (
               <PaginationControls
                 currentPage={currentPage}
-                totalItems={getTotalItemsCount()}
+                totalItems={totalItemsCount}
                 itemsPerPage={ARTICLES_PER_PAGE}
                 onPageChange={handlePageChange}
                 className="mb-8"
@@ -251,7 +267,7 @@ export function ArticleList() {
         )}
 
         {/* Empty state */}
-        {!isLoading && getDisplayedArticles().length === 0 && (
+        {!isLoading && displayedArticles.length === 0 && (
           <div className="text-center py-12">
             <h2 className="text-xl font-semibold text-slate-600 mb-2">
               {showFiltered ? 'Aucun article ne correspond aux critères' : 'Aucun article disponible'}
