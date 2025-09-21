@@ -12,6 +12,7 @@ services:
       - DEBUG=true
     volumes:
       - ./data/articles_seen.json:/app/data/articles_seen.json # Monte seulement ce fichier
+      - ./data/chat_history.json:/app/data/chat_history.json # Monte l'historique des chats
     networks:
       - news-network-arm64
     deploy:

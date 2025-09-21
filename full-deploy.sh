@@ -157,6 +157,15 @@ deploy_to_raspi() {
             echo "✅ articles_seen.json déjà présent"
         fi
         
+        # Créer chat_history.json s'il n'existe pas (pour les conversations IA)
+        if [ ! -f data/chat_history.json ]; then
+            echo "📋 Création du fichier chat_history.json..."
+            echo "{}" > data/chat_history.json
+            echo "✅ chat_history.json créé"
+        else
+            echo "✅ chat_history.json déjà présent"
+        fi
+        
         # Démarrer les nouveaux conteneurs
         echo "🚀 Démarrage des nouveaux conteneurs..."
         docker-compose -f docker-compose.arm64.yml up -d

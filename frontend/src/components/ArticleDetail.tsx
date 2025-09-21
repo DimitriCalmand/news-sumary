@@ -3,6 +3,7 @@ import { ArrowLeft, ExternalLink, RefreshCw } from 'lucide-react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { newsApi } from '../utils/api';
+import { ArticleChat } from './ArticleChat';
 import { AutoReadingTimer } from './AutoReadingTimer';
 import { CommentsEditor } from './CommentsEditor';
 import { LoadingSpinner } from './LoadingSpinner';
@@ -277,6 +278,12 @@ export function ArticleDetail() {
             />
           </CardContent>
         </Card>
+
+        {/* AI Chat Section */}
+        <ArticleChat
+          articleId={articleId.toString()}
+          articleTitle={article.title}
+        />
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3 sm:justify-between">

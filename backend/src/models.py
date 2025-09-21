@@ -63,10 +63,13 @@ class ArticleManager:
             try:
                 with open(JSON_FILE, "r", encoding="utf-8") as f:
                     articles = json.load(f)
-                    # Ensure all articles have the has_been_pretreat field
-                    for article in articles:
+                    # Ensure all articles have the has_been_pretreat field and an ID
+                    for i, article in enumerate(articles):
                         if "has_been_pretreat" not in article:
                             article["has_been_pretreat"] = False
+                        # Add ID if missing (use index as ID)
+                        if "id" not in article or article["id"] is None:
+                            article["id"] = i
                     return articles
             except (json.JSONDecodeError, FileNotFoundError) as e:
                 if DEBUG_LOGGING:
@@ -80,6 +83,11 @@ class ArticleManager:
         try:
             # Ensure data directory exists
             os.makedirs(os.path.dirname(JSON_FILE), exist_ok=True)
+            
+            # Ensure all articles have IDs before saving
+            for i, article in enumerate(articles):
+                if "id" not in article or article["id"] is None:
+                    article["id"] = i
             
             with open(JSON_FILE, "w", encoding="utf-8") as f:
                 json.dump(articles, f, ensure_ascii=False, indent=2)
@@ -100,6 +108,26 @@ class ArticleManager:
             article["id"] = article_id
             return article
         return None
+    
+    @staticmethod
+    def ensure_article_ids() -> None:
+        """Ensure all articles have proper IDs and save them"""
+        try:
+            articles = ArticleManager.load_articles()
+            needs_save = False
+            
+            for i, article in enumerate(articles):
+                if "id" not in article or article["id"] is None or article["id"] != i:
+                    article["id"] = i
+                    needs_save = True
+            
+            if needs_save:
+                ArticleManager.save_articles(articles)
+                if DEBUG_LOGGING:
+                    print(f"[MODELS] Updated IDs for {len(articles)} articles")
+        except Exception as e:
+            if DEBUG_LOGGING:
+                print(f"[MODELS] Error ensuring article IDs: {e}")
     
     @staticmethod
     def mark_article_as_pretreat(article_id: int) -> bool:
@@ -270,3 +298,93 @@ class ArticleManager:
                 filtered.append(article)
         
         return filtered
+
+
+class ChatManager:
+    """Manager for chat conversations with AI about articles"""
+    
+    CHAT_FILE = "./data/chat_history.json"
+    
+    @staticmethod
+    def load_conversations() -> Dict:
+        """Load all conversations from file"""
+        try:
+            if os.path.exists(ChatManager.CHAT_FILE):
+                with open(ChatManager.CHAT_FILE, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            return {}
+        except Exception as e:
+            if DEBUG_LOGGING:
+                print(f"[CHAT] Error loading conversations: {e}")
+            return {}
+    
+    @staticmethod
+    def save_conversations(conversations: Dict) -> bool:
+        """Save all conversations to file"""
+        try:
+            # Ensure data directory exists
+            os.makedirs("./data", exist_ok=True)
+            
+            with open(ChatManager.CHAT_FILE, 'w', encoding='utf-8') as f:
+                json.dump(conversations, f, ensure_ascii=False, indent=2)
+            
+            if DEBUG_LOGGING:
+                print(f"[CHAT] Conversations saved successfully")
+            return True
+        except Exception as e:
+            if DEBUG_LOGGING:
+                print(f"[CHAT] Error saving conversations: {e}")
+            return False
+    
+    @staticmethod
+    def get_conversation(article_id: str) -> List[Dict]:
+        """Get conversation history for a specific article"""
+        conversations = ChatManager.load_conversations()
+        return conversations.get(article_id, [])
+    
+    @staticmethod
+    def add_message(article_id: str, message_type: str, content: str, model_used: str = None) -> bool:
+        """
+        Add a message to the conversation
+        
+        Args:
+            article_id: ID of the article
+            message_type: 'user' or 'ai'
+            content: Message content
+            model_used: AI model used (for AI messages)
+        """
+        try:
+            conversations = ChatManager.load_conversations()
+            
+            if article_id not in conversations:
+                conversations[article_id] = []
+            
+            message = {
+                "id": str(len(conversations[article_id]) + 1),
+                "type": message_type,
+                "content": content,
+                "timestamp": json.dumps({"$date": {"$numberLong": str(int(1000 * __import__('time').time()))}}),
+                "model_used": model_used if message_type == 'ai' else None
+            }
+            
+            conversations[article_id].append(message)
+            
+            return ChatManager.save_conversations(conversations)
+        except Exception as e:
+            if DEBUG_LOGGING:
+                print(f"[CHAT] Error adding message: {e}")
+            return False
+    
+    @staticmethod
+    def clear_conversation(article_id: str) -> bool:
+        """Clear conversation history for a specific article"""
+        try:
+            conversations = ChatManager.load_conversations()
+            if article_id in conversations:
+                conversations[article_id] = []
+                return ChatManager.save_conversations(conversations)
+            return True
+        except Exception as e:
+            if DEBUG_LOGGING:
+                print(f"[CHAT] Error clearing conversation: {e}")
+            return False

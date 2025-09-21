@@ -1,0 +1,48 @@
+{
+  "2": [
+    {
+      "id": "1",
+      "type": "user",
+      "content": "yo",
+      "timestamp": "{\"$date\": {\"$numberLong\": \"1758439920968\"}}",
+      "model_used": null
+    },
+    {
+      "id": "2",
+      "type": "ai",
+      "content": "L'article ne contient pas d'informations pertinentes en réponse à \"yo\". Si vous avez une question spécifique sur le contenu de l'article, n'hésitez pas à la poser !",
+      "timestamp": "{\"$date\": {\"$numberLong\": \"1758439920986\"}}",
+      "model_used": "mistral small"
+    },
+    {
+      "id": "3",
+      "type": "user",
+      "content": "Résume moi l'article",
+      "timestamp": "{\"$date\": {\"$numberLong\": \"1758439936969\"}}",
+      "model_used": null
+    },
+    {
+      "id": "4",
+      "type": "ai",
+      "content": "**Résumé de l'article :**\n\nGoogle Cloud a annoncé l'ajout de deux startups d'IA, **Lovable** et **Windsurf**, à sa liste de clients, renforçant ainsi sa position face à des concurrents comme AWS et Microsoft Azure. Cette croissance s'inscrit dans une stratégie plus large visant à faire du cloud un pilier central pour Google, avec un chiffre d'affaires annuel de **50 milliards de dollars** et des perspectives prometteuses.\n\nLes partenariats avec des startups d'IA, notamment **9 des 10 principaux laboratoires d'IA** et **60% des startups d'IA générative**, sont un moteur clé de cette expansion. Google Cloud propose des offres attractives, comme **350 000 dollars de crédits cloud** via son programme pour startups, et des infrastructures optimisées pour l'IA (Gemini 2.5 Pro, GPU Nvidia).\n\nMalgré les défis liés aux coûts élevés de l'IA, le marché du cloud reste prometteur, avec une croissance attendue de **20% par an** d'ici 2025. L'article souligne également l'engagement de Google via des événements comme le **Google AI Builder’s Forum**, où 40 nouvelles startups ont été annoncées comme clientes.",
+      "timestamp": "{\"$date\": {\"$numberLong\": \"1758439936988\"}}",
+      "model_used": "mistral small"
+    }
+  ],
+  "3": [
+    {
+      "id": "1",
+      "type": "user",
+      "content": "Résume moi l'article",
+      "timestamp": "{\"$date\": {\"$numberLong\": \"1758440189838\"}}",
+      "model_used": null
+    },
+    {
+      "id": "2",
+      "type": "ai",
+      "content": "**Résumé de l'article :**\n\nLors de sa visite d'État au Royaume-Uni, l'ancien président Donald Trump a participé à un banquet réunissant plusieurs dirigeants majeurs de la tech, dont Tim Cook (Apple), Sam Altman (OpenAI), Jensen Huang (Nvidia), Ruth Porat (Alphabet/Google), Satya Nadella (Microsoft) et Marc Benioff (Salesforce). Cet événement a coïncidé avec la signature d'un accord technologique entre les États-Unis et le Royaume-Uni, le *Tech Prosperity Deal*, axé sur les technologies nucléaires, quantiques et l'IA.\n\nPlusieurs entreprises (Google, Microsoft, Nvidia, OpenAI, etc.) ont annoncé des investissements massifs au Royaume-Uni, notamment la construction de centres de données, pour un total de 31 milliards de livres. Ces initiatives reflètent l'importance croissante de la tech dans les relations économiques et politiques, ainsi que l'influence des dirigeants technologiques dans l'administration de Trump.\n\nL'article souligne également des critiques de Trump envers Tim Cook et des mesures comme un ordre exécutif \"anti-woke\" sur l'IA, ainsi que l'absence notable d'Elon Musk lors des événements.",
+      "timestamp": "{\"$date\": {\"$numberLong\": \"1758440189856\"}}",
+      "model_used": "mistral small"
+    }
+  ]
+}

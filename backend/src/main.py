@@ -49,6 +49,12 @@ def create_app():
 def initialize_services():
     """Initialize all background services"""
     try:
+        # Ensure all articles have proper IDs
+        from models import ArticleManager
+        ArticleManager.ensure_article_ids()
+        if DEBUG_LOGGING:
+            print("[MAIN] Article IDs initialized")
+        
         # Initialize the article cache
         article_cache.get_articles(force_refresh=True)
         if DEBUG_LOGGING:

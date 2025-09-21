@@ -5,11 +5,11 @@ Contains all Flask API routes and endpoints
 
 import time
 
-from ai import pretreat_articles
+from ai import chat_with_ai, pretreat_articles
 from cache import article_cache
 from config import DEBUG_LOGGING
 from flask import Blueprint, jsonify, request
-from models import ArticleManager
+from models import ArticleManager, ChatManager
 
 # Create a Blueprint for API routes
 api_bp = Blueprint('api', __name__, url_prefix='/api')
@@ -235,7 +235,7 @@ def update_article_rating(article_id: int):
         success = ArticleManager.update_article_rating(article_id, rating)
         if success:
             # Clear cache to ensure fresh data
-            article_cache.clear_cache()
+            article_cache.invalidate_cache()
             log_response("update_article_rating", start_time, article_id=article_id, rating=rating)
             return jsonify({"message": "Rating updated successfully", "rating": rating})
         else:
@@ -264,7 +264,7 @@ def add_reading_time(article_id: int):
         success = ArticleManager.add_reading_time(article_id, seconds)
         if success:
             # Clear cache to ensure fresh data
-            article_cache.clear_cache()
+            article_cache.invalidate_cache()
             log_response("add_reading_time", start_time, article_id=article_id, seconds=seconds)
             return jsonify({"message": "Reading time added successfully", "seconds_added": seconds})
         else:
@@ -293,7 +293,7 @@ def update_article_comments(article_id: int):
         success = ArticleManager.update_article_comments(article_id, comments)
         if success:
             # Clear cache to ensure fresh data
-            article_cache.clear_cache()
+            article_cache.invalidate_cache()
             log_response("update_article_comments", start_time, article_id=article_id)
             return jsonify({"message": "Comments updated successfully", "comments": comments})
         else:
@@ -322,7 +322,7 @@ def update_article_tags(article_id: int):
         success = ArticleManager.update_article_tags(article_id, tags)
         if success:
             # Clear cache to ensure fresh data
-            article_cache.clear_cache()
+            article_cache.invalidate_cache()
             log_response("update_article_tags", start_time, article_id=article_id, tags=tags)
             return jsonify({"message": "Tags updated successfully", "tags": tags})
         else:
@@ -398,6 +398,143 @@ def filter_articles():
     except Exception as e:
         log_response("filter_articles", start_time, status="error", error=str(e))
         return jsonify({"error": f"Error filtering articles: {str(e)}"}), 500
+
+
+@api_bp.route('/articles/<article_id>/chat', methods=['POST'])
+def chat_about_article(article_id):
+    """Chat with AI about a specific article"""
+    start_time = time.time()
+    
+    try:
+        # Get request data
+        data = request.get_json()
+        if not data or 'question' not in data:
+            return jsonify({"error": "Question is required"}), 400
+        
+        user_question = data['question'].strip()
+        if not user_question:
+            return jsonify({"error": "Question cannot be empty"}), 400
+        
+        # Optional model selection (default to mistral small)
+        model_name = data.get('model', 'mistral small')
+        
+        log_request("chat_about_article", start_time, 
+                   article_id=article_id, 
+                   question_length=len(user_question),
+                   model=model_name)
+        
+        # Call AI chat function
+        result = chat_with_ai(article_id, user_question, model_name)
+        
+        if result['success']:
+            # Save user question to conversation history
+            ChatManager.add_message(article_id, 'user', user_question)
+            
+            # Save AI response to conversation history
+            ChatManager.add_message(article_id, 'ai', result['answer'], result['model_used'])
+            
+            log_request("chat_about_article", start_time, 
+                       article_id=article_id, 
+                       response_length=len(result['answer']),
+                       status="success")
+            
+            return jsonify({
+                "success": True,
+                "answer": result['answer'],
+                "article_title": result['article_title'],
+                "model_used": result['model_used'],
+                "question": user_question
+            }), 200
+        else:
+            log_request("chat_about_article", start_time, 
+                       article_id=article_id, 
+                       error=result['error'],
+                       status="error")
+            
+            return jsonify({
+                "success": False,
+                "error": result['error']
+            }), 400
+            
+    except Exception as e:
+        log_request("chat_about_article", start_time, 
+                   article_id=article_id, 
+                   error=str(e),
+                   status="exception")
+        
+        return jsonify({"error": f"Error processing chat request: {str(e)}"}), 500
+
+
+@api_bp.route('/articles/<article_id>/chat/history', methods=['GET'])
+def get_chat_history(article_id):
+    """Get chat history for a specific article"""
+    start_time = time.time()
+    
+    try:
+        log_request("get_chat_history", start_time, article_id=article_id)
+        
+        # Get conversation history
+        conversation = ChatManager.get_conversation(article_id)
+        
+        # Convert timestamps for frontend compatibility
+        for message in conversation:
+            if 'timestamp' in message:
+                # Simple timestamp format for now
+                message['timestamp'] = time.time() * 1000  # JavaScript timestamp
+        
+        log_request("get_chat_history", start_time, 
+                   article_id=article_id, 
+                   message_count=len(conversation),
+                   status="success")
+        
+        return jsonify({
+            "success": True,
+            "conversation": conversation,
+            "article_id": article_id
+        }), 200
+        
+    except Exception as e:
+        log_request("get_chat_history", start_time, 
+                   article_id=article_id, 
+                   error=str(e),
+                   status="exception")
+        
+        return jsonify({"error": f"Error retrieving chat history: {str(e)}"}), 500
+
+
+@api_bp.route('/articles/<article_id>/chat/clear', methods=['DELETE'])
+def clear_chat_history(article_id):
+    """Clear chat history for a specific article"""
+    start_time = time.time()
+    
+    try:
+        log_request("clear_chat_history", start_time, article_id=article_id)
+        
+        # Clear conversation history
+        success = ChatManager.clear_conversation(article_id)
+        
+        if success:
+            log_request("clear_chat_history", start_time, 
+                       article_id=article_id, 
+                       status="success")
+            
+            return jsonify({
+                "success": True,
+                "message": "Chat history cleared successfully"
+            }), 200
+        else:
+            return jsonify({
+                "success": False,
+                "error": "Failed to clear chat history"
+            }), 500
+        
+    except Exception as e:
+        log_request("clear_chat_history", start_time, 
+                   article_id=article_id, 
+                   error=str(e),
+                   status="exception")
+        
+        return jsonify({"error": f"Error clearing chat history: {str(e)}"}), 500
 
 
 def register_routes(app):
