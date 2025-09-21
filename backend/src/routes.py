@@ -10,6 +10,7 @@ from cache import article_cache
 from config import DEBUG_LOGGING
 from flask import Blueprint, jsonify, request
 from models import ArticleManager, ChatManager
+from settings import SettingsManager
 
 # Create a Blueprint for API routes
 api_bp = Blueprint('api', __name__, url_prefix='/api')
@@ -535,6 +536,97 @@ def clear_chat_history(article_id):
                    status="exception")
         
         return jsonify({"error": f"Error clearing chat history: {str(e)}"}), 500
+
+
+@api_bp.route('/settings', methods=['GET'])
+def get_settings():
+    """Get current application settings"""
+    start_time = time.time()
+    log_request("get_settings", start_time)
+    
+    try:
+        settings = SettingsManager.load_settings()
+        log_response("get_settings", start_time)
+        return jsonify(settings), 200
+        
+    except Exception as e:
+        log_response("get_settings", start_time, "error", error=str(e))
+        return jsonify({"error": f"Error retrieving settings: {str(e)}"}), 500
+
+
+@api_bp.route('/settings', methods=['PUT'])
+def update_settings():
+    """Update application settings"""
+    start_time = time.time()
+    log_request("update_settings", start_time)
+    
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+        
+        # Validate the structure (basic validation)
+        if "prompts" not in data or "models" not in data:
+            return jsonify({"error": "Invalid settings structure. Must contain 'prompts' and 'models'"}), 400
+        
+        # Save settings
+        success = SettingsManager.save_settings(data)
+        
+        if success:
+            log_response("update_settings", start_time)
+            return jsonify({
+                "success": True,
+                "message": "Settings updated successfully"
+            }), 200
+        else:
+            return jsonify({
+                "success": False,
+                "error": "Failed to save settings"
+            }), 500
+        
+    except Exception as e:
+        log_response("update_settings", start_time, "error", error=str(e))
+        return jsonify({"error": f"Error updating settings: {str(e)}"}), 500
+
+
+@api_bp.route('/settings/models', methods=['GET'])
+def get_models():
+    """Get available models"""
+    start_time = time.time()
+    log_request("get_models", start_time)
+    
+    try:
+        models = SettingsManager.get_models()
+        default_model = SettingsManager.get_default_model()
+        
+        log_response("get_models", start_time, count=len(models))
+        return jsonify({
+            "models": models,
+            "default_model": default_model
+        }), 200
+        
+    except Exception as e:
+        log_response("get_models", start_time, "error", error=str(e))
+        return jsonify({"error": f"Error retrieving models: {str(e)}"}), 500
+
+
+@api_bp.route('/settings/prompts', methods=['GET'])
+def get_prompts():
+    """Get available prompts"""
+    start_time = time.time()
+    log_request("get_prompts", start_time)
+    
+    try:
+        settings = SettingsManager.load_settings()
+        prompts = settings.get("prompts", {})
+        
+        log_response("get_prompts", start_time, count=len(prompts))
+        return jsonify(prompts), 200
+        
+    except Exception as e:
+        log_response("get_prompts", start_time, "error", error=str(e))
+        return jsonify({"error": f"Error retrieving prompts: {str(e)}"}), 500
 
 
 def register_routes(app):

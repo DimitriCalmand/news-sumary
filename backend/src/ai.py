@@ -1,9 +1,9 @@
 import json
 
 import requests
-from config import (CHAT_PROMPT_MESSAGE, DEBUG_LOGGING, MODEL_CONFIG_FILE,
-                    PROMPT_MESSAGE)
+from config import DEBUG_LOGGING
 from models import ArticleManager
+from settings import SettingsManager
 
 
 def pretreat_articles() -> None:
@@ -24,18 +24,8 @@ def pretreat_articles() -> None:
     ArticleManager.save_articles(articles)
     return None
 def load_models_settings(model_name: str) -> dict:
-    # open the json file and load the settings for the given model_name
-    try:
-        with open(MODEL_CONFIG_FILE, "r") as f:
-            models_settings = json.load(f)
-        for model in models_settings["models"]:
-            if model["name"] == model_name:
-                return model
-        return {}
-    except Exception as e:
-        if DEBUG_LOGGING:
-            print(f"[AI] Error loading model settings: {e}")
-        return {}
+    """Get model configuration from settings"""
+    return SettingsManager.get_model_by_name(model_name)
 def prepare_tag_to_str() -> str:
     tags = ArticleManager.get_all_tags()
     if not tags:
@@ -80,7 +70,7 @@ def process_article_content(content: str, model_name) -> str:
         # add a admin message to explain the task
 
         "messages": [
-            {"role": "system", "content": PROMPT_MESSAGE.format(tags=prepare_tag_to_str())},
+            {"role": "system", "content": SettingsManager.get_prompt("article_processing").format(tags=prepare_tag_to_str())},
             {"role": "user", "content": f"Pretreat the following article content:\n\n{content}"}
         ]
     }
@@ -140,7 +130,7 @@ def chat_with_ai(article_id: str, user_question: str, model_name: str = "mistral
             }
         
         # Prepare the chat prompt with article context
-        chat_prompt = CHAT_PROMPT_MESSAGE.format(
+        chat_prompt = SettingsManager.get_prompt("chat").format(
             article_content=article.get("content", ""),
             article_title=article.get("title", ""),
             article_source=article.get("source", ""),

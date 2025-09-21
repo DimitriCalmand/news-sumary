@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { ExternalLink, RefreshCw } from 'lucide-react';
+import { ExternalLink, RefreshCw, Settings } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
+import { newsApi } from '../lib/api';
 import type { Article, ArticleTitle } from '../types';
-import { newsApi } from '../utils/api';
 import { ArticleFilters } from './ArticleFilters';
 import { LoadingSpinner } from './LoadingSpinner';
 import { PaginationControls } from './PaginationControls';
+import SettingsModal from './SettingsModal';
 import { StarRating } from './StarRating';
 import { Button } from './ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
@@ -16,6 +17,7 @@ export function ArticleList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [activeFilters, setActiveFilters] = useState<{ tags?: string[]; min_rating?: number }>({});
   const [showFiltered, setShowFiltered] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // Query for total count
   const { data: totalCount, refetch: refetchCount } = useQuery({
@@ -147,10 +149,21 @@ export function ArticleList() {
                 )}
               </p>
             </div>
-            <Button onClick={handleRefresh} variant="outline" className="gap-2 self-start sm:self-auto">
-              <RefreshCw className="h-4 w-4" />
-              Actualiser
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setIsSettingsOpen(true)}
+                variant="outline"
+                className="gap-2"
+                title="Paramètres"
+              >
+                <Settings className="h-4 w-4" />
+                Paramètres
+              </Button>
+              <Button onClick={handleRefresh} variant="outline" className="gap-2 self-start sm:self-auto">
+                <RefreshCw className="h-4 w-4" />
+                Actualiser
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -285,6 +298,16 @@ export function ArticleList() {
           </div>
         )}
       </div>
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        onSave={() => {
+          // Optionally refetch data when settings are saved
+          handleRefresh();
+        }}
+      />
     </div>
   );
 }
