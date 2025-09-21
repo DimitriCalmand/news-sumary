@@ -6,6 +6,7 @@ from models import ArticleManager
 from settings import SettingsManager
 
 
+
 def pretreat_articles() -> None:
     """Pretreat articles that have not been pretreat yet using an AI model"""
     if DEBUG_LOGGING:
@@ -17,10 +18,14 @@ def pretreat_articles() -> None:
                 print(f"[AI] Pretreating article: {article['title']}")
             # Simulate AI processing (e.g., summarization, keyword extraction)
             processed_content, tags = process_article_content(article["content"], "mistral small")
+            if DEBUG_LOGGING:
+                print(f"[AI] Processed content: {processed_content[:60]}...")  # Print first 60 chars
             article["content"] = processed_content
             article["has_been_pretreat"] = True
             article["tags"] = tags
-    ArticleManager.save_articles(articles)
+            ArticleManager.save_articles(articles)
+            if DEBUG_LOGGING:
+                print(f"[AI] Article '{article['title']}' saved successfully")
     return None
 def load_models_settings(model_name: str) -> dict:
     """Get model configuration from settings"""
