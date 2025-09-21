@@ -8,6 +8,7 @@ export interface Article {
   time_spent: number; // seconds
   comments: string;
   tags: string[];
+  date?: string; // Date de publication ou de scraping
 }
 
 export interface ArticleTitle {
@@ -18,6 +19,7 @@ export interface ArticleTitle {
   rating?: number;
   time_spent: number;
   tags: string[];
+  date?: string; // Date de publication ou de scraping
 }
 
 export interface PaginationInfo {

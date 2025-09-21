@@ -84,7 +84,7 @@ def get_articles_paginated():
 
 @api_bp.route('/titles', methods=['POST'])
 def get_titles_paginated():
-    """Route POST for retrieving only titles with pagination"""
+    """Route POST for retrieving only titles with pagination and sorting"""
     start_time = time.time()
     
     try:
@@ -92,12 +92,16 @@ def get_titles_paginated():
         data = request.get_json() or {}
         page = data.get('page', 1)
         per_page = data.get('per_page', 20)
+        sort_by = data.get('sort_by', 'date')  # 'date' or 'order'
         
-        log_request("get_titles_paginated", start_time, page=page, per_page=per_page)
+        log_request("get_titles_paginated", start_time, page=page, per_page=per_page, sort_by=sort_by)
         
         # Validate parameters
         if not isinstance(page, int) or not isinstance(per_page, int):
             return jsonify({"error": "Parameters 'page' and 'per_page' must be integers"}), 400
+            
+        if sort_by not in ['date', 'order']:
+            return jsonify({"error": "Parameter 'sort_by' must be 'date' or 'order'"}), 400
         
         if page < 1:
             return jsonify({"error": "Parameter 'page' must be greater than 0"}), 400
@@ -106,7 +110,7 @@ def get_titles_paginated():
             return jsonify({"error": "Parameter 'per_page' must be greater than 0"}), 400
         
         # Get paginated titles
-        result = article_cache.get_paginated_titles(page, per_page)
+        result = article_cache.get_paginated_titles(page, per_page, sort_by)
         
         log_response("get_titles_paginated", start_time,
                     returned=result["pagination"]["returned"],

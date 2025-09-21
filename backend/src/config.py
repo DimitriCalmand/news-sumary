@@ -31,6 +31,8 @@ FLASK_DEBUG = True  # Active le hot reload en développement
 MODEL_CONFIG_FILE = "./data/models.json"
 SETTINGS_CONFIG_FILE = "./data/settings.json"
 
+BASIC_TAGS = ["découverte", "technologie", "innovation", "économie", "finance", "entreprise", "juridique", "santé", "éducation", "productivité"]
+
 def get_port():
     """Get the port from environment variable or use default"""
     return int(os.getenv("PORT", DEFAULT_PORT))

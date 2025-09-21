@@ -7,7 +7,7 @@ import json
 import os
 from typing import Dict, List, Optional
 
-from config import DEBUG_LOGGING, JSON_FILE
+from config import BASIC_TAGS, DEBUG_LOGGING, JSON_FILE
 
 
 class Article:
@@ -156,6 +156,9 @@ class ArticleManager:
         for article in articles:
             tags = article.get("tags", [])
             all_tags.update(tags)
+        # add basic tags if not already present
+        for tag in BASIC_TAGS:
+            all_tags.add(tag)
         return sorted(list(all_tags))
     
     @staticmethod

@@ -156,8 +156,7 @@ deploy_to_raspi() {
         else
             echo "✅ articles_seen.json déjà présent"
         fi
-        
-        # Créer chat_history.json s'il n'existe pas (pour les conversations IA)
+        # Créer chat_history.json s'il n'existe pas (pour la persistance)
         if [ ! -f data/chat_history.json ]; then
             echo "📋 Création du fichier chat_history.json..."
             echo "{}" > data/chat_history.json
@@ -165,7 +164,16 @@ deploy_to_raspi() {
         else
             echo "✅ chat_history.json déjà présent"
         fi
-        
+        # Créer settings.json s'il n'existe pas (pour la persistance)
+        if [ ! -f data/settings.json ]; then
+            echo "📋 Création du fichier settings.json..."
+            echo '{"prompts":{"article_processing":"","chat":""},"models":[],"default_model":"mistral small"}' > data/settings.json
+            echo "✅ settings.json créé"
+        else
+            echo "✅ settings.json déjà présent"
+        fi
+
+
         # Démarrer les nouveaux conteneurs
         echo "🚀 Démarrage des nouveaux conteneurs..."
         docker-compose -f docker-compose.arm64.yml up -d
@@ -239,5 +247,96 @@ main() {
     show_final_info
 }
 
-# Exécuter le script principal
-main "$@"
+# Fonction d'aide
+show_help() {
+    print_header
+    echo "Usage: $0 [commande]"
+    echo ""
+    echo "Commandes disponibles:"
+    echo "  deploy         - Déploiement complet (défaut)"
+    echo "  build          - Build uniquement les images ARM64"
+    echo "  push           - Push les images vers Docker Hub"
+    echo "  copy           - Copier les fichiers vers Raspberry Pi"
+    echo "  raspi          - Déployer sur Raspberry Pi (sans build)"
+    echo "  check          - Vérifier les prérequis"
+    echo "  setup          - Configurer Docker buildx"
+    echo "  help           - Afficher cette aide"
+    echo ""
+    echo "Exemples:"
+    echo "  $0              # Déploiement complet"
+    echo "  $0 deploy       # Déploiement complet"
+    echo "  $0 build        # Build uniquement"
+    echo "  $0 push         # Push vers Docker Hub"
+    echo "  $0 raspi        # Déployer sur Pi (images déjà buildées)"
+    echo "  $0 check        # Vérifier prérequis"
+    echo ""
+    echo "Workflow complet:"
+    echo "  1. Build des images ARM64"
+    echo "  2. Push vers Docker Hub"
+    echo "  3. Copie des fichiers"
+    echo "  4. Déploiement sur Raspberry Pi"
+}
+
+# Point d'entrée principal avec gestion des arguments
+case "${1:-deploy}" in
+    "deploy"|"")
+        print_header
+        check_prerequisites
+        setup_builder
+        build_images
+        copy_compose_file
+        deploy_to_raspi
+        show_final_info
+        ;;
+    "build")
+        print_header
+        check_prerequisites
+        setup_builder
+        build_images
+        echo -e "${GREEN}✅ Build terminé ! Utilisez '$0 push' pour envoyer vers Docker Hub${NC}"
+        ;;
+    "push")
+        print_header
+        # Vérifier que les images existent localement
+        if docker image inspect ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE}:arm64 >/dev/null 2>&1 && \
+           docker image inspect ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE}:arm64 >/dev/null 2>&1; then
+            print_step "Push des images vers Docker Hub..."
+            docker push ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE}:arm64
+            docker push ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE}:arm64
+            print_success "Images envoyées vers Docker Hub"
+        else
+            print_error "Images ARM64 non trouvées localement. Lancez d'abord '$0 build'"
+            exit 1
+        fi
+        ;;
+    "copy")
+        print_header
+        copy_compose_file
+        echo -e "${GREEN}✅ Fichiers copiés sur Raspberry Pi${NC}"
+        ;;
+    "raspi")
+        print_header
+        check_prerequisites
+        deploy_to_raspi
+        show_final_info
+        ;;
+    "check")
+        print_header
+        check_prerequisites
+        print_success "Tous les prérequis sont OK !"
+        ;;
+    "setup")
+        print_header
+        setup_builder
+        print_success "Docker buildx configuré !"
+        ;;
+    "help"|"-h"|"--help")
+        show_help
+        ;;
+    *)
+        print_error "Commande inconnue: $1"
+        echo ""
+        show_help
+        exit 1
+        ;;
+esac

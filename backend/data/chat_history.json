@@ -27,6 +27,20 @@
       "content": "**Résumé de l'article :**\n\nGoogle Cloud a annoncé l'ajout de deux startups d'IA, **Lovable** et **Windsurf**, à sa liste de clients, renforçant ainsi sa position face à des concurrents comme AWS et Microsoft Azure. Cette croissance s'inscrit dans une stratégie plus large visant à faire du cloud un pilier central pour Google, avec un chiffre d'affaires annuel de **50 milliards de dollars** et des perspectives prometteuses.\n\nLes partenariats avec des startups d'IA, notamment **9 des 10 principaux laboratoires d'IA** et **60% des startups d'IA générative**, sont un moteur clé de cette expansion. Google Cloud propose des offres attractives, comme **350 000 dollars de crédits cloud** via son programme pour startups, et des infrastructures optimisées pour l'IA (Gemini 2.5 Pro, GPU Nvidia).\n\nMalgré les défis liés aux coûts élevés de l'IA, le marché du cloud reste prometteur, avec une croissance attendue de **20% par an** d'ici 2025. L'article souligne également l'engagement de Google via des événements comme le **Google AI Builder’s Forum**, où 40 nouvelles startups ont été annoncées comme clientes.",
       "timestamp": "{\"$date\": {\"$numberLong\": \"1758439936988\"}}",
       "model_used": "mistral small"
+    },
+    {
+      "id": "5",
+      "type": "user",
+      "content": "que penses tu de l'articles",
+      "timestamp": "{\"$date\": {\"$numberLong\": \"1758480044091\"}}",
+      "model_used": null
+    },
+    {
+      "id": "6",
+      "type": "ai",
+      "content": "L'article est **informatif et bien structuré**, offrant une analyse claire de la croissance de Google Cloud grâce à ses partenariats avec des startups d'IA. Il met en avant des **données chiffrées** (chiffre d'affaires, prévisions, parts de marché) et des **exemples concrets** (Lovable, Windsurf, Gemini 2.5 Pro) pour illustrer son propos.\n\nPoints forts :\n- **Contexte économique** bien détaillé (concurrence avec AWS/Microsoft Azure, perspectives du marché cloud).\n- **Exemples précis** de startups et technologies utilisées (Gemini, Devin).\n- **Approche équilibrée** : mentionne à la fois les opportunités (croissance) et les défis (coûts élevés de l'IA).\n\nPoints à noter :\n- L'article ne fournit pas d'analyse critique approfondie (avantages/inconvénients pour Google ou les startups).\n- Aucune citation d'experts ou de contrepoints externes.\n\nEn résumé, c'est un **article solide** pour comprendre l'impact des startups d'IA sur Google Cloud, mais il reste **factuel et descriptif** sans approfondir les implications stratégiques.",
+      "timestamp": "{\"$date\": {\"$numberLong\": \"1758480044113\"}}",
+      "model_used": "mistral small"
     }
   ],
   "3": [

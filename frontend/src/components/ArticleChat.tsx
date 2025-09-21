@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { MarkdownRenderer } from './MarkdownRenderer';
 import { Button } from './ui/Button';
 
@@ -20,6 +20,12 @@ export const ArticleChat: React.FC<ArticleChatProps> = ({ articleId }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Function to scroll to bottom
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     // Load chat history when component mounts or when expanded
     useEffect(() => {
@@ -27,6 +33,13 @@ export const ArticleChat: React.FC<ArticleChatProps> = ({ articleId }) => {
             loadChatHistory();
         }
     }, [isExpanded, messages.length, articleId]);
+
+    // Scroll to bottom when messages change
+    useEffect(() => {
+        if (isExpanded && messages.length > 0) {
+            scrollToBottom();
+        }
+    }, [messages, isExpanded]);
 
     const loadChatHistory = async () => {
         setIsLoadingHistory(true);
@@ -211,6 +224,8 @@ export const ArticleChat: React.FC<ArticleChatProps> = ({ articleId }) => {
                                     </div>
                                 </div>
                             )}
+                            {/* Invisible element to scroll to */}
+                            <div ref={messagesEndRef} />
                         </div>
                     )}
 

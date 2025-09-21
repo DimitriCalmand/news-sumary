@@ -18,6 +18,7 @@ export function ArticleList() {
   const [activeFilters, setActiveFilters] = useState<{ tags?: string[]; min_rating?: number }>({});
   const [showFiltered, setShowFiltered] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<'date' | 'order'>('date');
 
   // Query for total count
   const { data: totalCount, refetch: refetchCount } = useQuery({
@@ -35,11 +36,14 @@ export function ArticleList() {
     error: titlesError,
     refetch: refetchTitles
   } = useQuery({
-    queryKey: ['articleTitles', currentPage],
-    queryFn: () => newsApi.getTitles(currentPage, ARTICLES_PER_PAGE),
+    queryKey: ['articleTitles', currentPage, sortBy],
+    queryFn: () => {
+      console.log('Fetching titles for page:', currentPage, 'sort:', sortBy);
+      return newsApi.getTitles(currentPage, ARTICLES_PER_PAGE, sortBy);
+    },
     enabled: !showFiltered, // Simplifié: seulement vérifie qu'on n'est pas en mode filtré
-    staleTime: 30 * 1000, // 30 secondes seulement pour permettre la pagination
-    refetchOnMount: false,
+    staleTime: 0, // Pas de cache pour forcer le refetch à chaque changement de page
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
 
@@ -72,15 +76,26 @@ export function ArticleList() {
 
     // Pour la pagination normale (pas filtrée), forcer le refetch
     if (!showFiltered) {
-      // Le refetch se déclenchera automatiquement grâce au changement de queryKey
-      console.log('Page change triggered, new data should load automatically');
+      console.log('Page change triggered, refetching titles for page:', page);
+      // Forcer un refetch immédiat des titres avec la nouvelle page
+      setTimeout(() => {
+        refetchTitles();
+      }, 0);
     }
 
     // Scroll après un petit délai pour laisser React faire le re-render
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 100);
-  }; const handleRefresh = async () => {
+  };
+
+  const handleSortChange = (newSortBy: 'date' | 'order') => {
+    console.log('Sort change:', sortBy, '->', newSortBy);
+    setSortBy(newSortBy);
+    setCurrentPage(1); // Reset to first page when sort changes
+  };
+
+  const handleRefresh = async () => {
     if (showFiltered) {
       await refetchFiltered();
     } else {
@@ -172,6 +187,33 @@ export function ArticleList() {
           <ArticleFilters onFiltersChange={handleFiltersChange} />
         </div>
 
+        {/* Contrôles de tri (uniquement quand pas de filtres actifs) */}
+        {!showFiltered && (
+          <div className="mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <span className="text-sm font-medium text-slate-700">Trier par :</span>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => handleSortChange('date')}
+                  variant={sortBy === 'date' ? 'default' : 'outline'}
+                  size="sm"
+                  className="text-xs"
+                >
+                  📅 Plus récents
+                </Button>
+                <Button
+                  onClick={() => handleSortChange('order')}
+                  variant={sortBy === 'order' ? 'default' : 'outline'}
+                  size="sm"
+                  className="text-xs"
+                >
+                  🔢 Ordre d'arrivée
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Loading state */}
         {isLoading && (
           <div className="flex justify-center py-12">
@@ -190,34 +232,14 @@ export function ArticleList() {
                       <CardTitle className="text-lg line-clamp-2 leading-tight">
                         {article.title}
                       </CardTitle>
-                      {/* Afficher rating et tags pour les articles filtrés */}
-                      {showFiltered && 'rating' in article && (
-                        <div className="flex items-center gap-4">
-                          {article.rating && article.rating > 0 && (
-                            <div className="flex items-center gap-2">
-                              <StarRating rating={article.rating} readonly size="sm" />
-                              <span className="text-sm text-slate-600">
-                                ({article.rating}/5)
-                              </span>
-                            </div>
-                          )}
-                          {article.tags && article.tags.length > 0 && (
-                            <div className="flex flex-wrap gap-1">
-                              {article.tags.slice(0, 3).map((tag, index) => (
-                                <span
-                                  key={index}
-                                  className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                              {article.tags.length > 3 && (
-                                <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                                  +{article.tags.length - 3}
-                                </span>
-                              )}
-                            </div>
-                          )}
+
+                      {/* Afficher rating seulement pour les articles filtrés */}
+                      {showFiltered && 'rating' in article && article.rating && article.rating > 0 && (
+                        <div className="flex items-center gap-2">
+                          <StarRating rating={article.rating} readonly size="sm" />
+                          <span className="text-sm text-slate-600">
+                            ({article.rating}/5)
+                          </span>
                         </div>
                       )}
                     </div>
@@ -238,6 +260,24 @@ export function ArticleList() {
                         >
                           Source <ExternalLink className="h-3 w-3" />
                         </a>
+                        {/* Tags à droite du lien Source */}
+                        {article.tags && article.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1 ml-2">
+                            {article.tags.slice(0, 3).map((tag, index) => (
+                              <span
+                                key={index}
+                                className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                            {article.tags.length > 3 && (
+                              <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                                +{article.tags.length - 3}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
                       <Button
                         size="sm"

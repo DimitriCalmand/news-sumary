@@ -4,7 +4,8 @@ Manages in-memory caching of articles for better performance
 """
 
 import time
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
+
 from config import CACHE_DURATION, DEBUG_LOGGING
 from models import ArticleManager
 
@@ -117,43 +118,58 @@ class ArticleCache:
             }
         }
     
-    def get_paginated_titles(self, page: int, per_page: int) -> Dict:
+    def get_paginated_titles(self, page: int, per_page: int, sort_by: str = 'date') -> Dict:
         """
-        Get paginated article titles
+        Get paginated article titles with sorting
         
         Args:
             page: Page number (1-based)
             per_page: Number of articles per page
+            sort_by: Sort order ('date' for newest first, 'order' for insertion order)
         
         Returns:
             Dictionary with titles and pagination info
         """
         articles = self.get_articles()
         
+        # Trier les articles selon le paramètre sort_by
+        if sort_by == 'date':
+            # Trier par date (plus récents en premier), puis par ordre d'arrivée (id) si pas de date
+            articles_sorted = sorted(articles, key=lambda x: (
+                x.get('date', '1900-01-01'),  # Date par défaut très ancienne si pas de date
+                -x.get('id', 0)  # ID décroissant comme second critère
+            ), reverse=True)
+        else:
+            # Garder l'ordre d'insertion (ordre original)
+            articles_sorted = articles
+        
         # Calculate indices
         start_index = (page - 1) * per_page
         end_index = start_index + per_page
         
         # Extract slice
-        articles_slice = articles[start_index:end_index]
+        articles_slice = articles_sorted[start_index:end_index]
         
         # Create titles with minimal data
         titles = []
         for i, article in enumerate(articles_slice):
             titles.append({
-                "id": start_index + i,
+                "id": article.get("id", start_index + i),  # Utiliser l'ID original de l'article
                 "title": article.get("title", ""),
                 "url": article.get("url", ""),
-                "has_been_pretreat": article.get("has_been_pretreat", False)
+                "has_been_pretreat": article.get("has_been_pretreat", False),
+                "date": article.get("date", None),
+                "tags": article.get("tags", [])  # Ajouter les tags
             })
         
         return {
             "titles": titles,
             "pagination": {
-                "start": start_index + 1,
-                "end": min(end_index, len(articles)),
+                "page": page,
+                "per_page": per_page,
                 "total": len(articles),
-                "returned": len(titles)
+                "returned": len(titles),
+                "sort_by": sort_by
             }
         }
     

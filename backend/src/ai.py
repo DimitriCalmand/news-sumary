@@ -20,7 +20,6 @@ def pretreat_articles() -> None:
             article["content"] = processed_content
             article["has_been_pretreat"] = True
             article["tags"] = tags
-            break
     ArticleManager.save_articles(articles)
     return None
 def load_models_settings(model_name: str) -> dict:
