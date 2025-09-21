@@ -393,9 +393,7 @@ def filter_articles():
                     filtered_by_rating.append(article)
             articles = filtered_by_rating
         
-        # Add IDs to articles
-        for i, article in enumerate(articles):
-            article["id"] = i
+        # Les IDs originaux sont déjà dans les articles, pas besoin de les redéfinir
         
         log_response("filter_articles", start_time, article_count=len(articles))
         return jsonify(articles)
