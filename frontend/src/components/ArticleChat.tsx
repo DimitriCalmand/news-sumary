@@ -1,172 +1,85 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSharedChat } from '../hooks/useSharedChat';
 import { MarkdownRenderer } from './MarkdownRenderer';
 import { Button } from './ui/Button';
 
 interface ArticleChatProps {
     articleId: string;
     articleTitle: string;
+    sharedChat: ReturnType<typeof useSharedChat>;
 }
 
-interface ChatMessage {
-    id: string;
-    type: 'user' | 'ai';
-    content: string;
-    timestamp: Date;
-}
-
-export const ArticleChat: React.FC<ArticleChatProps> = ({ articleId }) => {
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
+export const ArticleChat: React.FC<ArticleChatProps> = ({ sharedChat }) => {
     const [inputMessage, setInputMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(false);
-    const [isLoadingHistory, setIsLoadingHistory] = useState(false);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [isExpanded, setIsExpanded] = useState(false); // Fermé par défaut
+    
+    // Destructure shared chat state and methods
+    const {
+        messages,
+        isLoading,
+        isLoadingHistory,
+        messagesEndRef,
+        scrollToBottom,
+        loadChatHistory,
+        sendMessage,
+        clearChat
+    } = sharedChat;
 
-    // Function to scroll to bottom
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    // Load chat history when component mounts or when expanded
+    // Load chat history when component is expanded and messages are empty
     useEffect(() => {
         if (isExpanded && messages.length === 0) {
             loadChatHistory();
         }
-    }, [isExpanded, messages.length, articleId]);
+    }, [isExpanded, messages.length, loadChatHistory]);
 
     // Scroll to bottom when messages change
     useEffect(() => {
         if (isExpanded && messages.length > 0) {
-            scrollToBottom();
+            setTimeout(() => scrollToBottom(), 100);
         }
-    }, [messages, isExpanded]);
+    }, [messages, isExpanded, scrollToBottom]);
 
-    const loadChatHistory = async () => {
-        setIsLoadingHistory(true);
-        try {
-            const response = await fetch(`/api/articles/${articleId}/chat/history`);
-            const data = await response.json();
-
-            if (data.success && data.conversation) {
-                const loadedMessages: ChatMessage[] = data.conversation.map((msg: any) => ({
-                    id: msg.id,
-                    type: msg.type,
-                    content: msg.content,
-                    timestamp: new Date(msg.timestamp)
-                }));
-                setMessages(loadedMessages);
-            }
-        } catch (error) {
-            console.error('Error loading chat history:', error);
-        } finally {
-            setIsLoadingHistory(false);
-        }
-    };
-
-    const sendMessage = async () => {
+    const handleSendMessage = async () => {
         if (!inputMessage.trim() || isLoading) return;
-
-        const userMessage: ChatMessage = {
-            id: Date.now().toString(),
-            type: 'user',
-            content: inputMessage,
-            timestamp: new Date()
-        };
-
-        setMessages(prev => [...prev, userMessage]);
+        
+        await sendMessage(inputMessage);
         setInputMessage('');
-        setIsLoading(true);
-
-        try {
-            const response = await fetch(`/api/articles/${articleId}/chat`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    question: inputMessage,
-                    model: 'mistral small'
-                }),
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                const aiMessage: ChatMessage = {
-                    id: (Date.now() + 1).toString(),
-                    type: 'ai',
-                    content: data.answer,
-                    timestamp: new Date()
-                };
-                setMessages(prev => [...prev, aiMessage]);
-            } else {
-                const errorMessage: ChatMessage = {
-                    id: (Date.now() + 1).toString(),
-                    type: 'ai',
-                    content: `Erreur: ${data.error}`,
-                    timestamp: new Date()
-                };
-                setMessages(prev => [...prev, errorMessage]);
-            }
-        } catch (error) {
-            const errorMessage: ChatMessage = {
-                id: (Date.now() + 1).toString(),
-                type: 'ai',
-                content: 'Erreur de connexion avec le service IA',
-                timestamp: new Date()
-            };
-            setMessages(prev => [...prev, errorMessage]);
-        } finally {
-            setIsLoading(false);
-        }
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            sendMessage();
-        }
-    };
-
-    const clearChat = async () => {
-        try {
-            const response = await fetch(`/api/articles/${articleId}/chat/clear`, {
-                method: 'DELETE'
-            });
-            const data = await response.json();
-
-            if (data.success) {
-                setMessages([]);
-            } else {
-                console.error('Failed to clear chat history:', data.error);
-            }
-        } catch (error) {
-            console.error('Error clearing chat history:', error);
-            // Clear locally anyway
-            setMessages([]);
+            handleSendMessage();
         }
     };
 
     return (
-        <div className="mt-6 border rounded-lg bg-gray-50">
+        <div className="border rounded-lg bg-white shadow-sm">
             {/* Chat Header */}
             <div
-                className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-between p-4 cursor-pointer hover:bg-blue-50 transition-colors border-b"
                 onClick={() => setIsExpanded(!isExpanded)}
             >
-                <div className="flex items-center space-x-2">
-                    <span className="text-lg">🤖</span>
-                    <h3 className="font-medium text-gray-800">
-                        Poser une question sur cet article
-                    </h3>
+                <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                        <span className="text-lg">🤖</span>
+                    </div>
+                    <div>
+                        <h3 className="font-medium text-gray-900">
+                            Chat avec l'Assistant IA
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                            Cliquez pour {isExpanded ? 'réduire' : 'agrandir'} le chat
+                        </p>
+                    </div>
                 </div>
                 <div className="flex items-center space-x-2">
                     {messages.length > 0 && (
-                        <span className="text-sm text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                        <span className="text-sm text-blue-600 bg-blue-100 px-3 py-1 rounded-full font-medium">
                             {messages.length} message{messages.length > 1 ? 's' : ''}
                         </span>
                     )}
-                    <span className={`transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
+                    <span className={`transform transition-transform text-gray-400 ${isExpanded ? 'rotate-180' : ''}`}>
                         ⌄
                     </span>
                 </div>
@@ -174,14 +87,27 @@ export const ArticleChat: React.FC<ArticleChatProps> = ({ articleId }) => {
 
             {/* Chat Content */}
             {isExpanded && (
-                <div className="border-t bg-white">
+                <div className="bg-white">
                     {/* Loading history indicator */}
                     {isLoadingHistory && (
-                        <div className="p-4 text-center">
+                        <div className="p-6 text-center">
                             <div className="flex items-center justify-center space-x-2">
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
                                 <span className="text-sm text-gray-600">Chargement de l'historique...</span>
                             </div>
+                        </div>
+                    )}
+
+                    {/* Empty state */}
+                    {messages.length === 0 && !isLoadingHistory && (
+                        <div className="p-6 text-center">
+                            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span className="text-2xl">💬</span>
+                            </div>
+                            <p className="text-gray-600 mb-2">Commencez une conversation</p>
+                            <p className="text-sm text-gray-500">
+                                Posez votre première question sur cet article !
+                            </p>
                         </div>
                     )}
 
@@ -230,22 +156,22 @@ export const ArticleChat: React.FC<ArticleChatProps> = ({ articleId }) => {
                     )}
 
                     {/* Input Area */}
-                    <div className="p-4 border-t bg-gray-50">
-                        <div className="flex space-x-2">
+                    <div className="p-4 border-t bg-blue-50">
+                        <div className="flex space-x-3">
                             <textarea
                                 value={inputMessage}
                                 onChange={(e) => setInputMessage(e.target.value)}
                                 onKeyPress={handleKeyPress}
                                 placeholder="Posez votre question sur cet article..."
-                                className="flex-1 p-2 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="flex-1 p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 rows={2}
                                 disabled={isLoading || isLoadingHistory}
                             />
-                            <div className="flex flex-col space-y-1">
+                            <div className="flex flex-col space-y-2">
                                 <Button
-                                    onClick={sendMessage}
+                                    onClick={handleSendMessage}
                                     disabled={!inputMessage.trim() || isLoading || isLoadingHistory}
-                                    className="px-4 py-2 text-sm"
+                                    className="px-6 py-2 text-sm bg-blue-500 hover:bg-blue-600"
                                 >
                                     {isLoading ? '...' : 'Envoyer'}
                                 </Button>
@@ -253,7 +179,7 @@ export const ArticleChat: React.FC<ArticleChatProps> = ({ articleId }) => {
                                     <Button
                                         onClick={clearChat}
                                         variant="outline"
-                                        className="px-4 py-1 text-xs"
+                                        className="px-4 py-1 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
                                     >
                                         Effacer
                                     </Button>
@@ -262,7 +188,7 @@ export const ArticleChat: React.FC<ArticleChatProps> = ({ articleId }) => {
                         </div>
 
                         <div className="mt-2 text-xs text-gray-500">
-                            Appuyez sur Entrée pour envoyer • Shift+Entrée pour une nouvelle ligne
+                            Entrée pour envoyer • Shift+Entrée pour une nouvelle ligne
                         </div>
                     </div>
                 </div>

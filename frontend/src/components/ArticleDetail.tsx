@@ -1,11 +1,14 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, ExternalLink, RefreshCw } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSharedChat } from '../hooks/useSharedChat';
 import { newsApi } from '../utils/api';
 import { ArticleChat } from './ArticleChat';
 import { AutoReadingTimer } from './AutoReadingTimer';
+import { ChatModal } from './ChatModal';
 import { CommentsEditor } from './CommentsEditor';
+import { FloatingChatButton } from './FloatingChatButton';
 import { LoadingSpinner } from './LoadingSpinner';
 import { MarkdownRenderer } from './MarkdownRenderer';
 import { StarRating } from './StarRating';
@@ -17,6 +20,10 @@ export function ArticleDetail() {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
   const articleId = id ? parseInt(id, 10) : 0;
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  
+  // Shared chat state
+  const sharedChat = useSharedChat(articleId.toString());
 
   console.log('ArticleDetail - URL id:', id, 'parsed articleId:', articleId);
 
@@ -266,6 +273,40 @@ export function ArticleDetail() {
           </Card>
         </div>
 
+        {/* Chat Section - Repositionné avant les commentaires */}
+        <Card className="mb-8 border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+          <CardHeader className="bg-gradient-to-r from-blue-100 to-indigo-100 border-b border-blue-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-blue-500 rounded-lg">
+                  <span className="text-white text-lg">🤖</span>
+                </div>
+                <div>
+                  <CardTitle className="text-lg text-blue-900">
+                    Assistant IA pour cet article
+                  </CardTitle>
+                  <p className="text-sm text-blue-700 mt-1">
+                    Posez vos questions sur le contenu de l'article
+                  </p>
+                </div>
+              </div>
+              <Button
+                onClick={() => setIsChatModalOpen(true)}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                💬 Ouvrir le chat
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4">
+            <ArticleChat
+              articleId={articleId.toString()}
+              articleTitle={article.title}
+              sharedChat={sharedChat}
+            />
+          </CardContent>
+        </Card>
+
         {/* Comments */}
         <Card className="mb-8">
           <CardHeader>
@@ -279,10 +320,20 @@ export function ArticleDetail() {
           </CardContent>
         </Card>
 
-        {/* AI Chat Section */}
-        <ArticleChat
+        {/* Floating Chat Button */}
+        <FloatingChatButton
+          isOpen={isChatModalOpen}
+          onClick={() => setIsChatModalOpen(!isChatModalOpen)}
+          messageCount={sharedChat.messages.length}
+        />
+
+        {/* Chat Modal */}
+        <ChatModal
+          isOpen={isChatModalOpen}
+          onClose={() => setIsChatModalOpen(false)}
           articleId={articleId.toString()}
           articleTitle={article.title}
+          sharedChat={sharedChat}
         />
 
         {/* Actions */}
