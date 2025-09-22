@@ -1,9 +1,10 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, ExternalLink, RefreshCw } from 'lucide-react';
+import { ArrowLeft, ExternalLink, RefreshCw, Clock, Globe } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSharedChat } from '../hooks/useSharedChat';
 import { newsApi } from '../utils/api';
+import { formatRelativeTime, formatDateTime } from '../lib/utils';
 import { ArticleChat } from './ArticleChat';
 import { AutoReadingTimer } from './AutoReadingTimer';
 import { ChatModal } from './ChatModal';
@@ -200,6 +201,26 @@ export function ArticleDetail() {
               <CardTitle className="text-2xl lg:text-3xl leading-tight">
                 {article.title}
               </CardTitle>
+              
+              {/* Date et source */}
+              <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">
+                {/* Source */}
+                {article.source && (
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-4 w-4" />
+                    <span className="font-medium">{article.source}</span>
+                  </div>
+                )}
+                
+                {/* Date de scraping */}
+                {article.scraped_date && (
+                  <div className="flex items-center gap-2" title={`Récupéré le ${formatDateTime(article.scraped_date)}`}>
+                    <Clock className="h-4 w-4" />
+                    <span>{formatRelativeTime(article.scraped_date)}</span>
+                  </div>
+                )}
+              </div>
+              
               <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3">
                   {article.has_been_pretreat && (

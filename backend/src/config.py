@@ -16,6 +16,19 @@ TECHCRUNCH_URL = "https://techcrunch.com/category/artificial-intelligence/"
 TITLE_CLASS = "loop-card__title"
 PARAGRAPH_CLASS = "wp-block-paragraph"
 
+# France Info scraping settings
+FRANCE_INFO_BASE_URL = "https://www.franceinfo.fr"
+FRANCE_INFO_POLITIQUE_URL = FRANCE_INFO_BASE_URL + "/europe/"
+FRANCE_INFO_CARD_CLASSES = ["card-article-m__link", "card-article-majeure__link"]
+FRANCE_INFO_CONTENT_CLASS = "c-body"
+
+# Sources
+TECHCRUNCH_SOURCE = "TechCrunch"
+FRANCE_INFO_SOURCE = "France Info"
+
+# Tags obligatoires
+REQUIRED_TAGS = ["IA", "politique"]
+
 # Scraping intervals
 SCRAPING_INTERVAL = 1800  # 30 minutes in seconds
 

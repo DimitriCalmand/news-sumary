@@ -8,7 +8,9 @@ export interface Article {
   time_spent: number; // seconds
   comments: string;
   tags: string[];
-  date?: string; // Date de publication ou de scraping
+  source?: string; // Source de l'article (TechCrunch, France Info, etc.)
+  scraped_date?: string; // Date et heure de scraping
+  date?: string; // Date de publication ou de scraping (legacy)
 }
 
 export interface ArticleTitle {
@@ -19,7 +21,9 @@ export interface ArticleTitle {
   rating?: number;
   time_spent: number;
   tags: string[];
-  date?: string; // Date de publication ou de scraping
+  source?: string; // Source de l'article (TechCrunch, France Info, etc.)
+  scraped_date?: string; // Date et heure de scraping
+  date?: string; // Date de publication ou de scraping (legacy)
 }
 
 export interface PaginationInfo {

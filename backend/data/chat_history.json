@@ -75,5 +75,21 @@
       "timestamp": "{\"$date\": {\"$numberLong\": \"1758445257441\"}}",
       "model_used": "mistral small"
     }
+  ],
+  "41": [
+    {
+      "id": "1",
+      "type": "user",
+      "content": "résume moi l'article",
+      "timestamp": "{\"$date\": {\"$numberLong\": \"1758539220134\"}}",
+      "model_used": null
+    },
+    {
+      "id": "2",
+      "type": "ai",
+      "content": "**Résumé de l'article :**\n\nLes syndicats français donnent cinq jours au Premier ministre Sébastien Lecornu pour répondre à leurs revendications après la mobilisation du 18 septembre. Ils exigent l'abandon du projet de budget, le retour à l'âge légal de départ à la retraite à 64 ans, une taxation des très hauts revenus et plus de moyens pour les services publics. Lecornu, en difficulté sans majorité politique, pourrait négocier avec certains syndicats, notamment la CFDT, pour éviter une censure. Une nouvelle réunion est prévue la semaine suivante.",
+      "timestamp": "{\"$date\": {\"$numberLong\": \"1758539220151\"}}",
+      "model_used": "mistral small"
+    }
   ]
 }

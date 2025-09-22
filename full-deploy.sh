@@ -6,7 +6,7 @@
 set -e
 
 # Configuration
-RASPI_HOST="192.168.1.137"
+RASPI_HOST="176.163.25.162" #"192.168.1.137"
 RASPI_USER="server"
 RASPI_PATH="/Disk/Programmation/Intern/News-sumary"
 DOCKERHUB_USERNAME="dimitriepita"

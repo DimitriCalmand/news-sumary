@@ -5,6 +5,7 @@ Contains data models and article management functions
 
 import json
 import os
+from datetime import datetime
 from typing import Dict, List, Optional
 
 from config import BASIC_TAGS, DEBUG_LOGGING, JSON_FILE
@@ -15,7 +16,7 @@ class Article:
     
     def __init__(self, title: str, url: str, content: str = "", has_been_pretreat: bool = False, 
                  rating: Optional[int] = None, time_spent: int = 0, comments: str = "", 
-                 tags: Optional[List[str]] = None):
+                 tags: Optional[List[str]] = None, source: str = "", scraped_date: Optional[str] = None):
         self.title = title
         self.url = url
         self.content = content
@@ -24,6 +25,8 @@ class Article:
         self.time_spent = time_spent  # Temps passé en secondes
         self.comments = comments  # Commentaires personnels
         self.tags = tags or []  # Liste des tags
+        self.source = source  # Source de l'article (TechCrunch, France Info, etc.)
+        self.scraped_date = scraped_date or datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Date et heure de scraping
     
     def to_dict(self) -> Dict:
         """Convert article to dictionary"""
@@ -35,7 +38,9 @@ class Article:
             "rating": self.rating,
             "time_spent": self.time_spent,
             "comments": self.comments,
-            "tags": self.tags
+            "tags": self.tags,
+            "source": self.source,
+            "scraped_date": self.scraped_date
         }
     
     @classmethod
@@ -49,7 +54,9 @@ class Article:
             rating=data.get("rating"),
             time_spent=data.get("time_spent", 0),
             comments=data.get("comments", ""),
-            tags=data.get("tags", [])
+            tags=data.get("tags", []),
+            source=data.get("source", ""),
+            scraped_date=data.get("scraped_date", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         )
 
 
