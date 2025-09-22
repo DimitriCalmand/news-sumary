@@ -15,7 +15,7 @@ from config import (DEBUG_LOGGING, PARAGRAPH_CLASS, SCRAPING_INTERVAL,
                     TECHCRUNCH_URL, TITLE_CLASS, FRANCE_INFO_BASE_URL,
                     FRANCE_INFO_POLITIQUE_URL, FRANCE_INFO_CARD_CLASSES,
                     FRANCE_INFO_CONTENT_CLASS, TECHCRUNCH_SOURCE,
-                    FRANCE_INFO_SOURCE, REQUIRED_TAGS)
+                    FRANCE_INFO_SOURCE, get_required_tag_for_source)
 from models import Article, ArticleManager
 
 
@@ -126,12 +126,13 @@ class TechCrunchScraper:
                     print(f"[SCRAPER] Scraping new article: {title}")
                 
                 content = self.get_article_content(link)
+                required_tag = get_required_tag_for_source(TECHCRUNCH_SOURCE)
                 article = Article(
                     title=title,
                     url=link,
                     content=content,
                     has_been_pretreat=False,
-                    tags=["IA"],  # Tag obligatoire pour TechCrunch
+                    tags=[required_tag] if required_tag else [],  # Tag obligatoire pour TechCrunch
                     source=TECHCRUNCH_SOURCE,
                     scraped_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 )
@@ -256,12 +257,13 @@ class FranceInfoScraper:
                 title, content = self.get_article_content(link)
                 
                 if title and title not in existing_titles and content:
+                    required_tag = get_required_tag_for_source(FRANCE_INFO_SOURCE)
                     article = Article(
                         title=title,
                         url=link,
                         content=content,
                         has_been_pretreat=False,
-                        tags=["politique"],  # Tag obligatoire pour France Info
+                        tags=[required_tag] if required_tag else [],  # Tag obligatoire pour France Info
                         source=FRANCE_INFO_SOURCE,
                         scraped_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     )

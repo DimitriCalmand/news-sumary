@@ -1,6 +1,7 @@
-import { Filter, Star, Tag, X } from 'lucide-react';
+import { Filter, Star, Tag, X, ChevronDown, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { newsApi } from '../utils/api';
+import type { TagCategoriesResponse } from '../types';
 import { StarRating } from './StarRating';
 import { Button } from './ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
@@ -14,22 +15,32 @@ export function ArticleFilters({ onFiltersChange, className = '' }: ArticleFilte
     const [isExpanded, setIsExpanded] = useState(false);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [minRating, setMinRating] = useState<number>(0);
-    const [availableTags, setAvailableTags] = useState<string[]>([]);
-    const [popularTags, setPopularTags] = useState<string[]>([]);
+    const [tagCategories, setTagCategories] = useState<TagCategoriesResponse | null>(null);
+    const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
 
-    // Charger les tags disponibles
+    // Charger les catégories de tags
     useEffect(() => {
-        const loadTags = async () => {
+        const loadTagCategories = async () => {
             try {
-                const tags = await newsApi.getAllTags();
-                setAvailableTags(tags);
-                // Prendre les 8 premiers tags comme "populaires"
-                setPopularTags(tags.slice(0, 8));
+                const categories = await newsApi.getTagCategories();
+                console.log('Categories loaded:', categories);
+                setTagCategories(categories);
+                // Expand categories that have tags by default
+                const initialExpanded = new Set<string>();
+                Object.entries(categories.categories).forEach(([key, category]) => {
+                    console.log(`Category ${key}:`, category);
+                    // Expand if main tag exists OR if sub_tags exist
+                    if (category.has_main || category.sub_tags.length > 0) {
+                        initialExpanded.add(key);
+                    }
+                });
+                console.log('Initial expanded:', initialExpanded);
+                setExpandedCategories(initialExpanded);
             } catch (error) {
-                console.error('Error loading tags:', error);
+                console.error('Error loading tag categories:', error);
             }
         };
-        loadTags();
+        loadTagCategories();
     }, []);
 
     // Notifier les changements de filtres (seulement si il y a vraiment des filtres)
@@ -57,6 +68,18 @@ export function ArticleFilters({ onFiltersChange, className = '' }: ArticleFilte
 
     const handleRatingChange = (rating: number) => {
         setMinRating(rating === minRating ? 0 : rating);
+    };
+
+    const toggleCategory = (categoryKey: string) => {
+        setExpandedCategories(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(categoryKey)) {
+                newSet.delete(categoryKey);
+            } else {
+                newSet.add(categoryKey);
+            }
+            return newSet;
+        });
     };
 
     const clearFilters = () => {
@@ -129,47 +152,102 @@ export function ArticleFilters({ onFiltersChange, className = '' }: ArticleFilte
                             Tags ({selectedTags.length} sélectionné{selectedTags.length !== 1 ? 's' : ''})
                         </h4>
 
-                        {/* Popular Tags */}
-                        {popularTags.length > 0 && (
-                            <div className="mb-3">
-                                <p className="text-xs text-slate-500 mb-2">Tags populaires :</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {popularTags.map((tag) => (
-                                        <button
-                                            key={tag}
-                                            onClick={() => handleTagToggle(tag)}
-                                            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${selectedTags.includes(tag)
-                                                ? 'bg-blue-100 text-blue-800 ring-2 ring-blue-200'
-                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                                }`}
-                                        >
-                                            {tag}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* All Tags */}
-                        {availableTags.length > popularTags.length && (
-                            <div>
-                                <p className="text-xs text-slate-500 mb-2">Tous les tags :</p>
-                                <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
-                                    {availableTags
-                                        .filter(tag => !popularTags.includes(tag))
-                                        .map((tag) => (
-                                            <button
-                                                key={tag}
-                                                onClick={() => handleTagToggle(tag)}
-                                                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${selectedTags.includes(tag)
-                                                    ? 'bg-blue-100 text-blue-800 ring-2 ring-blue-200'
-                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        {tagCategories && (
+                            <div className="space-y-4">
+                                {/* Tags fréquents (BASIC_TAGS) */}
+                                {tagCategories.basic_tags.length > 0 && (
+                                    <div>
+                                        <p className="text-sm font-medium text-slate-700 mb-2">Tags fréquents :</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {tagCategories.basic_tags.map((tag) => (
+                                                <button
+                                                    key={tag}
+                                                    onClick={() => handleTagToggle(tag)}
+                                                    className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                                                        selectedTags.includes(tag)
+                                                            ? 'bg-green-100 text-green-800 ring-2 ring-green-200'
+                                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                                     }`}
-                                            >
-                                                {tag}
-                                            </button>
-                                        ))}
-                                </div>
+                                                >
+                                                    {tag}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Categories IA et Politique */}
+                                {Object.entries(tagCategories.categories).map(([categoryKey, category]) => (
+                                    <div key={categoryKey} className="border border-slate-200 rounded-lg">
+                                        <button
+                                            onClick={() => toggleCategory(categoryKey)}
+                                            className="w-full px-3 py-2 flex items-center justify-between text-left hover:bg-slate-50 rounded-t-lg"
+                                        >
+                                            <span className="font-medium text-slate-700 capitalize">
+                                                {categoryKey === 'ia' ? 'IA' : categoryKey === 'politique' ? 'Politique' : categoryKey}
+                                            </span>
+                                            {expandedCategories.has(categoryKey) ? 
+                                                <ChevronDown className="h-4 w-4" /> : 
+                                                <ChevronRight className="h-4 w-4" />
+                                            }
+                                        </button>
+                                        {expandedCategories.has(categoryKey) && (
+                                            <div className="p-3 border-t border-slate-200">
+                                                <div className="flex flex-wrap gap-2">
+                                                    {/* Main tag */}
+                                                    {category.has_main && (
+                                                        <button
+                                                            onClick={() => handleTagToggle(category.main_tag)}
+                                                            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                                                                selectedTags.includes(category.main_tag)
+                                                                    ? 'bg-blue-100 text-blue-800 ring-2 ring-blue-200'
+                                                                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                                                            }`}
+                                                        >
+                                                            {category.main_tag} (principal)
+                                                        </button>
+                                                    )}
+                                                    {/* Sub tags */}
+                                                    {category.sub_tags.map((tag) => (
+                                                        <button
+                                                            key={tag}
+                                                            onClick={() => handleTagToggle(tag)}
+                                                            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                                                                selectedTags.includes(tag)
+                                                                    ? 'bg-blue-100 text-blue-800 ring-2 ring-blue-200'
+                                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                            }`}
+                                                        >
+                                                            {tag}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+
+                                {/* Autres tags (non catégorisés) */}
+                                {tagCategories.other_tags.length > 0 && (
+                                    <div>
+                                        <p className="text-sm font-medium text-slate-700 mb-2">Autres tags :</p>
+                                        <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto">
+                                            {tagCategories.other_tags.map((tag) => (
+                                                <button
+                                                    key={tag}
+                                                    onClick={() => handleTagToggle(tag)}
+                                                    className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                                                        selectedTags.includes(tag)
+                                                            ? 'bg-purple-100 text-purple-800 ring-2 ring-purple-200'
+                                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                    }`}
+                                                >
+                                                    {tag}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         )}
 

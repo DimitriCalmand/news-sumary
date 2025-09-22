@@ -5,9 +5,11 @@
     "content": "### Résumé\nTechCrunch Disrupt 2025, qui se tiendra à San Francisco du 27 au 29 octobre, est un événement incontournable pour les innovateurs. Les inscriptions à tarif réduit sont disponibles jusqu'au 26 septembre à 23h59 PT, permettant d'économiser jusqu'à 668$.\n\n### 📢 **TechCrunch Disrupt 2025 : Ne manquez pas l'événement de l'année !**\n\n📅 **Dates et lieu**\nTechCrunch Disrupt 2025 se déroulera à **San Francisco**, plus précisément au **Moscone West**, du **27 au 29 octobre**.\n\n🎟️ **Économisez jusqu'à 668$**\nNe manquez pas l'occasion de **sauvegarder jusqu'à 668$** sur votre billet en vous inscrivant avant le **26 septembre à 23h59 PT**. Les prix augmenteront dans **6 jours** !\n\n💡 **Un événement incontournable**\nTechCrunch Disrupt 2025 est le lieu où les **idées les plus audacieuses** se concrétisent et où les **frontlines de l'innovation** brillent. Célébrez le **20e anniversaire** de cet événement emblématique !\n\n📢 **Ne manquez pas cette opportunité**\nNe laissez pas passer cette chance de participer à l'un des événements les plus prestigieux de l'industrie technologique. **Inscrivez-vous dès maintenant** pour profiter des tarifs avantageux !\n\n© 2025 TechCrunch Media LLC.\n\n",
     "has_been_pretreat": true,
     "rating": 5,
-    "time_spent": 340,
+    "time_spent": 346,
     "comments": "",
-    "tags": [],
+    "tags": [
+      "ia"
+    ],
     "id": 0,
     "scraped_date": "2025-09-22 13:16:16",
     "source": "TechCrunch"
@@ -20,7 +22,9 @@
     "rating": null,
     "time_spent": 129,
     "comments": "",
-    "tags": [],
+    "tags": [
+      "ia"
+    ],
     "id": 1,
     "scraped_date": "2025-09-22 13:16:16",
     "source": "TechCrunch"
@@ -33,7 +37,9 @@
     "rating": null,
     "time_spent": 9,
     "comments": "",
-    "tags": [],
+    "tags": [
+      "ia"
+    ],
     "id": 2,
     "scraped_date": "2025-09-22 13:16:16",
     "source": "TechCrunch"
@@ -50,7 +56,8 @@
       "technologie",
       "innovation",
       "économie",
-      "entreprise"
+      "entreprise",
+      "ia"
     ],
     "id": 3,
     "scraped_date": "2025-09-22 13:16:16",
@@ -67,7 +74,8 @@
     "tags": [
       "technologie",
       "juridique",
-      "économie"
+      "économie",
+      "ia"
     ],
     "id": 4,
     "scraped_date": "2025-09-22 13:16:16",
@@ -83,7 +91,8 @@
     "comments": "",
     "tags": [
       "entreprise",
-      "économie"
+      "économie",
+      "ia"
     ],
     "id": 5,
     "scraped_date": "2025-09-22 13:16:16",
@@ -100,7 +109,8 @@
     "tags": [
       "technologie",
       "innovation",
-      "juridique"
+      "juridique",
+      "ia"
     ],
     "id": 6,
     "scraped_date": "2025-09-22 13:16:16",
@@ -116,7 +126,8 @@
     "comments": "",
     "tags": [
       "technologie",
-      "innovation"
+      "innovation",
+      "ia"
     ],
     "id": 7,
     "scraped_date": "2025-09-22 13:16:16",
@@ -133,7 +144,8 @@
     "tags": [
       "technologie",
       "économie",
-      "entreprise"
+      "entreprise",
+      "ia"
     ],
     "id": 8,
     "scraped_date": "2025-09-22 13:16:16",
@@ -150,7 +162,8 @@
     "tags": [
       "technologie",
       "innovation",
-      "économie"
+      "économie",
+      "ia"
     ],
     "id": 9,
     "scraped_date": "2025-09-22 13:16:16",
@@ -168,7 +181,8 @@
       "économie",
       "technologie",
       "innovation",
-      "entreprise"
+      "entreprise",
+      "ia"
     ],
     "id": 10,
     "scraped_date": "2025-09-22 13:16:16",
@@ -180,12 +194,13 @@
     "content": "### Résumé\nApple a introduit son framework **Foundation Models** lors de la WWDC 2025, permettant aux développeurs d'utiliser des modèles d'IA locaux pour enrichir leurs applications. Plusieurs applications ont déjà intégré ces modèles, offrant des fonctionnalités améliorées sans nécessiter de connexion internet.\n\n### Article réécrit\n\n## 📢 Apple lance son framework Foundation Models\n\nEarlier this year, Apple introduced its **Foundation Models** framework during **WWDC 2025**, which allows developers to use the company’s **local AI models** to power features in their applications.\n\nThe company touted that with this framework, developers gain access to AI models without worrying about any **inference cost**. Plus, these local models have capabilities such as **guided generation** and **tool calling** built in.\n\nAs **iOS 26** is rolling out to all users, developers have been updating their apps to include features powered by Apple’s local AI models. Apple’s models are small compared with leading models from **OpenAI, Anthropic, Google, or Meta**. That is why local-only features largely improve **quality of life** with these apps rather than introducing major changes to the app’s workflow.\n\n## 📱 Applications utilisant le framework\n\n### The Lil Artist\nThe **Lil Artist** app offers various interactive experiences to help kids learn different skills like **creativity, math, and music**. Developer **Arima Jain** shipped an **AI story creator** with the iOS 26 update. This allows users to select a character and a theme, with the app generating a story using AI. The developer said that the **text generation** in the story is powered by the local model.\n\n### Daylish\nThe developer of the **Daylish** app is working on a prototype for automatically suggesting emojis for timeline events based on the title for the daily planner app.\n\n### MoneyCoach\nFinance tracking app **MoneyCoach** has two neat features powered by local models. First, the app shows **insights** about your spending, such as whether you spent more than average on groceries for that particular week. The other feature automatically suggests **categories and subcategories** for a spending item for quick entries.\n\n### LookUp\nThe word learning app **LookUp** has added two new modes using Apple’s AI models. There is a new learning mode, which leverages a local model to create examples corresponding to a word. Plus, the example asks users to explain the usage of the word in a sentence.\n\nThe developer is also using on-device models to generate a map view of a word’s origin.\n\n### Tasks\nJust like a few other apps, the **Tasks** app implemented a feature to suggest tags for an entry using local models automatically. It’s also using these models to detect a recurring task and schedule it accordingly. And the app lets users speak a few things and use the local model to break them down into various tasks without using the internet.\n\n### Day One\nAutomattic-owned journaling app **Day One** is using Apple’s models to get highlights and suggest titles for your entry. The team has also implemented a feature to generate prompts that nudge you to dive deeper and write more based on what you have already written.\n\n### Crouton\nRecipe app **Crouton** is using **Apple Intelligence** to suggest tags for a recipe and assign names to timers. It also uses AI to break down a block of text into easy-to-follow steps for cooking.\n\n### SignEasy\nDigital signing app **SignEasy** is using Apple’s local models to extract key insights from a contract and give users a summary of the document they are signing.\n\nWe will continue updating this list as we discover more apps using Apple’s local models.\n\n© 2025 TechCrunch Media LLC.\n\n",
     "has_been_pretreat": true,
     "rating": 3,
-    "time_spent": 143,
+    "time_spent": 148,
     "comments": "",
     "tags": [
       "technologie",
       "innovation",
-      "productivité"
+      "productivité",
+      "ia"
     ],
     "id": 11,
     "scraped_date": "2025-09-22 13:16:16",
@@ -202,7 +217,8 @@
     "tags": [
       "technologie",
       "économie",
-      "entreprise"
+      "entreprise",
+      "ia"
     ],
     "id": 12,
     "scraped_date": "2025-09-22 13:16:16",
@@ -220,7 +236,8 @@
       "technologie",
       "innovation",
       "économie",
-      "entreprise"
+      "entreprise",
+      "ia"
     ],
     "id": 13,
     "scraped_date": "2025-09-22 13:16:16",
@@ -237,7 +254,8 @@
     "tags": [
       "technologie",
       "innovation",
-      "économie"
+      "économie",
+      "ia"
     ],
     "id": 14,
     "scraped_date": "2025-09-22 13:16:16",
@@ -256,7 +274,8 @@
       "innovation",
       "économie",
       "finance",
-      "entreprise"
+      "entreprise",
+      "ia"
     ],
     "id": 15,
     "scraped_date": "2025-09-22 13:16:16",
@@ -274,7 +293,8 @@
       "technologie",
       "économie",
       "entreprise",
-      "finance"
+      "finance",
+      "ia"
     ],
     "id": 16,
     "scraped_date": "2025-09-22 13:16:16",
@@ -291,7 +311,8 @@
     "tags": [
       "technologie",
       "innovation",
-      "productivité"
+      "productivité",
+      "ia"
     ],
     "id": 17,
     "scraped_date": "2025-09-22 13:16:16",
@@ -308,7 +329,8 @@
     "tags": [
       "technologie",
       "innovation",
-      "productivité"
+      "productivité",
+      "ia"
     ],
     "id": 18,
     "scraped_date": "2025-09-22 13:16:16",
@@ -325,7 +347,8 @@
     "tags": [
       "technologie",
       "innovation",
-      "économie"
+      "économie",
+      "ia"
     ],
     "id": 19,
     "scraped_date": "2025-09-22 13:16:16",
@@ -342,7 +365,8 @@
     "tags": [
       "technologie",
       "innovation",
-      "productivité"
+      "productivité",
+      "ia"
     ],
     "id": 20,
     "scraped_date": "2025-09-22 13:16:16",
@@ -364,7 +388,8 @@
       "juridique",
       "santé",
       "éducation",
-      "productivité"
+      "productivité",
+      "ia"
     ],
     "id": 21,
     "scraped_date": "2025-09-22 13:16:16",
@@ -383,7 +408,8 @@
       "innovation",
       "économie",
       "finance",
-      "entreprise"
+      "entreprise",
+      "ia"
     ],
     "id": 22,
     "scraped_date": "2025-09-22 13:16:16",
@@ -401,7 +427,8 @@
       "technologie",
       "économie",
       "entreprise",
-      "innovation"
+      "innovation",
+      "ia"
     ],
     "id": 23,
     "scraped_date": "2025-09-22 13:16:16",
@@ -419,7 +446,8 @@
       "technologie",
       "innovation",
       "économie",
-      "entreprise"
+      "entreprise",
+      "ia"
     ],
     "id": 24,
     "scraped_date": "2025-09-22 13:16:16",
@@ -437,7 +465,8 @@
       "technologie",
       "innovation",
       "productivité",
-      "économie"
+      "économie",
+      "ia"
     ],
     "id": 25,
     "scraped_date": "2025-09-22 13:16:16",
@@ -455,7 +484,8 @@
       "technologie",
       "innovation",
       "économie",
-      "productivité"
+      "productivité",
+      "ia"
     ],
     "id": 26,
     "scraped_date": "2025-09-22 13:16:16",
@@ -472,7 +502,8 @@
     "tags": [
       "technologie",
       "innovation",
-      "économie"
+      "économie",
+      "ia"
     ],
     "id": 27,
     "scraped_date": "2025-09-22 13:16:16",
@@ -491,7 +522,8 @@
       "innovation",
       "économie",
       "finance",
-      "entreprise"
+      "entreprise",
+      "ia"
     ],
     "id": 28,
     "scraped_date": "2025-09-22 13:16:16",
@@ -511,7 +543,8 @@
       "économie",
       "finance",
       "entreprise",
-      "juridique"
+      "juridique",
+      "ia"
     ],
     "id": 29,
     "scraped_date": "2025-09-22 13:16:16",
@@ -529,7 +562,8 @@
       "économie",
       "finance",
       "entreprise",
-      "juridique"
+      "juridique",
+      "ia"
     ],
     "id": 30,
     "scraped_date": "2025-09-22 13:16:16",
@@ -545,7 +579,8 @@
     "comments": "",
     "tags": [
       "technologie",
-      "innovation"
+      "innovation",
+      "ia"
     ],
     "id": 31,
     "scraped_date": "2025-09-22 13:16:16",
@@ -564,7 +599,8 @@
       "innovation",
       "économie",
       "finance",
-      "entreprise"
+      "entreprise",
+      "ia"
     ],
     "id": 32,
     "scraped_date": "2025-09-22 13:16:16",
@@ -581,7 +617,8 @@
     "tags": [
       "technologie",
       "innovation",
-      "productivité"
+      "productivité",
+      "ia"
     ],
     "id": 33,
     "scraped_date": "2025-09-22 13:16:16",
@@ -599,7 +636,8 @@
       "technologie",
       "économie",
       "finance",
-      "productivité"
+      "productivité",
+      "ia"
     ],
     "id": 34,
     "scraped_date": "2025-09-22 13:16:16",
@@ -619,7 +657,8 @@
       "innovation",
       "technologie",
       "économie",
-      "productivité"
+      "productivité",
+      "ia"
     ],
     "id": 35,
     "scraped_date": "2025-09-22 13:16:16",
@@ -685,7 +724,8 @@
     "tags": [
       "économie",
       "finance",
-      "juridique"
+      "juridique",
+      "politique"
     ],
     "source": "France Info",
     "id": 39,
@@ -753,7 +793,8 @@
     "tags": [
       "juridique",
       "sport",
-      "éducation"
+      "éducation",
+      "politique"
     ],
     "source": "France Info",
     "id": 43,
@@ -904,7 +945,8 @@
       "économie",
       "finance",
       "juridique",
-      "entreprise"
+      "entreprise",
+      "politique"
     ],
     "source": "France Info",
     "id": 52,
@@ -938,7 +980,8 @@
     "tags": [
       "éducation",
       "santé",
-      "juridique"
+      "juridique",
+      "politique"
     ],
     "source": "France Info",
     "scraped_date": "2025-09-22 13:16:16",
@@ -972,7 +1015,8 @@
     "tags": [
       "santé",
       "économie",
-      "éducation"
+      "éducation",
+      "politique"
     ],
     "source": "France Info",
     "scraped_date": "2025-09-22 13:16:16",
@@ -988,7 +1032,8 @@
     "comments": "",
     "tags": [
       "découverte",
-      "économie"
+      "économie",
+      "politique"
     ],
     "source": "France Info",
     "scraped_date": "2025-09-22 13:16:16",
@@ -1004,7 +1049,8 @@
     "comments": "",
     "tags": [
       "économie",
-      "juridique"
+      "juridique",
+      "politique"
     ],
     "source": "France Info",
     "scraped_date": "2025-09-22 13:16:16",
@@ -1021,7 +1067,8 @@
     "tags": [
       "éducation",
       "économie",
-      "juridique"
+      "juridique",
+      "politique"
     ],
     "source": "France Info",
     "scraped_date": "2025-09-22 13:16:16",
@@ -1038,7 +1085,8 @@
     "tags": [
       "santé",
       "technologie",
-      "innovation"
+      "innovation",
+      "politique"
     ],
     "source": "France Info",
     "scraped_date": "2025-09-22 13:16:16",
@@ -1050,10 +1098,11 @@
     "content": "### Résumé\nChristian Brückner, suspect principal dans l'enlèvement de Maddie McCann, a été libéré de prison malgré son profil dangereux. Les autorités allemandes n'avaient pas le choix légal de le retenir plus longtemps. Les enquêteurs estiment avoir des preuves concrètes contre lui, mais il nie toute implication et n'est pas mis en examen.\n\n### Article réécrit\n\n**🚨 Libération controversée du suspect principal dans l'affaire Maddie McCann**\n\nCe texte correspond à une partie de la retranscription du reportage ci-dessus. Cliquez sur la vidéo pour la regarder en intégralité.\n\n**🏚️ Une sortie de prison très médiatique**\nUne **sortie de prison** très médiatique a eu lieu ce mercredi matin pour le suspect numéro un de l'enlèvement de **Maddie McCann**. Depuis sept ans, **Christian Brückner** purgeait une peine pour le viol d'une touriste américaine au Portugal en 2005, soit deux ans avant la disparition de la fillette britannique de 3 ans dans une station balnéaire portugaise. Libérable, malgré son **profil très sensible**, la justice allemande n'avait pas le choix, nous explique ce procureur.\n\n**📜 \"Il n'existe aucun moyen légal en Allemagne de l'enfermer plus longtemps\"**\n\"Il n'existe **aucun moyen légal** en Allemagne de l'enfermer plus longtemps, même si certaines expertises indiquent qu'il est **dangereux** et que le **risque de récidive** est important\", a indiqué **Christian Wolters**, procureur de Braunschweig (Allemagne).\n\n**🔍 Un témoignage accablant**\nChristian Brückner a-t-il enlevé la petite Maddie McCann, qui dormait dans la chambre d'hôtel de ses parents le 3 mai 2007, à Praia da Luz (Portugal). Les **enquêteurs en sont persuadés**. Ils estiment avoir des **preuves concrètes** comme son téléphone qui a borné ce soir-là. Des **photos et vidéos de viols d'enfants** stockés sur des clés USB auraient été découvertes dissimulées sur un terrain lui appartenant, ainsi que des e-mails décrivant le **rapte d'une fillette de trois ans en 2007**. Il aurait aussi évoqué l'affaire avec des proches en 2008, selon **Helge Busching**, un Allemand qui faisait à l'époque des larcins avec lui au Portugal.\n\n**🗣️ \"Je lui avais dit à l'époque que je ne comprenais pas comment quelqu'un pouvait enlever un petit enfant dans un hôtel, et après il m'a dit : 'Elle n'a même pas crié'. Je crois que c'est sorti de sa bouche comme ça sans faire exprès\"**, s'est-il souvenu.\n\n**🚫 Le suspect nie toute implication**\nLe suspect lui, nie toute implication et n'est pas mis en examen, rappelle son avocat. \"La défense n'a toujours pas accès au dossier d'enquête. Nous ne savons pas sur quoi ces déclarations sont fondées\", a fait savoir son conseil.\n\n**🔎 L'enquête se poursuit**\nEn attendant, l'enquête se poursuit. Le suspect devra laisser son passeport, prévenir les autorités de tout changement et bien sûr porter un bracelet électronique. Les autorités craignent toujours que l'ancien détenu, qui a encore des échéances judiciaires, ne s'évapore dans la nature.\n\n**",
     "has_been_pretreat": true,
     "rating": null,
-    "time_spent": 0,
+    "time_spent": 13,
     "comments": "",
     "tags": [
-      "juridique**"
+      "juridique**",
+      "politique"
     ],
     "source": "France Info",
     "scraped_date": "2025-09-22 13:16:16",
@@ -1105,7 +1154,8 @@
     "tags": [
       "juridique",
       "santé",
-      "économie"
+      "économie",
+      "politique"
     ],
     "source": "France Info",
     "scraped_date": "2025-09-22 13:16:16",
@@ -1120,9 +1170,10 @@
     "time_spent": 0,
     "comments": "",
     "tags": [
-      "découverte",
-      "santé",
-      "éducation"
+      "politique",
+      "relations internationales",
+      "union européenne",
+      "gouvernement"
     ],
     "source": "France Info",
     "scraped_date": "2025-09-22 13:16:16",
@@ -1159,7 +1210,8 @@
       "santé",
       "éducation",
       "technologie",
-      "innovation"
+      "innovation",
+      "politique"
     ],
     "source": "France Info",
     "scraped_date": "2025-09-22 13:16:16",
@@ -1168,15 +1220,16 @@
   {
     "title": "Guerre en Ukraine : la Russie a lancé près de 580 drones contre l'Ukraine",
     "url": "https://www.franceinfo.fr/monde/europe/manifestations-en-ukraine/direct-guerre-en-ukraine-la-russie-a-lance-40-missiles-et-580-drones-sur-l-ukraine-faisant-trois-morts-dit-volodymyr-zelensky_7503271.html",
-    "content": "### Résumé\nLa Russie a lancé une attaque massive contre l'Ukraine avec 40 missiles et 580 drones, faisant trois morts et des dizaines de blessés. Volodymyr Zelensky accuse la Russie de terroriser les civils. Par ailleurs, la Russie nie avoir violé l'espace aérien estonien, malgré les accusations de l'Estonie. Les réactions internationales condamnent ces actions. Enfin, l'Ukraine prévoit d'exporter certaines de ses armes pour financer sa production militaire.\n\n### Article réécrit\n\n## 📢 **Attaque massive de la Russie contre l'Ukraine**\nLa Russie a lancé **40 missiles** et quelque **580 drones** sur l'Ukraine. Ce raid, survenu dans la nuit de vendredi à samedi, faisant **trois morts** et des **dizaines de blessés**, constitue une **\"attaque massive\"**, a annoncé **Volodymyr Zelensky**.\n\n> \"Chaque frappe de ce type ne répond pas à une nécessité militaire, mais à une **stratégie délibérée** de la Russie visant à **terroriser les civils** et à **détruire nos infrastructures**\", a-t-il accusé.\n\n## 🛑 **Violation de l'espace aérien estonien**\nLa Russie nie avoir violé l'espace aérien estonien. Vendredi, trois avions de combat russes ont survolé l'Estonie, qui a dénoncé une violation **\"sans précédent\"** de son espace aérien.\n\nLe ministère de la Défense russe a fait savoir que **\"trois chasseurs russes MiG-31\"** avaient effectivement réalisé un vol mais que celui-ci **\"s'était déroulé en stricte conformité avec les règles internationales d'utilisation de l'espace aérien, sans violer les frontières d'autres États, ce qui est confirmé par les moyens de contrôle objectif\"**.\n\n## 🌍 **Condamnations internationales**\n- **Emmanuel Macron** a dénoncé une **\"accumulation de provocations\"** de la Russie.\n- **Donald Trump**, président américain, a commenté : **\"Je n'aime pas ce qu’il se passe\"**.\n- **Andriï Sybiga**, chef de la diplomatie ukrainienne, a réagi : **\"L'incursion (...) constitue une nouvelle escalade de la part de la Russie et une menace directe pour la sécurité transatlantique\"**.\n- Les services diplomatiques estoniens ont convoqué le chargé d'affaires de l'ambassade de Russie pour protester contre cette nouvelle violation.\n\n## 💰 **Exportations contrôlées d'armes ukrainiennes**\nVolodymyr Zelensky a affirmé vendredi qu'il comptait commencer à vendre à l'étranger certains types d'armements tels que des **drones navals** pour financer la production militaire en Ukraine.\n\n> \"Nous disposons de certains types d'armes en quantités bien plus importantes que ce dont nous avons réellement besoin aujourd'hui en Ukraine\", a-t-il expliqué dans son adresse quotidienne diffusée sur les réseaux sociaux.\n\n",
+    "content": "### Résumé\nLa Russie a lancé une attaque massive contre l'Ukraine avec 40 missiles et 580 drones, faisant trois morts et des dizaines de blessés. Volodymyr Zelensky accuse la Russie de terroriser les civils. Par ailleurs, la Russie nie avoir violé l'espace aérien estonien, malgré les accusations de l'Estonie. Les réactions internationales condamnent ces actions. Enfin, l'Ukraine prévoit d'exporter certaines de ses armes pour financer sa production militaire.\n\n## 📢 **Attaque massive de la Russie contre l'Ukraine**\nLa Russie a lancé **40 missiles** et quelque **580 drones** sur l'Ukraine. Ce raid, survenu dans la nuit de vendredi à samedi, faisant **trois morts** et des **dizaines de blessés**, constitue une **\"attaque massive\"**, a annoncé **Volodymyr Zelensky**.\n\n> \"Chaque frappe de ce type ne répond pas à une nécessité militaire, mais à une **stratégie délibérée** de la Russie visant à **terroriser les civils** et à **détruire nos infrastructures**\", a-t-il accusé.\n\n## 🛑 **Violation de l'espace aérien estonien**\nLa Russie nie avoir violé l'espace aérien estonien. Vendredi, trois avions de combat russes ont survolé l'Estonie, qui a dénoncé une violation **\"sans précédent\"** de son espace aérien.\n\nLe ministère de la Défense russe a fait savoir que **\"trois chasseurs russes MiG-31\"** avaient effectivement réalisé un vol mais que celui-ci **\"s'était déroulé en stricte conformité avec les règles internationales d'utilisation de l'espace aérien, sans violer les frontières d'autres États, ce qui est confirmé par les moyens de contrôle objectif\"**.\n\n## 🌍 **Condamnations internationales**\n- **Emmanuel Macron** a dénoncé une **\"accumulation de provocations\"** de la Russie.\n- **Donald Trump**, président américain, a commenté : **\"Je n'aime pas ce qu’il se passe\"**.\n- **Andriï Sybiga**, chef de la diplomatie ukrainienne, a réagi : **\"L'incursion (...) constitue une nouvelle escalade de la part de la Russie et une menace directe pour la sécurité transatlantique\"**.\n- Les services diplomatiques estoniens ont convoqué le chargé d'affaires de l'ambassade de Russie pour protester contre cette nouvelle violation.\n\n## 💰 **Exportations contrôlées d'armes ukrainiennes**\nVolodymyr Zelensky a affirmé vendredi qu'il comptait commencer à vendre à l'étranger certains types d'armements tels que des **drones navals** pour financer la production militaire en Ukraine.\n\n> \"Nous disposons de certains types d'armes en quantités bien plus importantes que ce dont nous avons réellement besoin aujourd'hui en Ukraine\", a-t-il expliqué dans son adresse quotidienne diffusée sur les réseaux sociaux.\n\n",
     "has_been_pretreat": true,
     "rating": null,
     "time_spent": 0,
     "comments": "",
     "tags": [
       "économie",
+      "finance",
       "juridique",
-      "santé"
+      "politique"
     ],
     "source": "France Info",
     "scraped_date": "2025-09-22 13:16:16",

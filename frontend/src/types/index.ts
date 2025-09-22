@@ -48,6 +48,21 @@ export interface RatingUpdate {
   rating: number; // 1-5
 }
 
+// Types pour les catégories de tags
+export interface TagCategory {
+  main_tag: string;
+  sub_tags: string[];
+  has_main: boolean;
+}
+
+export interface TagCategoriesResponse {
+  categories: {
+    [categoryKey: string]: TagCategory;
+  };
+  basic_tags: string[];
+  other_tags: string[];
+}
+
 export interface ReadingTimeUpdate {
   seconds: number;
 }

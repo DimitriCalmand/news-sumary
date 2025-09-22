@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Article, TitlesResponse } from '../types';
+import type { Article, TitlesResponse, TagCategoriesResponse } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/';
 
@@ -81,6 +81,12 @@ export const newsApi = {
   getAllTags: async (): Promise<string[]> => {
     const response = await api.get('tags');
     return response.data.tags;
+  },
+
+  // Get organized tag categories
+  getTagCategories: async (): Promise<TagCategoriesResponse> => {
+    const response = await api.get('tags/categories');
+    return response.data;
   },
 
   // Filter articles by tags and/or rating

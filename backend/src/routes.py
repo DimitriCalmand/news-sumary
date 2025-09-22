@@ -9,7 +9,7 @@ from ai import chat_with_ai, pretreat_articles
 from cache import article_cache
 from config import DEBUG_LOGGING
 from flask import Blueprint, jsonify, request
-from models import ArticleManager, ChatManager
+from models import ArticleManager, ChatManager, normalize_tags
 from settings import SettingsManager
 
 # Create a Blueprint for API routes
@@ -324,12 +324,15 @@ def update_article_tags(article_id: int):
         if not isinstance(tags, list) or not all(isinstance(tag, str) for tag in tags):
             return jsonify({"error": "Tags must be a list of strings"}), 400
         
-        success = ArticleManager.update_article_tags(article_id, tags)
+        # Normalize tags before updating
+        normalized_tags = normalize_tags(tags)
+        
+        success = ArticleManager.update_article_tags(article_id, normalized_tags)
         if success:
             # Clear cache to ensure fresh data
             article_cache.invalidate_cache()
-            log_response("update_article_tags", start_time, article_id=article_id, tags=tags)
-            return jsonify({"message": "Tags updated successfully", "tags": tags})
+            log_response("update_article_tags", start_time, article_id=article_id, tags=normalized_tags)
+            return jsonify({"message": "Tags updated successfully", "tags": normalized_tags})
         else:
             return jsonify({"error": "Article not found"}), 404
     
@@ -352,6 +355,59 @@ def get_all_tags():
     except Exception as e:
         log_response("get_all_tags", start_time, status="error", error=str(e))
         return jsonify({"error": f"Error getting tags: {str(e)}"}), 500
+
+@api_bp.route('/tags/categories', methods=['GET'])
+def get_tag_categories():
+    """Get organized tag categories"""
+    from config import TAG_CATEGORIES, BASIC_TAGS
+    
+    start_time = time.time()
+    log_request("get_tag_categories", start_time)
+    
+    try:
+        # Get all actual tags from articles
+        all_article_tags = ArticleManager.get_all_tags()
+        
+        # Organize tags by categories
+        organized_tags = {
+            "categories": {},
+            "basic_tags": [],
+            "other_tags": []
+        }
+        
+        # Process defined categories
+        for category_key, category_data in TAG_CATEGORIES.items():
+            main_tag = category_data["main_tag"]
+            sub_tags = category_data["sub_tags"]
+            
+            # Only include tags that actually exist in articles
+            available_sub_tags = [tag for tag in sub_tags if tag in all_article_tags]
+            
+            if main_tag in all_article_tags or available_sub_tags:
+                organized_tags["categories"][category_key] = {
+                    "main_tag": main_tag,
+                    "sub_tags": available_sub_tags,
+                    "has_main": main_tag in all_article_tags
+                }
+        
+        # Process basic tags
+        organized_tags["basic_tags"] = [tag for tag in BASIC_TAGS if tag in all_article_tags]
+        
+        # Process other tags (not in categories or basic)
+        all_defined_tags = set()
+        for category_data in TAG_CATEGORIES.values():
+            all_defined_tags.add(category_data["main_tag"])
+            all_defined_tags.update(category_data["sub_tags"])
+        all_defined_tags.update(BASIC_TAGS)
+        
+        organized_tags["other_tags"] = [tag for tag in all_article_tags if tag not in all_defined_tags]
+        
+        log_response("get_tag_categories", start_time)
+        return jsonify(organized_tags)
+    
+    except Exception as e:
+        log_response("get_tag_categories", start_time, status="error", error=str(e))
+        return jsonify({"error": f"Error getting tag categories: {str(e)}"}), 500
 
 @api_bp.route('/pretreat', methods=['GET'])
 def pretreat_articles_route():

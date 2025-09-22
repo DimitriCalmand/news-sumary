@@ -1,7 +1,7 @@
 import json
 
 import requests
-from config import DEBUG_LOGGING
+from config import DEBUG_LOGGING, get_tags_for_source, get_required_tag_for_source
 from models import ArticleManager
 from settings import SettingsManager
 
@@ -17,26 +17,55 @@ def pretreat_articles() -> None:
             if DEBUG_LOGGING:
                 print(f"[AI] Pretreating article: {article['title']}")
             # Simulate AI processing (e.g., summarization, keyword extraction)
-            processed_content, tags = process_article_content(article["content"], "mistral small")
+            article_source = article.get("source", "")
+            processed_content, ai_tags = process_article_content(article["content"], "mistral small", article_source)
             if DEBUG_LOGGING:
                 print(f"[AI] Processed content: {processed_content[:60]}...")  # Print first 60 chars
+                print(f"[AI] AI suggested tags: {ai_tags}")
+            
+            # Ajouter automatiquement le tag obligatoire selon la source
+            required_tag = get_required_tag_for_source(article_source)
+            final_tags = ai_tags.copy() if ai_tags else []
+            
+            # Ajouter le tag obligatoire s'il n'est pas déjà présent
+            if required_tag and required_tag not in final_tags:
+                final_tags.append(required_tag)
+                if DEBUG_LOGGING:
+                    print(f"[AI] Added required tag '{required_tag}' for source '{article_source}'")
+            
+            # Garder les tags existants de l'article s'il y en a
+            existing_tags = article.get("tags", [])
+            if existing_tags:
+                # Fusionner les tags existants avec les nouveaux, sans doublons
+                all_tags = list(set(existing_tags + final_tags))
+                final_tags = all_tags
+                if DEBUG_LOGGING:
+                    print(f"[AI] Merged with existing tags: {existing_tags} -> {final_tags}")
+            
             article["content"] = processed_content
             article["has_been_pretreat"] = True
-            article["tags"] = tags
+            article["tags"] = final_tags
             ArticleManager.save_articles(articles)
             if DEBUG_LOGGING:
-                print(f"[AI] Article '{article['title']}' saved successfully")
+                print(f"[AI] Article '{article['title']}' saved with final tags: {final_tags}")
     return None
 def load_models_settings(model_name: str) -> dict:
     """Get model configuration from settings"""
     return SettingsManager.get_model_by_name(model_name)
-def prepare_tag_to_str() -> str:
-    tags = ArticleManager.get_all_tags()
+def prepare_tag_to_str(source: str = None) -> str:
+    """Prepare tags string for AI, filtered by source if provided"""
+    if source:
+        tags = get_tags_for_source(source)
+    else:
+        tags = ArticleManager.get_all_tags()
+    
     if not tags:
         return "[No tags available]"
     tag_str = "["
     tag_str += ", ".join(tags)
     tag_str += "]"
+    if DEBUG_LOGGING:
+        print(f"[AI] Prepared tags for source '{source}': {tag_str}")
     return tag_str
 def extract_content_and_tags(answer: str) -> tuple[str, list]:
     """
@@ -56,12 +85,12 @@ def extract_content_and_tags(answer: str) -> tuple[str, list]:
             tags_list.append(tag.strip().lower())
     return contents[0], tags_list
 
-def process_article_content(content: str, model_name) -> str:
+def process_article_content(content: str, model_name: str, source: str = None) -> tuple:
     model = load_models_settings(model_name)
     if not model:
         if DEBUG_LOGGING:
             print(f"[AI] No settings found for model: {model_name}. Returning original content.")
-        return content  # Return original content if no model settings found
+        return content, []  # Return original content if no model settings found
     url = model.get("url")
     api_key = model.get("apikey")
     id = model.get("id")
@@ -74,19 +103,20 @@ def process_article_content(content: str, model_name) -> str:
         # add a admin message to explain the task
 
         "messages": [
-            {"role": "system", "content": SettingsManager.get_prompt("article_processing").format(tags=prepare_tag_to_str())},
+            {"role": "system", "content": SettingsManager.get_prompt("article_processing").format(tags=prepare_tag_to_str(source))},
             {"role": "user", "content": f"Pretreat the following article content:\n\n{content}"}
         ]
     }
     response = requests.post(url, headers=headers, json=body)
     if response.status_code == 200:
         res = response.json().get("choices", [])[0].get("message", {}).get("content", "")
+        print(res)
         res, tags = extract_content_and_tags(res)
         return res, tags
     else:
         if DEBUG_LOGGING:
             print(f"[AI] Error processing article content: {response.status_code} {response.text}")
-        return content
+        return content, []
 
 
 def chat_with_ai(article_id: str, user_question: str, model_name: str = "mistral small") -> dict:

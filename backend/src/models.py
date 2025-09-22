@@ -5,10 +5,61 @@ Contains data models and article management functions
 
 import json
 import os
+import re
 from datetime import datetime
 from typing import Dict, List, Optional
 
 from config import BASIC_TAGS, DEBUG_LOGGING, JSON_FILE
+
+
+def normalize_tag(tag: str) -> str:
+    """
+    Normalise un tag en:
+    - convertissant en minuscules
+    - supprimant les caractères spéciaux sauf lettres, chiffres, espaces et tirets
+    - supprimant les espaces en début/fin
+    - remplaçant les espaces multiples par un seul
+    """
+    if not tag or not isinstance(tag, str):
+        return ""
+    
+    # Convertir en minuscules
+    tag = tag.lower().strip()
+    
+    # Garder seulement lettres, chiffres, espaces, tirets et caractères accentués
+    tag = re.sub(r'[^\w\s\-àâäçéèêëïîôöùûüÿ]', '', tag)
+    
+    # Remplacer plusieurs espaces par un seul
+    tag = re.sub(r'\s+', ' ', tag)
+    
+    # Supprimer les espaces en début/fin
+    tag = tag.strip()
+    
+    return tag
+
+
+def normalize_tags(tags: List[str]) -> List[str]:
+    """
+    Normalise une liste de tags en:
+    - normalisant chaque tag
+    - supprimant les doublons
+    - supprimant les tags vides
+    """
+    if not tags:
+        return []
+    
+    normalized = []
+    seen = set()
+    
+    for tag in tags:
+        normalized_tag = normalize_tag(tag)
+        if normalized_tag and normalized_tag not in seen:
+            normalized.append(normalized_tag)
+            seen.add(normalized_tag)
+            if DEBUG_LOGGING and normalized_tag != tag:
+                print(f"[MODELS] Tag normalized: '{tag}' -> '{normalized_tag}'")
+    
+    return normalized
 
 
 class Article:
@@ -24,7 +75,7 @@ class Article:
         self.rating = rating  # Note de 1 à 5 étoiles
         self.time_spent = time_spent  # Temps passé en secondes
         self.comments = comments  # Commentaires personnels
-        self.tags = tags or []  # Liste des tags
+        self.tags = normalize_tags(tags or [])  # Liste des tags normalisés
         self.source = source  # Source de l'article (TechCrunch, France Info, etc.)
         self.scraped_date = scraped_date or datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Date et heure de scraping
     
@@ -38,7 +89,7 @@ class Article:
             "rating": self.rating,
             "time_spent": self.time_spent,
             "comments": self.comments,
-            "tags": self.tags,
+            "tags": normalize_tags(self.tags),  # Normaliser les tags lors de la sauvegarde
             "source": self.source,
             "scraped_date": self.scraped_date
         }
@@ -54,7 +105,7 @@ class Article:
             rating=data.get("rating"),
             time_spent=data.get("time_spent", 0),
             comments=data.get("comments", ""),
-            tags=data.get("tags", []),
+            tags=normalize_tags(data.get("tags", [])),  # Normaliser les tags lors du chargement
             source=data.get("source", ""),
             scraped_date=data.get("scraped_date", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         )
@@ -263,12 +314,12 @@ class ArticleManager:
         """Update article tags"""
         articles = ArticleManager.load_articles()
         if 0 <= article_id < len(articles):
-            # Clean and validate tags
-            clean_tags = [tag.strip().lower() for tag in tags if tag.strip()]
-            articles[article_id]["tags"] = clean_tags
+            # Normalize tags using the comprehensive normalization function
+            normalized_tags = normalize_tags(tags)
+            articles[article_id]["tags"] = normalized_tags
             ArticleManager.save_articles(articles)
             if DEBUG_LOGGING:
-                print(f"[MODELS] Updated tags for article {article_id}: {clean_tags}")
+                print(f"[MODELS] Updated tags for article {article_id}: {normalized_tags}")
             return True
         return False
     
