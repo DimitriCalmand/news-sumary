@@ -20,6 +20,7 @@ export interface ArticleTitle {
   has_been_pretreat: boolean;
   rating?: number;
   time_spent: number;
+  comments: string;
   tags: string[];
   source?: string; // Source de l'article (TechCrunch, France Info, etc.)
   scraped_date?: string; // Date et heure de scraping

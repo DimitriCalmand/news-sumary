@@ -233,13 +233,25 @@ export function ArticleList() {
                         {article.title}
                       </CardTitle>
 
-                      {/* Afficher rating seulement pour les articles filtrés */}
-                      {showFiltered && 'rating' in article && article.rating && article.rating > 0 && (
+                      {/* Afficher rating et commentaires pour tous les articles qui en ont */}
+                      {'rating' in article && article.rating && article.rating > 0 && (
                         <div className="flex items-center gap-2">
                           <StarRating rating={article.rating} readonly size="sm" />
                           <span className="text-sm text-slate-600">
                             ({article.rating}/5)
                           </span>
+                        </div>
+                      )}
+
+                      {/* Afficher les commentaires s'il y en a */}
+                      {'comments' in article && article.comments && article.comments.trim() && (
+                        <div className="p-2 bg-amber-50 border-l-4 border-amber-200 rounded-r">
+                          <div className="flex items-start gap-2">
+                            <span className="text-amber-600 text-sm font-medium">💭 Note :</span>
+                            <p className="text-sm text-amber-800 line-clamp-2">
+                              {article.comments}
+                            </p>
+                          </div>
                         </div>
                       )}
                     </div>

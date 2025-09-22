@@ -158,8 +158,13 @@ class ArticleCache:
                 "title": article.get("title", ""),
                 "url": article.get("url", ""),
                 "has_been_pretreat": article.get("has_been_pretreat", False),
-                "date": article.get("date", None),
-                "tags": article.get("tags", [])  # Ajouter les tags
+                "rating": article.get("rating"),  # Inclure rating pour l'affichage des notes
+                "time_spent": article.get("time_spent", 0),
+                "comments": article.get("comments", ""),  # Inclure comments pour l'affichage des notes
+                "tags": article.get("tags", []),  # Ajouter les tags
+                "source": article.get("source"),  # Source de l'article
+                "scraped_date": article.get("scraped_date"),  # Date de scraping
+                "date": article.get("date", None)
             })
         
         return {
