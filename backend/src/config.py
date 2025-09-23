@@ -57,34 +57,6 @@ REQUIRED_TAGS = ["ia", "politique"]
 # Tags de base pour compléter (tags fréquents)
 BASIC_TAGS = []
 
-# Fonction pour obtenir les tags disponibles pour une source
-def get_tags_for_source(source):
-    """Retourne les tags disponibles pour une source donnée"""
-    if source == TECHCRUNCH_SOURCE:
-        # TechCrunch = tags AI + tags de base
-        ai_tags = [TAG_CATEGORIES["ia"]["main_tag"]] + TAG_CATEGORIES["ia"]["sub_tags"]
-        return ai_tags + BASIC_TAGS
-    elif source == FRANCE_INFO_SOURCE:
-        # France Info = tags Politique + tags de base
-        politique_tags = [TAG_CATEGORIES["politique"]["main_tag"]] + TAG_CATEGORIES["politique"]["sub_tags"]
-        return politique_tags + BASIC_TAGS
-    else:
-        # Par défaut, tous les tags
-        all_tags = []
-        for category in TAG_CATEGORIES.values():
-            all_tags.append(category["main_tag"])
-            all_tags.extend(category["sub_tags"])
-        return all_tags + BASIC_TAGS
-
-# Fonction pour obtenir le tag principal obligatoire pour une source
-def get_required_tag_for_source(source):
-    """Retourne le tag obligatoire pour une source donnée"""
-    if source == TECHCRUNCH_SOURCE:
-        return TAG_CATEGORIES["ia"]["main_tag"]
-    elif source == FRANCE_INFO_SOURCE:
-        return TAG_CATEGORIES["politique"]["main_tag"]
-    return None
-
 # Scraping intervals
 SCRAPING_INTERVAL = 1800  # 30 minutes in seconds
 

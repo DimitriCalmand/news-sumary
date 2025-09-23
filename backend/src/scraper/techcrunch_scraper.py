@@ -10,8 +10,8 @@ from typing import List
 import requests
 from bs4 import BeautifulSoup
 
-from config import (DEBUG_LOGGING, PARAGRAPH_CLASS, TECHCRUNCH_SOURCE,
-                    TECHCRUNCH_URL, TITLE_CLASS, get_required_tag_for_source)
+from config import (DEBUG_LOGGING, PARAGRAPH_CLASS, TAG_CATEGORIES, TECHCRUNCH_SOURCE,
+                    TECHCRUNCH_URL, TITLE_CLASS)
 from models import Article, ArticleManager
 
 
@@ -122,7 +122,7 @@ class TechCrunchScraper:
                     print(f"[SCRAPER] Scraping new article: {title}")
 
                 content = self.get_article_content(link)
-                required_tag = get_required_tag_for_source(TECHCRUNCH_SOURCE)
+                required_tag = TAG_CATEGORIES["ia"]["main_tag"]
                 article = Article(
                     title=title,
                     url=link,

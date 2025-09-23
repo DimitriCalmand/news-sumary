@@ -12,8 +12,7 @@ from bs4 import BeautifulSoup
 
 from config import (DEBUG_LOGGING, FRANCE_INFO_BASE_URL,
                     FRANCE_INFO_CARD_CLASSES, FRANCE_INFO_CONTENT_CLASS,
-                    FRANCE_INFO_POLITIQUE_URL, FRANCE_INFO_SOURCE,
-                    get_required_tag_for_source)
+                    FRANCE_INFO_POLITIQUE_URL, FRANCE_INFO_SOURCE, TAG_CATEGORIES)
 from models import Article, ArticleManager
 
 
@@ -125,7 +124,7 @@ class FranceInfoScraper:
                 title, content = self.get_article_content(link)
 
                 if title and title not in existing_titles and content:
-                    required_tag = get_required_tag_for_source(FRANCE_INFO_SOURCE)
+                    required_tag = TAG_CATEGORIES["politique"]["main_tag"]
                     article = Article(
                         title=title,
                         url=link,
