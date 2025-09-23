@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { ExternalLink, RefreshCw, Settings } from 'lucide-react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { newsApi } from '../lib/api';
 import { getRelativeTime } from '../utils/api';
 import type { Article, ArticleTitle } from '../types';
@@ -14,12 +14,75 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 
 const ARTICLES_PER_PAGE = 20;
 
+// Fonction de similarité pour la recherche approximative
+function calculateSimilarity(str1: string, str2: string): number {
+  const longer = str1.length > str2.length ? str1 : str2;
+  const shorter = str1.length > str2.length ? str2 : str1;
+  
+  if (longer.length === 0) return 1.0;
+  
+  const distance = levenshteinDistance(longer, shorter);
+  return (longer.length - distance) / longer.length;
+}
+
+// Distance de Levenshtein simplifiée
+function levenshteinDistance(str1: string, str2: string): number {
+  const matrix = [];
+  
+  for (let i = 0; i <= str2.length; i++) {
+    matrix[i] = [i];
+  }
+  
+  for (let j = 0; j <= str1.length; j++) {
+    matrix[0][j] = j;
+  }
+  
+  for (let i = 1; i <= str2.length; i++) {
+    for (let j = 1; j <= str1.length; j++) {
+      if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1, // substitution
+          matrix[i][j - 1] + 1,     // insertion
+          matrix[i - 1][j] + 1      // deletion
+        );
+      }
+    }
+  }
+  
+  return matrix[str2.length][str1.length];
+}
+
+// Fonction de recherche floue
+function fuzzySearch(title: string, searchTerm: string): boolean {
+  const titleWords = title.toLowerCase().split(/\s+/);
+  const searchWords = searchTerm.toLowerCase().split(/\s+/);
+  
+  // Si la recherche contient plusieurs mots, tous doivent matcher
+  return searchWords.every(searchWord => {
+    return titleWords.some(titleWord => {
+      // Recherche exacte d'abord (plus rapide)
+      if (titleWord.includes(searchWord)) return true;
+      
+      // Recherche approximative si la longueur est similaire
+      if (Math.abs(titleWord.length - searchWord.length) <= 2) {
+        const similarity = calculateSimilarity(titleWord, searchWord);
+        return similarity >= 0.8; // 80% de similarité minimum
+      }
+      
+      return false;
+    });
+  });
+}
+
 export function ArticleList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [activeFilters, setActiveFilters] = useState<{ tags?: string[]; min_rating?: number }>({});
   const [showFiltered, setShowFiltered] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [sortBy, setSortBy] = useState<'date' | 'order'>('date');
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Query for total count
   const { data: totalCount, refetch: refetchCount } = useQuery({
@@ -109,24 +172,47 @@ export function ArticleList() {
   const error = showFiltered ? filteredError : titlesError;
 
   // Mémoriser les calculs pour éviter les re-renders constants
-  const paginatedFilteredArticles = useMemo(() => {
-    if (!filteredData) return [];
-    const startIndex = (currentPage - 1) * ARTICLES_PER_PAGE;
-    const endIndex = startIndex + ARTICLES_PER_PAGE;
-    return filteredData.slice(startIndex, endIndex);
-  }, [filteredData, currentPage]);
+  const allArticles = useMemo(() => {
+    return showFiltered ? (filteredData || []) : (titlesData?.titles || []);
+  }, [showFiltered, filteredData, titlesData?.titles]);
 
   const displayedArticles = useMemo(() => {
-    if (showFiltered) {
-      return paginatedFilteredArticles;
-    } else {
-      return titlesData?.titles || [];
+    let articles = allArticles;
+    
+    // Appliquer le filtre de recherche par titre
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase().trim();
+      articles = articles.filter((article: ArticleTitle) => 
+        fuzzySearch(article.title, term)
+      );
     }
-  }, [showFiltered, paginatedFilteredArticles, titlesData?.titles]);
+    
+    // Appliquer la pagination
+    const startIndex = (currentPage - 1) * ARTICLES_PER_PAGE;
+    const endIndex = startIndex + ARTICLES_PER_PAGE;
+    return articles.slice(startIndex, endIndex);
+  }, [allArticles, searchTerm, currentPage]);
+
+  // Effet pour remettre à la première page quand la recherche change
+  useEffect(() => {
+    if (searchTerm !== '') {
+      setCurrentPage(1);
+    }
+  }, [searchTerm]);
 
   const totalItemsCount = useMemo(() => {
-    return showFiltered && filteredData ? filteredData.length : (totalCount || 0);
-  }, [showFiltered, filteredData, totalCount]);
+    let articles = allArticles;
+    
+    // Appliquer le filtre de recherche par titre pour le compte
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase().trim();
+      articles = articles.filter((article: ArticleTitle) => 
+        fuzzySearch(article.title, term)
+      );
+    }
+    
+    return articles.length;
+  }, [allArticles, searchTerm]);
 
   if (error) {
     return (
@@ -180,6 +266,30 @@ export function ArticleList() {
                 Actualiser
               </Button>
             </div>
+          </div>
+        </div>
+
+        {/* Recherche par titre */}
+        <div className="mb-6">
+          <div className="flex items-center gap-4">
+            <div className="flex-1 max-w-md">
+              <input
+                type="text"
+                placeholder="Rechercher dans les titres..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            {searchTerm && (
+              <Button
+                onClick={() => setSearchTerm('')}
+                variant="outline"
+                size="sm"
+              >
+                ✕ Effacer
+              </Button>
+            )}
           </div>
         </div>
 
