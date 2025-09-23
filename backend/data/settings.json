@@ -1,5 +1,6 @@
 {
-  "default_model": "ministral 3B",
+  "article_processing_model": "ministral 3B",
+  "chat_model": "mistral small",
   "models": [
     {
       "apikey": "S07zd26zbUzcgqb8NJpOWWPE7XenV8Am",

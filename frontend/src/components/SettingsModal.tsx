@@ -48,7 +48,15 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave }
         setSaving(true);
         setError(null);
         try {
+            // Sauvegarder les paramètres principaux
             await settingsApi.updateSettings(settings);
+            
+            // Sauvegarder les modèles spécifiques
+            await Promise.all([
+                settingsApi.setChatModel(chatModel),
+                settingsApi.setArticleProcessingModel(articleProcessingModel)
+            ]);
+            
             onSave?.();
             onClose();
         } catch (err) {
@@ -70,24 +78,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave }
         });
     };
 
-    const handleChatModelChange = async (modelName: string) => {
-        try {
-            await settingsApi.setChatModel(modelName);
-            setChatModel(modelName);
-        } catch (err) {
-            setError('Erreur lors de la sauvegarde du modèle de chat');
-            console.error('Error setting chat model:', err);
-        }
+    const handleChatModelChange = (modelName: string) => {
+        setChatModel(modelName);
     };
 
-    const handleArticleProcessingModelChange = async (modelName: string) => {
-        try {
-            await settingsApi.setArticleProcessingModel(modelName);
-            setArticleProcessingModel(modelName);
-        } catch (err) {
-            setError('Erreur lors de la sauvegarde du modèle de traitement');
-            console.error('Error setting article processing model:', err);
-        }
+    const handleArticleProcessingModelChange = (modelName: string) => {
+        setArticleProcessingModel(modelName);
     };
 
     const handleModelChange = (index: number, field: keyof Model, value: string) => {
