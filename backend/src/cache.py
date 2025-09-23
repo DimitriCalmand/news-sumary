@@ -137,7 +137,7 @@ class ArticleCache:
             # Trier par date (plus récents en premier), puis par ordre d'arrivée (id) si pas de date
             articles_sorted = sorted(articles, key=lambda x: (
                 x.get('date', '1900-01-01'),  # Date par défaut très ancienne si pas de date
-                -x.get('id', 0)  # ID décroissant comme second critère
+                x.get('id', 0)  # ID croissant comme second critère
             ), reverse=True)
         else:
             # Garder l'ordre d'insertion (ordre original)
