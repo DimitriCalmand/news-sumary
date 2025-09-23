@@ -192,9 +192,9 @@ class TestArticle:
 class TestArticleManager:
     """Test cases for ArticleManager class."""
 
-    @patch('models.ArticleManager.load_articles')
-    @patch('models.ArticleManager.save_articles')
-    def test_update_article_tags_success(self, mock_save, mock_load):
+    @patch('models.article_storage.ArticleStorage.save_articles')
+    @patch('models.article_storage.ArticleStorage.load_articles')
+    def test_update_article_tags_success(self, mock_load, mock_save):
         """Test successful tag update."""
         mock_load.return_value = [
             {"id": 0, "title": "Test", "tags": ["old"]},
@@ -236,7 +236,7 @@ class TestArticleManager:
         result = ArticleManager.update_article_rating(0, 6)
         assert result is False
 
-    @patch('models.ArticleManager.load_articles')
+    @patch('models.article_storage.ArticleStorage.load_articles')
     def test_get_all_tags(self, mock_load):
         """Test getting all unique tags."""
         mock_load.return_value = [
@@ -249,7 +249,7 @@ class TestArticleManager:
         expected_tags = ["tech", "ai", "politics"]
         assert set(tags) == set(expected_tags)
 
-    @patch('models.ArticleManager.load_articles')
+    @patch('models.article_storage.ArticleStorage.load_articles')
     def test_filter_by_rating(self, mock_load):
         """Test filtering articles by minimum rating."""
         mock_load.return_value = [
@@ -262,7 +262,7 @@ class TestArticleManager:
         assert len(result) == 1
         assert result[0]["title"] == "Good"
 
-    @patch('models.ArticleManager.load_articles')
+    @patch('models.article_storage.ArticleStorage.load_articles')
     def test_get_unpretreat_articles(self, mock_load):
         """Test getting unpretreat articles."""
         mock_load.return_value = [
