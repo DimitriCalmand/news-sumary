@@ -12,6 +12,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave }
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [chatModel, setChatModel] = useState<string>('');
+    const [articleProcessingModel, setArticleProcessingModel] = useState<string>('');
 
     // Load settings when modal opens
     useEffect(() => {
@@ -24,8 +26,14 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave }
         setLoading(true);
         setError(null);
         try {
-            const data = await settingsApi.getSettings();
-            setSettings(data);
+            const [settingsData, chatModelData, articleProcessingModelData] = await Promise.all([
+                settingsApi.getSettings(),
+                settingsApi.getChatModel(),
+                settingsApi.getArticleProcessingModel()
+            ]);
+            setSettings(settingsData);
+            setChatModel(chatModelData.chat_model);
+            setArticleProcessingModel(articleProcessingModelData.article_processing_model);
         } catch (err) {
             setError('Erreur lors du chargement des paramètres');
             console.error('Error loading settings:', err);
@@ -62,12 +70,24 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave }
         });
     };
 
-    const handleDefaultModelChange = (modelName: string) => {
-        if (!settings) return;
-        setSettings({
-            ...settings,
-            default_model: modelName,
-        });
+    const handleChatModelChange = async (modelName: string) => {
+        try {
+            await settingsApi.setChatModel(modelName);
+            setChatModel(modelName);
+        } catch (err) {
+            setError('Erreur lors de la sauvegarde du modèle de chat');
+            console.error('Error setting chat model:', err);
+        }
+    };
+
+    const handleArticleProcessingModelChange = async (modelName: string) => {
+        try {
+            await settingsApi.setArticleProcessingModel(modelName);
+            setArticleProcessingModel(modelName);
+        } catch (err) {
+            setError('Erreur lors de la sauvegarde du modèle de traitement');
+            console.error('Error setting article processing model:', err);
+        }
     };
 
     const handleModelChange = (index: number, field: keyof Model, value: string) => {
@@ -167,14 +187,14 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave }
                             <div>
                                 <h3 className="text-lg font-medium text-gray-900 mb-4">Modèles IA</h3>
 
-                                {/* Default Model Selection */}
+                                {/* Chat Model Selection */}
                                 <div className="mb-6">
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Modèle par défaut
+                                        Modèle pour le chat IA
                                     </label>
                                     <select
-                                        value={settings.default_model}
-                                        onChange={(e) => handleDefaultModelChange(e.target.value)}
+                                        value={chatModel}
+                                        onChange={(e) => handleChatModelChange(e.target.value)}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     >
                                         {settings.models.map((model) => (
@@ -183,6 +203,30 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, onSave }
                                             </option>
                                         ))}
                                     </select>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        Modèle utilisé pour les conversations avec l'IA sur les articles
+                                    </p>
+                                </div>
+
+                                {/* Article Processing Model Selection */}
+                                <div className="mb-6">
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Modèle pour le traitement d'articles
+                                    </label>
+                                    <select
+                                        value={articleProcessingModel}
+                                        onChange={(e) => handleArticleProcessingModelChange(e.target.value)}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    >
+                                        {settings.models.map((model) => (
+                                            <option key={model.name} value={model.name}>
+                                                {model.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        Modèle utilisé pour résumer et traiter automatiquement les nouveaux articles
+                                    </p>
                                 </div>
 
                                 {/* Models List */}

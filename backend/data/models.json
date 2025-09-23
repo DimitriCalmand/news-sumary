@@ -20,13 +20,6 @@
       "url": "https://api.mistral.ai/v1/chat/completions",
       "apikey": "S07zd26zbUzcgqb8NJpOWWPE7XenV8Am",
       "llm": "mistral"
-    },
-    {
-      "name": "deep seek v3",
-      "id": "deepseek-chat",
-      "url": "https://api.deepseek.com/chat/completions",
-      "apikey": "sk-6060f1b2ef87432e8b157fd178c557d7",
-      "llm": "deepseek"
     }
   ]
 }

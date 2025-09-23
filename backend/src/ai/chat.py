@@ -15,18 +15,21 @@ from settings import SettingsManager
 from .models import load_models_settings
 
 
-def chat_with_ai(article_id: str, user_question: str, model_name: str = "mistral small") -> dict:
+def chat_with_ai(article_id: str, user_question: str, model_name: str = None) -> dict:
     """
     Chat with AI about a specific article
 
     Args:
         article_id: ID of the article to discuss
         user_question: User's question about the article
-        model_name: Name of the AI model to use
+        model_name: Name of the AI model to use (optional, uses configured chat model if not provided)
 
     Returns:
         dict: Response with success status and AI answer or error
     """
+    # Use configured chat model if none specified
+    if model_name is None:
+        model_name = SettingsManager.get_chat_model()
     try:
         # Get article details
         articles = ArticleManager.load_articles()

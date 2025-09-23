@@ -80,9 +80,10 @@ def pretreat_articles() -> None:
 
             # Process article content
             article_source = article.get("source", "")
+            model_name = SettingsManager.get_article_processing_model()
             processed_content, ai_tags = process_article_content(
                 article["content"],
-                "mistral small",
+                model_name,
                 article_source
             )
 

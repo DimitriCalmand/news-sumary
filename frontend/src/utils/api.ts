@@ -103,3 +103,33 @@ export const newsApi = {
     return response.data;
   },
 };
+
+// Fonction utilitaire pour calculer le temps relatif
+export const getRelativeTime = (dateString: string): string => {
+  if (!dateString) return '';
+
+  const now = new Date();
+  const date = new Date(dateString);
+  const diffMs = now.getTime() - date.getTime();
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMinutes < 1) return 'maintenant';
+  if (diffMinutes < 60) return `${diffMinutes}mn`;
+
+  if (diffHours < 24) {
+    if (diffHours === 1) return '1h';
+    return `${diffHours}h`;
+  }
+
+  if (diffDays === 1) return '1j';
+  if (diffDays < 7) return `${diffDays}j`;
+
+  // Pour les articles plus vieux, afficher la date
+  return date.toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: diffDays > 365 ? '2-digit' : undefined
+  });
+};

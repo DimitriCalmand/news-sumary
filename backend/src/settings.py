@@ -81,10 +81,40 @@ class SettingsManager:
         return {}
     
     @classmethod
-    def get_default_model(cls) -> str:
-        """Get default model name"""
+    def get_chat_model(cls) -> str:
+        """Get model name for chat functionality"""
         settings = cls.load_settings()
-        return settings.get("default_model", "mistral small")
+        chat_model = settings.get("chat_model")
+        if chat_model:
+            return chat_model
+        # Fallback to first available model
+        models = cls.get_models()
+        return models[0]["name"] if models else "mistral small"
+    
+    @classmethod
+    def get_article_processing_model(cls) -> str:
+        """Get model name for article processing functionality"""
+        settings = cls.load_settings()
+        article_model = settings.get("article_processing_model")
+        if article_model:
+            return article_model
+        # Fallback to first available model
+        models = cls.get_models()
+        return models[0]["name"] if models else "mistral small"
+    
+    @classmethod
+    def set_chat_model(cls, model_name: str) -> bool:
+        """Set the model for chat functionality"""
+        settings = cls.load_settings()
+        settings["chat_model"] = model_name
+        return cls.save_settings(settings)
+    
+    @classmethod
+    def set_article_processing_model(cls, model_name: str) -> bool:
+        """Set the model for article processing functionality"""
+        settings = cls.load_settings()
+        settings["article_processing_model"] = model_name
+        return cls.save_settings(settings)
     
     @classmethod
     def clear_cache(cls):
@@ -108,5 +138,6 @@ class SettingsManager:
                     "llm": "mistral"
                 }
             ],
-            "default_model": "mistral small"
+            "chat_model": "mistral small",
+            "article_processing_model": "mistral small"
         }

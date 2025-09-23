@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ExternalLink, RefreshCw, Settings } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import { newsApi } from '../lib/api';
+import { getRelativeTime } from '../utils/api';
 import type { Article, ArticleTitle } from '../types';
 import { ArticleFilters } from './ArticleFilters';
 import { LoadingSpinner } from './LoadingSpinner';
@@ -289,6 +290,12 @@ export function ArticleList() {
                               </span>
                             )}
                           </div>
+                        )}
+                        {/* Temps écoulé depuis l'ajout */}
+                        {('date' in article || 'scraped_date' in article) && (
+                          <span className="text-xs text-slate-500 ml-2">
+                            📅 {getRelativeTime(article.scraped_date || article.date || '')}
+                          </span>
                         )}
                       </div>
                       <Button
