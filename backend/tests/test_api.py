@@ -15,7 +15,7 @@ from unittest.mock import Mock, patch, MagicMock
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from flask import Flask
-from routes import api_bp
+from routes import articles_bp, modifications_bp, chat_bp, health_bp, settings_bp, tags_bp
 from models import ArticleManager, ChatManager
 from settings import SettingsManager
 from cache import article_cache
@@ -26,7 +26,12 @@ def app():
     """Create and configure a test app instance."""
     app = Flask(__name__)
     app.config['TESTING'] = True
-    app.register_blueprint(api_bp)
+    app.register_blueprint(articles_bp)
+    app.register_blueprint(modifications_bp)
+    app.register_blueprint(chat_bp)
+    app.register_blueprint(health_bp)
+    app.register_blueprint(settings_bp)
+    app.register_blueprint(tags_bp)
     return app
 
 
@@ -93,7 +98,7 @@ def sample_articles():
 class TestArticlesEndpoints:
     """Test cases for article-related endpoints."""
 
-    @patch('routes.article_cache')
+    @patch('routes.articles.article_cache')
     def test_get_articles_success(self, mock_cache, client, sample_articles):
         """Test GET /api/articles endpoint."""
         mock_cache.get_articles.return_value = sample_articles
@@ -105,7 +110,7 @@ class TestArticlesEndpoints:
         assert len(data) == 2
         assert data[0]['title'] == "First Article"
 
-    @patch('routes.article_cache')
+    @patch('routes.articles.article_cache')
     def test_get_articles_error(self, mock_cache, client):
         """Test GET /api/articles endpoint with error."""
         mock_cache.get_articles.side_effect = Exception("Database error")
@@ -173,7 +178,7 @@ class TestArticlesEndpoints:
         assert "titles" in result
         assert "pagination" in result
 
-    @patch('routes.get_single_article')
+    @patch('routes.articles.get_single_article')
     def test_get_article_by_id_success(self, mock_get_single, client):
         """Test GET /api/article/<id> endpoint."""
         # Mock the entire function to return a proper response
@@ -196,7 +201,7 @@ class TestArticlesEndpoints:
         assert isinstance(data, dict)
         assert "title" in data
 
-    @patch('routes.get_single_article')
+    @patch('routes.articles.get_single_article')
     def test_get_article_by_id_not_found(self, mock_get_single, client):
         """Test GET /api/article/<id> endpoint with not found."""
         mock_get_single.return_value = {"error": "Article not found"}, 404
@@ -204,7 +209,7 @@ class TestArticlesEndpoints:
         response = client.get('/api/article/999')
         assert response.status_code == 404
 
-    @patch('routes.article_cache')
+    @patch('routes.articles.article_cache')
     def test_get_length_success(self, mock_cache, client):
         """Test GET /api/length endpoint."""
         mock_cache.get_articles_count.return_value = 42
@@ -214,7 +219,7 @@ class TestArticlesEndpoints:
         data = json.loads(response.data)
         assert data == 42
 
-    @patch('routes.article_cache')
+    @patch('routes.articles.article_cache')
     def test_get_length_error(self, mock_cache, client):
         """Test GET /api/length endpoint with error."""
         mock_cache.get_articles_count.side_effect = Exception("Database error")
@@ -280,7 +285,7 @@ class TestTagsEndpoints:
     """Test cases for tags-related endpoints."""
 
     @patch('models.ArticleManager.update_article_tags')
-    @patch('routes.normalize_tags')
+    @patch('routes.article_modifications.normalize_tags')
     def test_update_article_tags_success(self, mock_normalize, mock_update, client):
         """Test PUT /api/articles/<id>/tags endpoint."""
         mock_normalize.return_value = ["normalized", "tags"]
@@ -318,7 +323,7 @@ class TestTagsEndpoints:
         assert response.status_code == 400
 
     @patch('models.ArticleManager.update_article_tags')
-    @patch('routes.normalize_tags')
+    @patch('routes.article_modifications.normalize_tags')
     def test_update_article_tags_not_found(self, mock_normalize, mock_update, client):
         """Test PUT /api/articles/<id>/tags with article not found."""
         mock_normalize.return_value = ["test"]
@@ -461,7 +466,7 @@ class TestUtilityEndpoints:
         data = json.loads(response.data)
         assert 'healthy' in data['status']  # The actual message includes additional text
 
-    @patch('routes.article_cache')
+    @patch('routes.health.article_cache')
     def test_cache_status(self, mock_cache, client):
         """Test GET /api/cache/status endpoint."""
         mock_cache.get_cache_info.return_value = {
@@ -478,7 +483,7 @@ class TestUtilityEndpoints:
         assert "misses" in data
         assert "size" in data
 
-    @patch('routes.article_cache')
+    @patch('routes.health.article_cache')
     def test_cache_refresh(self, mock_cache, client):
         """Test POST /api/cache/refresh endpoint."""
         mock_cache.invalidate_cache.return_value = None
