@@ -18,6 +18,69 @@ class ArticleCache:
         self._cache_timestamp: float = 0
         self._cache_duration = CACHE_DURATION
     
+    def _matches_search(self, title: str, search_term: str) -> bool:
+        """
+        Check if a title matches the search term using fuzzy search logic
+        
+        Args:
+            title: Article title to search in
+            search_term: Search term to match
+        
+        Returns:
+            True if the title matches the search term
+        """
+        if not title or not search_term:
+            return False
+            
+        title_lower = title.lower()
+        search_lower = search_term.lower()
+        
+        # Recherche exacte d'abord (plus rapide)
+        if search_lower in title_lower:
+            return True
+        
+        # Recherche par mots pour les termes multi-mots
+        title_words = title_lower.split()
+        search_words = search_lower.split()
+        
+        # Si la recherche contient plusieurs mots, tous doivent matcher
+        return all(
+            any(search_word in title_word or 
+                (len(title_word) > 3 and len(search_word) > 3 and 
+                 self._calculate_similarity(title_word, search_word) >= 0.8)
+                for title_word in title_words)
+            for search_word in search_words
+        )
+    
+    def _calculate_similarity(self, str1: str, str2: str) -> float:
+        """
+        Calculate similarity between two strings using Levenshtein distance
+        
+        Args:
+            str1: First string
+            str2: Second string
+        
+        Returns:
+            Similarity score between 0 and 1
+        """
+        if len(str1) < len(str2):
+            return self._calculate_similarity(str2, str1)
+
+        if len(str2) == 0:
+            return 1.0
+
+        previous_row = list(range(len(str2) + 1))
+        for i, c1 in enumerate(str1):
+            current_row = [i + 1]
+            for j, c2 in enumerate(str2):
+                insertions = previous_row[j + 1] + 1
+                deletions = current_row[j] + 1
+                substitutions = previous_row[j] + (c1 != c2)
+                current_row.append(min(insertions, deletions, substitutions))
+            previous_row = current_row
+
+        return (len(str2) - previous_row[-1]) / len(str2)
+    
     def is_cache_valid(self) -> bool:
         """Check if the current cache is still valid"""
         if not self._cache:
@@ -118,19 +181,26 @@ class ArticleCache:
             }
         }
     
-    def get_paginated_titles(self, page: int, per_page: int, sort_by: str = 'date') -> Dict:
+    def get_paginated_titles(self, page: int, per_page: int, sort_by: str = 'date', search: Optional[str] = None) -> Dict:
         """
-        Get paginated article titles with sorting
+        Get paginated article titles with sorting and optional search
         
         Args:
             page: Page number (1-based)
             per_page: Number of articles per page
             sort_by: Sort order ('date' for newest first, 'order' for insertion order)
+            search: Optional search term to filter titles
         
         Returns:
             Dictionary with titles and pagination info
         """
         articles = self.get_articles()
+        
+        # Appliquer le filtre de recherche si fourni
+        if search and search.strip():
+            search_term = search.strip().lower()
+            # Utiliser la même logique de recherche floue que le frontend
+            articles = [article for article in articles if self._matches_search(article.get('title', ''), search_term)]
         
         # Trier les articles selon le paramètre sort_by
         if sort_by == 'date':

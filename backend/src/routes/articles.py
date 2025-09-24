@@ -92,8 +92,9 @@ def get_titles_paginated():
         page = data.get('page', 1)
         per_page = data.get('per_page', 20)
         sort_by = data.get('sort_by', 'date')  # 'date' or 'order'
+        search = data.get('search')  # Optional search term
 
-        log_request("get_titles_paginated", start_time, page=page, per_page=per_page, sort_by=sort_by)
+        log_request("get_titles_paginated", start_time, page=page, per_page=per_page, sort_by=sort_by, search=search)
 
         # Validate parameters
         if not isinstance(page, int) or not isinstance(per_page, int):
@@ -109,7 +110,7 @@ def get_titles_paginated():
             return jsonify({"error": "Parameter 'per_page' must be greater than 0"}), 400
 
         # Get paginated titles
-        result = article_cache.get_paginated_titles(page, per_page, sort_by)
+        result = article_cache.get_paginated_titles(page, per_page, sort_by, search)
 
         log_response("get_titles_paginated", start_time,
                     returned=result["pagination"]["returned"],

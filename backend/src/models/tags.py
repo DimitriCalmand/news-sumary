@@ -16,6 +16,7 @@ def normalize_tag(tag: str) -> str:
     - supprimant les caractères spéciaux sauf lettres, chiffres, espaces et tirets
     - supprimant les espaces en début/fin
     - remplaçant les espaces multiples par un seul
+    - limitant la longueur à 30 caractères
     """
     if not tag or not isinstance(tag, str):
         return ""
@@ -31,6 +32,10 @@ def normalize_tag(tag: str) -> str:
 
     # Supprimer les espaces en début/fin
     tag = tag.strip()
+
+    # Limiter la longueur à 30 caractères
+    if len(tag) > 30:
+        tag = tag[:30].rstrip()
 
     return tag
 

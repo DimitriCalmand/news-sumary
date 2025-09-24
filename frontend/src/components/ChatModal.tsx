@@ -20,6 +20,9 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 }) => {
   const [inputMessage, setInputMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   // Destructure shared chat state and methods
   const {
@@ -47,14 +50,41 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     }
   }, [messages, isOpen, scrollToBottom]);
 
-  // Focus textarea when modal opens
+    // Focus textarea when modal opens
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => {
-        textareaRef.current?.focus();
-      }, 200);
+    if (isOpen && textareaRef.current) {
+      setTimeout(() => textareaRef.current?.focus(), 100);
     }
   }, [isOpen]);
+
+  // Touch handlers for mobile swipe to close
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (window.innerWidth >= 768) return; // Only on mobile
+    setTouchStartY(e.touches[0].clientY);
+    setIsDragging(false);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (window.innerWidth >= 768 || touchStartY === null) return;
+    
+    const currentY = e.touches[0].clientY;
+    const diffY = currentY - touchStartY;
+    
+    if (diffY > 50) { // Swipe down threshold
+      setIsDragging(true);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (window.innerWidth >= 768) return;
+    
+    if (isDragging) {
+      onClose();
+    }
+    
+    setTouchStartY(null);
+    setIsDragging(false);
+  };
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -82,30 +112,42 @@ export const ChatModal: React.FC<ChatModalProps> = ({
       
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-end justify-center p-4 md:items-center">
-        <div className="bg-white rounded-t-lg md:rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col animate-in slide-in-from-bottom-4 md:slide-in-from-bottom-0 md:fade-in duration-200">
+              {/* Modal */}
+      <div 
+        ref={modalRef}
+        className="bg-white rounded-t-lg md:rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col animate-in slide-in-from-bottom-4 md:slide-in-from-bottom-0 md:fade-in duration-200"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+          
+          {/* Mobile drag indicator */}
+          <div className="md:hidden flex justify-center py-2">
+            <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
+          </div>
           
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b bg-blue-50 rounded-t-lg">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
+          <div className="flex items-center justify-between p-3 md:p-4 border-b bg-blue-50 rounded-t-lg md:rounded-t-lg min-h-[60px] md:min-h-[auto]">
+            <div className="flex items-center space-x-3 flex-1 min-w-0">
+              <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
                 <MessageCircle className="h-5 w-5 text-blue-600" />
               </div>
-              <div>
-                <h3 className="font-medium text-gray-900">
+              <div className="min-w-0 flex-1">
+                <h3 className="font-medium text-gray-900 truncate">
                   Chat sur l'article
                 </h3>
-                <p className="text-sm text-gray-600 truncate max-w-xs">
+                <p className="text-sm text-gray-600 truncate">
                   {articleTitle}
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 flex-shrink-0 ml-2">
               {messages.length > 0 && (
                 <Button
                   onClick={clearChat}
                   variant="outline"
                   size="sm"
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50 hidden sm:flex"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -115,10 +157,10 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                   e.stopPropagation();
                   onClose();
                 }}
-                className="p-3 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors z-10 relative bg-white shadow-sm border border-gray-200"
+                className="p-3 md:p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors z-10 relative bg-white shadow-sm border border-gray-200 md:shadow-none md:border-transparent md:bg-transparent md:hover:bg-gray-100 flex-shrink-0"
                 aria-label="Fermer le chat"
               >
-                <X className="h-6 w-6" />
+                <X className="h-7 w-7 md:h-5 md:w-5" />
               </button>
             </div>
           </div>

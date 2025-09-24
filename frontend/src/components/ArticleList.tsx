@@ -100,13 +100,13 @@ export function ArticleList() {
     error: titlesError,
     refetch: refetchTitles
   } = useQuery({
-    queryKey: ['articleTitles', currentPage, sortBy],
+    queryKey: ['articleTitles', currentPage, sortBy, searchTerm],
     queryFn: () => {
-      console.log('Fetching titles for page:', currentPage, 'sort:', sortBy);
-      return newsApi.getTitles(currentPage, ARTICLES_PER_PAGE, sortBy);
+      console.log('Fetching titles for page:', currentPage, 'sort:', sortBy, 'search:', searchTerm);
+      return newsApi.getTitles(currentPage, ARTICLES_PER_PAGE, sortBy, searchTerm.trim() || undefined);
     },
-    enabled: !showFiltered, // Simplifié: seulement vérifie qu'on n'est pas en mode filtré
-    staleTime: 0, // Pas de cache pour forcer le refetch à chaque changement de page
+    enabled: !showFiltered,
+    staleTime: 0, // Pas de cache pour éviter les problèmes de pagination
     refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
@@ -138,15 +138,6 @@ export function ArticleList() {
     console.log('Page change:', currentPage, '->', page);
     setCurrentPage(page);
 
-    // Pour la pagination normale (pas filtrée), forcer le refetch
-    if (!showFiltered) {
-      console.log('Page change triggered, refetching titles for page:', page);
-      // Forcer un refetch immédiat des titres avec la nouvelle page
-      setTimeout(() => {
-        refetchTitles();
-      }, 0);
-    }
-
     // Scroll après un petit délai pour laisser React faire le re-render
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -177,21 +168,27 @@ export function ArticleList() {
   }, [showFiltered, filteredData, titlesData?.titles]);
 
   const displayedArticles = useMemo(() => {
-    let articles = allArticles;
-    
-    // Appliquer le filtre de recherche par titre
-    if (searchTerm.trim()) {
-      const term = searchTerm.toLowerCase().trim();
-      articles = articles.filter((article: ArticleTitle) => 
-        fuzzySearch(article.title, term)
-      );
+    if (showFiltered) {
+      // Mode filtré : pagination côté client sur tous les articles filtrés
+      let articles = allArticles;
+      
+      // Appliquer le filtre de recherche par titre
+      if (searchTerm.trim()) {
+        const term = searchTerm.toLowerCase().trim();
+        articles = articles.filter((article: ArticleTitle) => 
+          fuzzySearch(article.title, term)
+        );
+      }
+      
+      // Appliquer la pagination côté client
+      const startIndex = (currentPage - 1) * ARTICLES_PER_PAGE;
+      const endIndex = startIndex + ARTICLES_PER_PAGE;
+      return articles.slice(startIndex, endIndex);
+    } else {
+      // Mode normal : les articles sont déjà paginés et filtrés par le backend
+      return titlesData?.titles || [];
     }
-    
-    // Appliquer la pagination
-    const startIndex = (currentPage - 1) * ARTICLES_PER_PAGE;
-    const endIndex = startIndex + ARTICLES_PER_PAGE;
-    return articles.slice(startIndex, endIndex);
-  }, [allArticles, searchTerm, currentPage]);
+  }, [showFiltered, allArticles, titlesData?.titles, searchTerm, currentPage]);
 
   // Effet pour remettre à la première page quand la recherche change
   useEffect(() => {
@@ -201,18 +198,24 @@ export function ArticleList() {
   }, [searchTerm]);
 
   const totalItemsCount = useMemo(() => {
-    let articles = allArticles;
-    
-    // Appliquer le filtre de recherche par titre pour le compte
-    if (searchTerm.trim()) {
-      const term = searchTerm.toLowerCase().trim();
-      articles = articles.filter((article: ArticleTitle) => 
-        fuzzySearch(article.title, term)
-      );
+    if (showFiltered) {
+      // Mode filtré : compter tous les articles filtrés
+      let articles = allArticles;
+      
+      // Appliquer le filtre de recherche par titre pour le compte
+      if (searchTerm.trim()) {
+        const term = searchTerm.toLowerCase().trim();
+        articles = articles.filter((article: ArticleTitle) => 
+          fuzzySearch(article.title, term)
+        );
+      }
+      
+      return articles.length;
+    } else {
+      // Mode normal : utiliser le total retourné par le backend (qui tient compte de la recherche)
+      return titlesData?.pagination?.total || totalCount || 0;
     }
-    
-    return articles.length;
-  }, [allArticles, searchTerm]);
+  }, [showFiltered, allArticles, searchTerm, titlesData?.pagination?.total, totalCount]);
 
   if (error) {
     return (
@@ -436,10 +439,11 @@ export function ArticleList() {
             </div>
 
             {/* Pagination */}
-            {totalItemsCount > ARTICLES_PER_PAGE && (
+            {((showFiltered && totalItemsCount > ARTICLES_PER_PAGE) || 
+              (!showFiltered && totalCount && totalCount > ARTICLES_PER_PAGE)) && (
               <PaginationControls
                 currentPage={currentPage}
-                totalItems={totalItemsCount}
+                totalItems={showFiltered ? totalItemsCount : (totalCount || 0)}
                 itemsPerPage={ARTICLES_PER_PAGE}
                 onPageChange={handlePageChange}
                 className="mb-8"

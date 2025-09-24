@@ -804,7 +804,7 @@
     "content": "# Drone survolant l'aéroport de Copenhague : une menace pour l'Europe\n\n## Résumé\nDes drones ont survolé l'aéroport de Copenhague, perturbant le trafic aérien et fermant l'aéroport pendant plusieurs heures. La Première ministre danoise, Mette Frederiksen, suggère une responsabilité possible de la Russie, tandis que cette dernière nie toute implication.\n\n## Article\n\n### Drone survolant l'aéroport de Copenhague\nCe texte correspond à une partie de la retranscription du reportage ci-dessus. Cliquez sur la vidéo pour le regarder en intégralité. La vidéo a été publiée par la télévision danoise. On y voit un point lumineux au-dessus de l'aéroport de Copenhague. Il s'agirait de l'un des drones qui a survolé le Danemark, dans la soirée du lundi 22 septembre. En début de soirée, trois ou quatre engins volants non identifiés ont été repérés alors qu'ils survolaient les pistes. Immédiatement, la police a été dépêchée sur place. Des dizaines de vols ont été annulés, et l'aéroport de Copenhague fermé pendant plusieurs heures. Les drones ont ensuite disparu sans être interceptés.\n\n### Réactions et accusations\nDans la matinée de mardi, la Première ministre danoise, Mette Frederiksen, pointe du doigt une possible responsabilité de la Russie. \"Je ne peux absolument pas exclure qu'il s'agisse de la Russie. Nous avons vu des drones au-dessus de la Pologne qui n'auraient pas dû être là. Même chose en Roumanie, et des violations de l'espace aérien estonien. Je peux juste dire qu'il s'agit d'une attaque grave contre une infrastructure critique.\"\n\n### Réponse de la Russie\nLa Russie a réagi et nie toute implication dans l'événement qui a aussi perturbé le trafic aérien norvégien. Car lundi soir, alors que Copenhague était en alerte, au même moment, au moins deux autres drones sont également repérés au-dessus de l'aéroport d'Oslo (Norvège). \"Ce sont nos patrouilleurs qui ont fait la découverte. Ils ont réagi en apercevant des objets lumineux se déplaçant dans le ciel et il était évident qu'il ne s'agissait pas de quelque chose qu'on voit normalement dans un aéroport,\" explique Thorgeir Landevaag, le directeur de l’aéroport.\n\n### Contexte et implications\nL'incident fait monter la pression en Europe, après le survol de la Roumanie et de la Pologne par plusieurs drones russes ces dernières semaines. Les tensions internationales sont en augmentation, et les autorités européennes restent vigilantes face à cette nouvelle menace.",
     "has_been_pretreat": true,
     "rating": null,
-    "time_spent": 0,
+    "time_spent": 28,
     "comments": "",
     "tags": [
       "sécurité",
@@ -908,5 +908,279 @@
     "source": "France Info",
     "scraped_date": "2025-09-23 19:19:47",
     "id": 52
+  },
+  {
+    "title": "How Google’s dev tools manager makes AI coding work",
+    "url": "https://techcrunch.com/2025/09/23/how-googles-dev-tools-manager-makes-ai-coding-work/",
+    "content": "# 📢 Google's Ryan Salva on AI Coding Tools and the Future of Developer Work\n\n## 🌟 Résumé\nRyan Salva, project manager for Google's developer tools, discusses the adoption and use of AI coding tools by developers. He shares insights from a recent survey and his personal experience with tools like Gemini CLI and Gemini Code Assist. Salva also explores the future of coding and the role of developers in an increasingly AI-driven world.\n\n## 🛠️ Utilisation des outils AI par les développeurs\n\n### 📅 Tendance de l'adoption des outils AI\nLe rapport de Google a révélé que la majorité des développeurs ont commencé à utiliser des outils AI en avril 2024, correspondant à la sortie de Claude 3 et Gemini 2.5. Ces outils ont permis une meilleure intégration des modèles de raisonnement et de la capacité à appeler des outils.\n\n### 💻 Expérience personnelle de Salva\nSalva utilise principalement des outils de ligne de commande pour ses projets personnels, comme Gemini CLI, Claude Code, et Codex. Il utilise également plusieurs IDEs comme Zed, VS Code, Cursor, et Windsurf pour explorer l'évolution de l'industrie.\n\n### 📝 Utilisation professionnelle\nSur le plan professionnel, Salva utilise Gemini CLI pour créer des documents de spécification et de code à partir de problèmes sous-spécifiés. Il utilise également des documents de règles et de Markdown pour guider le modèle dans la production de code.\n\n## 🌐 L'avenir du codage et du développement\n\n### 💭 Perspectives sur le codage\nSalva pense que le développement de code sera de moins en moins central dans le processus de développement, avec une augmentation de l'utilisation des outils de ligne de commande pour la spécification et la gestion des tâches.\n\n### 🧑‍💻 Rôle des développeurs\nLe rôle des développeurs pourrait évoluer vers une approche plus architecturale, où ils se concentrent sur la résolution de problèmes complexes et la planification des tâches plutôt que sur l'écriture de code.\n\n## 🔧 Tags\n[technologie, innovation, développement]",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "ia"
+    ],
+    "source": "TechCrunch",
+    "scraped_date": "2025-09-23 20:43:07",
+    "id": 53
+  },
+  {
+    "title": "OpenAI is building five new Stargate data centers with Oracle and SoftBank",
+    "url": "https://techcrunch.com/2025/09/23/openai-is-building-five-new-stargate-data-centers-with-oracle-and-softbank/",
+    "content": "### Résumé\nOpenAI a annoncé le lancement de cinq nouveaux centres de données AI à travers les États-Unis, en partenariat avec Oracle et SoftBank. Ces centres augmenteront la capacité de Stargate à 7 gigawatts, suffisante pour alimenter plus de 5 millions de foyers. Les sites seront situés en Texas, au Nouveau-Mexique, et dans le Midwest pour Oracle, et à Lordstown, Ohio, et Milam County, Texas pour SoftBank.\n\n### Article avec emojis et structuration\n\n#### 🌐 Annonce de nouveaux centres de données AI par OpenAI\nOpenAI a annoncé le lancement de cinq nouveaux centres de données AI à travers les États-Unis, en partenariat avec Oracle et SoftBank. Ces centres sont une partie intégrante du projet Stargate, qui vise à augmenter la capacité de Stargate à 7 gigawatts. Cela représente suffisamment d'énergie pour alimenter plus de 5 millions de foyers.\n\n#### 📍 Localisation des nouveaux centres\n- **Oracle** : Les trois nouveaux sites sont situés à Shackelford County, Texas; Doña Ana County, New Mexico; et un emplacement non révélé dans le Midwest.\n- **SoftBank** : Deux sites sont en cours de développement à Lordstown, Ohio, et Milam County, Texas.\n\n#### 🛠️ Contexte et objectifs\nCes nouveaux centres de données sont une extension de l'infrastructure massive de OpenAI, visant à entraîner et servir des modèles AI plus puissants. Le projet Stargate est conçu pour fournir une capacité de calcul massive et une alimentation en énergie suffisante pour soutenir les besoins croissants en IA.\n\n#### 💰 Investissement de Nvidia\nLe 1er octobre, OpenAI a annoncé qu'elle recevra un investissement de 100 milliards de dollars de Nvidia pour acheter les processeurs AI de la société et construire encore plus de centres de données AI. Cet investissement renforcera encore davantage la capacité de Stargate.\n\n#### 📅 Évolutions récentes\nOpenAI a fait plusieurs avancées récentes dans le domaine de l'IA, notamment avec le projet Stargate. Ces centres de données sont essentiels pour l'entraînement et la mise en œuvre de modèles AI de plus en plus puissants.",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "économie",
+      "technologie",
+      "innovation",
+      "ia"
+    ],
+    "source": "TechCrunch",
+    "scraped_date": "2025-09-24 10:11:20",
+    "id": 54
+  },
+  {
+    "title": "Google’s AI Mode arrives in Spanish globally",
+    "url": "https://techcrunch.com/2025/09/23/googles-ai-mode-arrives-in-spanish-globally/",
+    "content": "# Google Bringt son Mode AI à l'Espagne\n\nGoogle est en train de déployer son Mode AI, une expérience de recherche basée sur l'IA, pour les utilisateurs hispanophones. Cette expansion permettra aux utilisateurs de poser des questions en utilisant des requêtes naturelles, d'engager des conversations, de télécharger des images et de s'immerger dans des sujets complexes.\n\n## 🌐 Expansion de Google AI Mode\n\n### 🇪🇸 Introduction en Espagne\nLe lancement de Google AI Mode en espagnol suit la grande expansion de l'IA en août, où Google a ajouté le service à 180 pays supplémentaires. Avant cette expansion, l'IA Mode était disponible uniquement aux États-Unis, au Royaume-Uni et en Inde.\n\n### 📅 Évolution récente\nGoogle a également introduit des capacités avancées d'IA pour ses abonnés Google AI Ultra, permettant de réserver des tables dans des restaurants via l'IA Mode. L'entreprise prévoit d'ajouter un support pour d'autres types d'appointements et d'achats de billets d'événements à l'avenir.\n\n## 🌐 Expansion Concurrentielle\n\n### 📱 Conversational Photo Editing\nGoogle a annoncé le même jour que l'introduction de l'édition photo conversational pour tous les utilisateurs d'Android aux États-Unis. Il a également annoncé que son plan de souscription Google AI Plus, initialement lancé en Indonésie, est maintenant disponible dans 40 pays supplémentaires.\n\n### 🤖 ChatGPT Go Plan\nOpenAI a récemment lancé son plan ChatGPT Go, disponible en Inde et en Indonésie, qui offre des limites d'utilisation 10 fois plus élevées que la version gratuite. Ce plan permet également à ChatGPT de mieux se souvenir des conversations précédentes, offrant des réponses plus personnalisées.\n\n## 🌐 Comparaison des Fonctionnalités\n\n### 🤖 Mode AI vs. AI Overviews\nGoogle AI Mode est une expérience immersive et conversational où les utilisateurs peuvent discuter directement avec Gemini AI. À l'inverse, les AI Overviews offrent une vue d'ensemble rapide et générée par l'IA des informations sur votre requête de recherche.",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "technologie",
+      "découverte",
+      "ia",
+      "innovation"
+    ],
+    "source": "TechCrunch",
+    "scraped_date": "2025-09-24 10:11:21",
+    "id": 55
+  },
+  {
+    "title": "Google Cloud’s COO isn’t stressed about landing the AI giants",
+    "url": "https://techcrunch.com/podcast/google-clouds-coo-isnt-stressed-about-landing-the-ai-giants/",
+    "content": "### Résumé\nFrancis deSouza, COO de Google Cloud, discute avec Connie Loizos de TechCrunch de ses objectifs pour Google Cloud et de la manière dont la société maintient sa position compétitive en se concentrant sur les startups, tandis que des géants comme AWS et Oracle s'engagent dans des partenariats majeurs avec des entreprises d'IA comme OpenAI et Anthropic. Ils abordent également les complexités des relations dans l'écosystème AI et la gestion de la pénurie de GPU par Google Cloud.\n\n### Article\n\n#### 🗓️ Discussion avec Francis deSouza, COO de Google Cloud\nFrancis deSouza, COO de Google Cloud, est invité par Connie Loizos, Editor-in-Chief de TechCrunch, pour discuter de ses objectifs pour Google Cloud et de la manière dont la société maintient sa position compétitive.\n\n#### 🌐 Stratégie de Google Cloud\n**Francis deSouza** explique que Google Cloud se concentre sur les startups pour rester compétitif. Contrairement à des géants comme AWS et Oracle qui s'engagent dans des partenariats majeurs avec des entreprises d'IA comme OpenAI et Anthropic, Google Cloud se positionne comme un fournisseur d'infrastructure pour les startups.\n\n#### 🤝 Complexités de l'écosystème AI\nLa discussion aborde également les complexités des relations dans l'écosystème AI. Bien que Google Cloud fournisse des services d'infrastructure, ses parents, Google et Alphabet, sont également des acteurs compétitifs dans le domaine de l'IA générative. De plus, ces parents détiennent des investissements dans des entreprises qu'ils considèrent comme des rivaux.\n\n#### 💻 Gestion de la pénurie de GPU\nFrancis deSouza parle de la gestion de la pénurie de GPU par Google Cloud. La société a mis en place des stratégies pour attirer et retenir les clients, notamment en offrant des solutions innovantes pour gérer les ressources GPU.\n\n#### 📅 Événements récents\nLa discussion couvre également les événements récents dans l'industrie, notamment les lancements de nouvelles fonctionnalités par Google Cloud, telles que l'application de calendrier et le preneur de notes de réunion.\n\n#### 🎙️ Podcast StrictlyVC Download\nStrictlyVC Download publie chaque mardi. Abonnez-vous sur Apple, Spotify ou votre plateforme de podcast préférée pour ne manquer aucune nouvelle épisode.\n\n#### 📅 Évolutions récentes\nAu cours des deux dernières années, Google Cloud a lancé plusieurs fonctionnalités innovantes, telles que :\n- Une application de calendrier\n- Un client Gmail\n- Un preneur de notes de réunion\n- Une recherche d'entreprise pour obtenir des informations de différentes sources\n\nCes fonctionnalités ont fourni à la société les briques contextuelles nécessaires pour créer des automatisations. D'autres plateformes de connaissance et de productivité d'entreprise, comme Salesforce, Fireflies et Read AI, ont également lancé leurs propres agents pour extraire et mettre à jour des informations.",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "économie",
+      "technologie",
+      "ia",
+      "innovation"
+    ],
+    "source": "TechCrunch",
+    "scraped_date": "2025-09-24 10:11:22",
+    "id": 56
+  },
+  {
+    "title": "Scott Wiener on his fight to make Big Tech disclose AI’s dangers",
+    "url": "https://techcrunch.com/2025/09/23/scott-wiener-on-his-fight-to-make-big-tech-disclose-ais-dangers/",
+    "content": "# 📢 Senator Scott Wiener Returns with New AI Safety Bill\n\n## 📅 Background\nSenator Scott Wiener has introduced a new AI safety bill, SB 53, which is currently awaiting Governor Gavin Newsom's signature or veto. This bill aims to address the potential harms of AI systems, focusing on transparency and safety reporting.\n\n## 🛠️ Key Features of SB 53\n- **Safety Reporting**: Requires leading AI labs to publish safety reports for their most capable AI models.\n- **Protected Channels**: Establishes protected channels for employees to report safety concerns to government officials.\n- **State-operated Cloud Cluster**: Creates a state-operated cloud computing cluster, CalCompute, for AI research resources.\n\n## 🤖 Support and Opposition\n- **Support**: Anthropic has endorsed SB 53, and Meta spokesperson Jim Cullinan supports AI regulation that balances guardrails with innovation.\n- **Opposition**: Some in the tech industry argue that states should leave AI regulation to the federal government.\n\n## 📅 Previous Attempts\n- **SB 1047**: A previous AI safety bill that would have made tech companies liable for AI harms was vetoed by Governor Newsom in 2024.\n- **Current Bill**: SB 53 is less severe and focuses on transparency and self-reporting.\n\n## 🗣️ Senator Wiener's Perspective\n- **AI Safety**: Senator Wiener believes AI systems have the potential to cause significant harm and that states should step up to regulate AI safety.\n- **Federal Regulation**: He doubts the federal government's ability to pass meaningful AI safety regulation and sees California as a leader in this area.\n\n## 📅 Future of AI Safety\n- **Governor Newsom's Decision**: The governor is considering SB 53 alongside other bills addressing AI risks.\n- **Industry Pressure**: Wiener acknowledges pressure from large AI PACs but remains focused on his constituents' interests.",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "technologie",
+      "découverte",
+      "ia",
+      "innovation"
+    ],
+    "source": "TechCrunch",
+    "scraped_date": "2025-09-24 10:11:23",
+    "id": 57
+  },
+  {
+    "title": "\"Sur le terrain\" du 23 septembre 2025 : réchauffement climatique, immigration... Les attaques de Donald Trump",
+    "url": "https://www.franceinfo.fr/replay-magazine/franceinfo/sur-le-terrain/sur-le-terrain-du-23-septembre-2025-rechauffement-climatique-immigration-les-attaques-de-donald-trump_7510657.html",
+    "content": "### Résumé\nLes invités de \"Sur le terrain\" du mardi 23 septembre 2025 sont Aude Soufi-Burridge, journaliste internationale, Maxime Lefebvre, ancien diplomate et professeur, Olivier Sueur, chercheur associé à l'Institut d'étude de géopolitique appliqué, et Général Jean-Claude Allard, chercheur associé à l'Iris. La séquence est disponible dans la vidéo ci-dessus.\n\n### Article\n\n#### Les invités de \"Sur le terrain\" du mardi 23 septembre 2025\n\nLes invités de \"Sur le terrain\" du mardi 23 septembre 2025 sont :\n\n- **Aude Soufi-Burridge**, journaliste internationale pour la chaîne franceinfo TV.\n- **Maxime Lefebvre**, ancien diplomate et professeur de relations internationales.\n- **Olivier Sueur**, chercheur associé à l'Institut d'étude de géopolitique appliqué.\n- **Général Jean-Claude Allard**, chercheur associé à l'Iris.\n\nRetrouvez l'intégralité de la séquence dans la vidéo ci-dessus.",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 50,
+    "comments": "",
+    "tags": [
+      "journalisme",
+      "géopolitique",
+      "politique",
+      "relations internationales"
+    ],
+    "source": "France Info",
+    "scraped_date": "2025-09-24 10:11:25",
+    "id": 58
+  },
+  {
+    "title": ":Témoignage\"Des haut-parleurs diffusaient des messages disant qu'on était tous des nazis\" : l'ex-maire de Kherson, en Ukraine, témoigne après trois ans de captivité chez les Russes",
+    "url": "https://www.franceinfo.fr/monde/europe/manifestations-en-ukraine/temoignage-des-haut-parleurs-diffusaient-des-messages-disant-qu-on-etait-tous-des-nazis-l-ex-maire-de-kherson-temoigne-apres-sa-captivite-chez-les-russes_7510612.html",
+    "content": "### Résumé\nUn nouvel échange de prisonniers entre Kiev et Moscou pourrait avoir lieu dans les prochaines semaines, avec la libération de Volodymyr Mikolaienko, ancien maire de Kherson, comme dernier échange. Mikolaienko, qui a été arrêté en avril 2022 et libéré en août 2022, raconte son expérience de trois ans et demi de détention, marquée par des tortures et des interrogatoires. Il exprime sa culpabilité pour les autres prisonniers et son désir de voir les responsables identifiés et punis.\n\n### Article\n\n#### 📢 Libération de prisonniers de guerre entre Kiev et Moscou\nUn nouvel échange de prisonniers pourrait avoir lieu dans les prochaines semaines, marquant une avancée concrète dans les pourparlers entre Kiev et Moscou. Le dernier échange, le 24 août, a vu la libération de Volodymyr Mikolaienko, ancien maire de Kherson.\n\n#### 🏠 Kherson, ville occupée et bombardée\nVolodymyr Mikolaienko a dirigé Kherson de 2014 à 2020, une ville occupée par les Russes pendant six mois au début de la guerre. Aujourd'hui, la ville est bombardée quotidiennement. Mikolaienko, qui a été arrêté le 18 avril 2022, a été libéré en août 2022.\n\n#### 🌟 Convalescence et souvenirs\nUn mois après sa libération, Mikolaienko est toujours en convalescence, profondément marqué par ses trois ans et demi de détention. Il a repris un peu de poids, mais n'est plus celui qu'il était avant la guerre. \" J'ai regardé une interview, il y avait un vieux… Je me demandais : 'C'est qui ce monsieur ?' C'était moi ! \", se remémore-t-il.\n\n#### 🔥 Expérience de détention\nVolodymyr Mikolaienko affirme qu'il veut tout effacer de ce qu'il s'est passé entre son arrestation et sa libération. Il raconte des réveils brutaux tous les jours à 6 heures, des tortures et des interrogatoires. \" Avec les dents \", répond-il lorsqu'on lui demande comment il a tenu. \" Au contrôle du matin : ils nous battaient. À la promenade : ils nous battaient. À l'interrogatoire : ils nous battaient. Au contrôle du soir : ils nous battaient. Du matin au soir, des haut-parleurs diffusaient des messages disant qu'on était tous des nazis \", raconte-t-il.\n\n#### 🌍 Kherson libérée\nKherson est libérée en novembre 2022, mais Mikolaienko ne l'apprendra que six mois plus tard. \" Lors d'un interrogatoire, un Russe me l'a chuchoté à l'oreille \", se rappelle-t-il. Lorsque ses codétenus le voient revenir en cellule tout sourire, ils s'interrogent. Il peut enfin leur glisser fièrement ces mots : \" Kherson est redevenue ukrainienne \". Le centre-ville de Kherson est quasiment désert malgré la libération de la ville.\n\n#### 🌟 Désir de justice\nVolodymyr Mikolaienko explique que l'appartement de sa mère de 91 ans est détruit et qu'il est impatient de retourner à Kherson pour aider à sa reconstruction. Mais surtout, il veut œuvrer à la libération des prisonniers, car quand il pense à eux, il est rongé par la culpabilité. \" En deux heures, les chars russes étaient à l'entrée de la ville. C'est une forme de trahison. Quand la guerre sera terminée, j'espère vraiment que les responsables seront identifiés et punis \", assène l'ex-otage.",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "économie politique",
+      "politique",
+      "relations internationales"
+    ],
+    "source": "France Info",
+    "scraped_date": "2025-09-24 10:11:26",
+    "id": 59
+  },
+  {
+    "title": "\"En cas de menace avérée, nous sommes prêts à défendre nos populations\", assure le chef des armées de l'Otan en Europe",
+    "url": "https://www.franceinfo.fr/monde/europe/manifestations-en-ukraine/en-cas-de-menace-averee-nous-sommes-prets-a-defendre-nos-populations-assure-le-chef-des-armees-de-l-otan-en-europe_7510771.html",
+    "content": "# Résumé\nLe général Alexus Grynkewich, nommé commandant suprême des forces alliées en Europe à l'Otan, assure que les forces sont prêtes à défendre les populations en cas de menace avérée, notamment en réponse aux incursions de drones et d'avions de chasse russes. Il souligne l'importance d'une approche globale et la nécessité de développer rapidement des capacités contre ces engins.\n\n# Article\n\n## 🌍 Contexte et Nomination\nEn juillet, le général Alexus Grynkewich a été nommé commandant suprême des forces alliées en Europe à l'Otan. Cette nomination intervient dans un contexte de tensions croissantes avec la Russie, notamment en ce qui concerne les incursions de drones et d'avions de chasse.\n\n## 🛡️ Préparation et Défense\nLe général Alexus Grynkewich assure que les forces sont prêtes à défendre les populations en cas de menace avérée. \"Nous sommes prêts à défendre nos populations en cas de menace avérée\", a-t-il déclaré dans les colonnes du Monde, mercredi 24 septembre. \"Il ne s'agit plus seulement de maintenir l'ordre à nos frontières mais d'avoir une approche globale\", a-t-il ajouté.\n\n## 🚀 Priorités et Menaces\nLes drones sont la priorité pour les forces alliées. \"Les drones sont notre priorité et nous pensons être en mesure de développer très rapidement des capacités contre ces engins sur notre flanc oriental. C'est là que se trouve actuellement la menace. Tout ce qui pourrait passer au travers des mailles du filet serait susceptible d'affecter n'importe lequel de nos pays\", a déclaré le général.\n\n## 📅 Visite en France\nLe général Alexus Grynkewich doit effectuer sa première visite en France, mercredi. Il a également souligné que chaque situation doit être étudiée au cas par cas. \"Abattre un drone est bien sûr une décision plus facile même s’il faut prendre en compte de nombreux facteurs : ce qui se trouve en dessous au moment où il est abattu, le risque encouru pour la population, et ce pour quoi il représente une menace\", a-t-il mis en garde.\n\n## 🌐 Réactions et Réponses\nLa Russie envoie des drones ou des avions de chasse dans l'espace aérien de pays de l'OTAN. Que leur disent-vous ? Les forces alliées doivent être prêtes à répondre à ces menaces de manière coordonnée et efficace.",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "drones",
+      "défense",
+      "otan",
+      "sécurité",
+      "politique",
+      "relations internationales"
+    ],
+    "source": "France Info",
+    "scraped_date": "2025-09-24 10:11:27",
+    "id": 60
+  },
+  {
+    "title": "États-Unis : la charge de Donald Trump contre l’Europe à l’ONU",
+    "url": "https://www.franceinfo.fr/monde/usa/presidentielle/donald-trump/etats-unis-la-charge-de-donald-trump-contre-l-europe-a-l-onu_7510723.html",
+    "content": "# Résumé\nDonald Trump a débuté sa conférence à l'Assemblée générale des Nations unies avec une blague sur un escalator en panne et des prompteurs éteints. Il a critiqué la politique migratoire de l'Europe, affirmant que les frontières ouvertes doivent être fermées. Il a également attaqué les politiques pour l'environnement et a appelé à abattre les avions russes violant les espaces aériens des alliés de l'OTAN.\n\n# 📢 Donald Trump à l'Assemblée générale des Nations unies\n\n## 🚀 Début de la conférence\nLors de son entrée à l'Assemblée générale des Nations unies, Donald Trump a rencontré un problème technique. L'escalator a échoué à fonctionner, et les prompteurs n'ont pas allumé. \"Voilà tout ce que je reçois de l'ONU : un escalator en panne et un prompteur éteint. Merci beaucoup\", a-t-il ironisé.\n\n## 🌍 Critique de la politique migratoire de l'Europe\nDurant près d'une heure, Trump a vanté son propre bilan et a critiqué la politique migratoire de l'Europe. \"Il est temps de mettre fin à l'expérience des frontières ouvertes. Vos pays vont droit en enfer\", a-t-il affirmé.\n\n## 🌍 Critique des politiques pour l'environnement\nTrump a également attaqué les politiques pour l'environnement. \"Ce changement climatique, c'est la plus grande escroquerie de l'histoire de l'humanité, d'après moi\", a-t-il lancé.\n\n## 🌍 Critique de la guerre en Ukraine\nDernier message adressé à l'Europe et aux alliés de l'OTAN concernant la guerre en Ukraine : ils devraient abattre les avions russes qui violent leurs espaces aériens.",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "institutions",
+      "réformes",
+      "union européenne",
+      "débats publics",
+      "élections",
+      "parlement",
+      "gouvernement",
+      "économie politique",
+      "politique",
+      "politique sociale",
+      "relations internationales"
+    ],
+    "source": "France Info",
+    "scraped_date": "2025-09-24 10:11:28",
+    "id": 61
+  },
+  {
+    "title": "Donald Trump juge que l'Ukraine peut regagner l'intégralité de son territoire face à la Russie, Volodymyr Zelensky salue un \"tournant\"",
+    "url": "https://www.franceinfo.fr/monde/europe/manifestations-en-ukraine/donald-trump-juge-que-l-ukraine-peut-regagner-l-integralite-de-son-territoire-face-a-la-russie-volodymyr-zelensky-salue-un-tournant_7509637.html",
+    "content": "### Résumé\nLe président américain Donald Trump a changé de discours sur la guerre en Ukraine, estimant que Kiev pourrait \"regagner son territoire dans sa forme originelle\" et \"aller plus loin\" face à la Russie. Il a également critiqué la Russie pour son manque de direction militaire et a exprimé son soutien à l'Ukraine.\n\n### Article\n\nLe président américain Donald Trump, changeant abruptement de discours sur la guerre en Ukraine, a jugé, mardi 23 septembre, que Kiev pourrait \"regagner son territoire dans sa forme originelle et peut-être même aller plus loin\" face à la Russie. \"Cela fait trois ans et demi que la Russie mène sans direction claire une guerre qu'une vraie puissance militaire aurait remportée en moins d'une semaine\", a écrit le dirigeant populiste sur son réseau Truth Social, estimant que le pays de Vladimir Poutine \"ressemblait beaucoup à un 'tigre de papier'\". En début d'année, Donald Trump avait sèchement lancé au président ukrainien Volodymyr Zelensky qu'il n'avait \"pas les cartes en main\", l'appelant ensuite à faire des \"échanges de territoire\" avec la Russie.\n\nAprès avoir vu son homologue ukrainien à New York, en marge de l'Assemblée générale de l'ONU, le président des États-Unis estime désormais qu' \"avec du temps, de la patience et le soutien financier de l'Europe et en particulier de l'Otan, c'est tout à fait une option de revenir aux frontières d'où ce conflit a débuté\". \"Cette publication de Donald Trump, c'est un grand tournant\", a encore écrit le président américain sur Truth Social. \"Poutine et la Russie ont de gros problèmes économiques et c'est le moment pour l'Ukraine d'agir\", a-t-il ajouté. \"Dans tous les cas, je souhaite le meilleur aux deux pays. Nous allons continuer à fournir des armes à l'Otan pour que l'Otan en fasse ce qu'elle veut. Bonne chance à tout le monde !\", a-t-il conclu.\n\nMardi, Volodymyr Zelensky s'est satisfait du \"tournant\" opéré par son homologue américain. \"Cette publication de Donald Trump, c'est un grand tournant\", a déclaré le président ukrainien en conférence de presse. Donald Trump \"comprend clairement la situation et est bien informé sur tous les aspects de cette guerre\", a aussi salué Volodymyr Zelensky dans une publication sur les réseaux sociaux.",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "économie politique",
+      "politique",
+      "relations internationales"
+    ],
+    "source": "France Info",
+    "scraped_date": "2025-09-24 10:11:29",
+    "id": 62
+  },
+  {
+    "title": "Espace aérien : des drones créent la psychose dans le ciel européen",
+    "url": "https://www.franceinfo.fr/internet/drones/espace-aerien-des-drones-creent-la-psychose-dans-le-ciel-europeen_7510714.html",
+    "content": "# Drones survolent l'aéroport de Copenhague et d'autres incidents en Europe\n\n## 🛩️ Incidents de drones en Europe\n\n### Aéroport de Copenhague\nL'aéroport de Copenhague a été fermé en urgence lundi 22 septembre après la détection de trois ou quatre drones non identifiés. Les vols ont été annulés et les passagers ont été plongés dans l'incompréhension. \"C'est désagréable à entendre lorsque vous ne savez pas ce qui se passe\", a affirmé une voyageuse. Les drones ont finalement quitté le ciel danois, mais aucun n'a été intercepté par la police.\n\n### Incursions en Norvège\nEn même temps, deux autres drones ont été repérés en Norvège, juste au-dessus de l'aéroport d'Oslo. Ces incidents ont ajouté à la tension en Europe, où les incursions russes se sont multipliées.\n\n### Incidents précédents\nLe 9 septembre dernier, une vingtaine de drones ont survolé la Pologne. Quatre jours après, la Roumanie a également repéré un aéronef envoyé par la Russie. Friday dernier, des avions de combat ont été détectés dans le ciel estonien.\n\n## 🇩🇰 Réactions du Danemark\nLa Première ministre du Danemark, Mette Frederiksen, a affirmé que l'incident pourrait être lié à la Russie. \"Je ne peux absolument pas exclure qu'il s'agisse de la Russie. Je peux juste dire qu'il s'agit d'une attaque grave contre une infrastructure danoise critique\", a-t-elle expliqué.\n\n## 🇷🇺 Réactions du Kremlin\nLe Kremlin a réagi en affirmant ne pas être à l'origine de l'envoi des drones en Norvège et au Danemark.\n\n## 🔍 Analyse et hypothèses\nPour le moment, il est impossible d'affirmer que Moscou est responsable des incidents d'hier soir. Cependant, les hypothèses de la Russie comme responsable ne peuvent pas être écartées.",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "drones",
+      "incidents",
+      "europe",
+      "sécurité",
+      "politique",
+      "relations internationales"
+    ],
+    "source": "France Info",
+    "scraped_date": "2025-09-24 10:11:31",
+    "id": 63
+  },
+  {
+    "title": "Les pays de l'Otan devraient abattre les avions russes violant leurs espaces aériens, juge Donald Trump",
+    "url": "https://www.franceinfo.fr/monde/otan/les-pays-de-l-otan-devraient-abattre-les-avions-russes-violant-leurs-espaces-aeriens-defend-donald-trump_7509574.html",
+    "content": "### Résumé\nDonald Trump a appelé les pays de l'Otan à abattre les avions russes violant leur espace aérien, après trois incursions suspectées de la Russie. Il a également critiqué la Chine et l'Inde pour leur soutien financier à la Russie.\n\n### Article\n#### Donald Trump appelle à abattre les avions russes violant l'espace aérien de l'Otan\nAlors que les pays européens s'interrogent sur leur réponse aux incursions aériennes de la Russie, Donald Trump a une position tranchée. Mardi 23 septembre, le président américain a jugé que les pays de l'Otan devraient abattre les appareils russes violant leur espace aérien, après trois incursions de drones ou d'avions de combat en moins de deux semaines sur le territoire de l'Alliance atlantique, dans lesquelles l'implication de la Russie est soupçonnée ou avérée. 🇺🇸🇷🇺\n\n**Oui, je le pense**, a déclaré le président américain en réponse à cette question : \"Pensez-vous que les pays de l'Otan devraient abattre les avions russes s'ils entrent dans leurs espaces aériens ?\". Il s'exprimait devant les médias à l'occasion d'une réunion avec Volodymyr Zelensky, en marge de l'Assemblée générale de l'ONU, à New York. Il a qualifié le président ukrainien d' **homme courageux qui se bat comme un beau diable**. \"Nous avons beaucoup de respect pour la manière dont l'Ukraine se bat\" , a encore déclaré le dirigeant populiste, dont la relation avec son homologue ukrainien n'a pas toujours été aussi positive, loin de là. 🇺🇦🇺🇸\n\n#### Nouvelles menaces de sanctions contre la Russie\nDonald Trump a également déclaré qu'il se donnait \"un mois\" avant de décider s'il faisait confiance à Vladimir Poutine, qu'il n'a pas encore réussi à convaincre de cesser les hostilités en Ukraine. 🕒🕒\n\nUn peu plus tôt, à la tribune de l'Assemblée générale, le président américain avait accusé la Chine et l'Inde d'être les **\"premiers\" bailleurs de fonds de Moscou** dans son invasion de l'Ukraine, à travers leurs achats de pétrole. Le dirigeant a aussi demandé aux pays européens de cesser **\"immédiatement\"** leurs achats d'or noir russe. Donald Trump a par ailleurs menacé de frapper la Russie de dures sanctions si le conflit se prolongeait. Ce n'est pas la première fois que le président américain émet une telle menace, mais il a jusqu'ici toujours repoussé sa mise en œuvre. 🚨🚨",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "économie politique",
+      "politique",
+      "relations internationales"
+    ],
+    "source": "France Info",
+    "scraped_date": "2025-09-24 10:11:32",
+    "id": 64
+  },
+  {
+    "title": "\"Sur le terrain\" du 23 septembre 2025 : les messages que Donald Trump a voulu faire passer",
+    "url": "https://www.franceinfo.fr/replay-magazine/franceinfo/sur-le-terrain/sur-le-terrain-du-23-septembre-2025-les-messages-que-donald-trump-a-voulu-faire-passer_7510681.html",
+    "content": "# 📢 Les invités de \"Sur le terrain\" du mardi 23 septembre 2025\n\n## 📢 Les invités de \"Sur le terrain\" du mardi 23 septembre 2025\n\nLes invités de \"Sur le terrain\" du mardi 23 septembre 2025 sont : Aude Soufi-Burridge, journaliste internationale franceinfo TV. Maxime Lefebvre, ancien diplomate et professeur de relations internationales. Olivier Sueur, chercheur associé à l'Institut d'étude de géopolitique appliqué. Général Jean-Claude Allard, chercheur associé à l'Iris. Retrouvez l'intégralité de la séquence dans la vidéo ci-dessus.\n\n## 📢 Aude Soufi-Burridge\n\nAude Soufi-Burridge est une journaliste internationale renommée pour ses reportages sur les événements mondiaux. Elle a couvert de nombreux conflits et crises politiques, offrant une perspective unique sur les dynamiques internationales.\n\n## 📢 Maxime Lefebvre\n\nMaxime Lefebvre, ancien diplomate et professeur de relations internationales, a une expertise approfondie dans les enjeux diplomatiques et les relations internationales. Il a travaillé dans plusieurs missions diplomatiques et enseigne actuellement à l'université.\n\n## 📢 Olivier Sueur\n\nOlivier Sueur est un chercheur associé à l'Institut d'étude de géopolitique appliqué. Il se concentre sur les aspects géopolitiques des conflits et des crises, offrant des analyses approfondies et des recommandations stratégiques.\n\n## 📢 Général Jean-Claude Allard\n\nGénéral Jean-Claude Allard est un chercheur associé à l'Iris. Il a une carrière militaire de longue date et a travaillé sur des missions de paix et de sécurité. Il apporte une perspective militaire et stratégique à ses analyses.\n\n## 📢 Discussion et débats\n\nLa discussion entre les invités abordera divers sujets tels que les défis actuels en matière de relations internationales, les dynamiques géopolitiques, et les enjeux de sécurité mondiale. Les invités partageront leurs perspectives et analyseront les tendances actuelles.\n\n## 📢 Conclusion\n\nLa séquence de \"Sur le terrain\" du mardi 23 septembre 2025 promet d'être enrichissante et informative, offrant une perspective variée sur les enjeux internationaux et les défis actuels.",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "géopolitique",
+      "politique",
+      "sécurité mondiale",
+      "relations internationales"
+    ],
+    "source": "France Info",
+    "scraped_date": "2025-09-24 10:11:33",
+    "id": 65
+  },
+  {
+    "title": "Guerre en Ukraine : la Russie assure ne pas avoir \"d'autre alternative\" que de poursuivre le conflit",
+    "url": "https://www.franceinfo.fr/monde/europe/manifestations-en-ukraine/guerre-en-ukraine-moscou-assure-ne-pas-avoir-d-autre-alternative-que-de-poursuivre-le-conflit_7510852.html",
+    "content": "### Résumé\nLe porte-parole de la présidence russe, Dmitri Peskov, a affirmé que la Russie n'a pas d'autre choix que de continuer son attaque à grande échelle en Ukraine. Donald Trump a également changé de discours, affirmant que l'Ukraine pourrait regagner son territoire face à la Russie. Volodymyr Zelensky a salué cette déclaration.\n\n### Article\n\n#### Moscou assure ne pas avoir d'autre choix que de continuer son attaque à grande échelle de l'Ukraine\n\"Nous poursuivons notre opération militaire spéciale pour assurer nos intérêts et atteindre les objectifs que (...) le président de notre pays a établis dès le début. Et nous agissons ainsi pour le présent et l'avenir de notre pays, pour les nombreuses générations à venir. Nous n'avons donc pas d'autre alternative\" , a déclaré le porte-parole de la présidence russe, Dmitri Peskov, dans une interview à la radio RBC , mercredi 24 septembre.\n\n#### Réponse de Dmitri Peskov à Donald Trump\nDans son entretien, Dmitri Peskov a également répondu à Donald Trump qui a comparé la Russie à un \"tigre de papier\" , mardi, à la tribune de l'ONU. \"La Russie n'est pas un tigre, mais est davantage associée à un ours. Et il n'existe pas d'ours de papier\" , a défendu Dmitri Peskov.\n\n#### Changement de discours de Donald Trump\nD'ailleurs, Donald Trump semble de nouveau changer abruptement de discours sur la guerre en Ukraine. Dans un message posté sur son réseau Truth Social, mardi soir, le président américain a assuré que Kiev pourrait \"regagner son territoire dans sa forme originelle et peut-être même aller plus loin\" face à la Russie. \"Cela fait trois ans et demi que la Russie mène sans direction claire une guerre qu'une vraie puissance militaire aurait remportée en moins d'une semaine\" , a-t-il écrit.\n\n#### Réaction de Volodymyr Zelensky\nDans la foulée, Volodymyr Zelensky s'est dit satisfait du \"tournant\" opéré par son homologue américain. \"Cette publication de Donald Trump, c'est un grand tournant\" , a déclaré le président ukrainien en conférence de presse. Donald Trump \"comprend clairement la situation et est bien informé sur tous les aspects de cette guerre\" , a-t-il aussi salué.\n\n###",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 42,
+    "comments": "",
+    "tags": [
+      "gouvernement",
+      "politique",
+      "relations internationales"
+    ],
+    "source": "France Info",
+    "scraped_date": "2025-09-24 10:11:34",
+    "id": 66
+  },
+  {
+    "title": "\"Sur le terrain\" du 23 septembre 2025 : Copenhague et Oslo, des drones d'origine inconnue",
+    "url": "https://www.franceinfo.fr/replay-magazine/franceinfo/sur-le-terrain/sur-le-terrain-du-23-septembre-2025-copenhague-et-oslo-des-drones-d-origine-inconnue_7510639.html",
+    "content": "# Résumé\nLes invités de \"Sur le terrain\" du mardi 23 septembre 2025 sont Olivier Sueur, Jean-Claude Allard, et Maxime Lefebvre. Ils discutent de sujets liés à la géopolitique appliquée, aux relations internationales, et à l'histoire récente.\n\n## 📢 Les invités de \"Sur le terrain\"\n### Olivier Sueur\n**Olivier Sueur** est chercheur associé à l'Institut d'étude de géopolitique appliqué. Il est connu pour ses analyses approfondies sur les dynamiques géopolitiques actuelles.\n\n### Général Jean-Claude Allard\n**Général Jean-Claude Allard** est chercheur associé à l'Iris. Il apporte une perspective militaire et stratégique à la discussion.\n\n### Maxime Lefebvre\n**Maxime Lefebvre** est ancien diplomate et professeur de relations internationales. Il partage son expertise sur les enjeux diplomatiques et les interactions internationales.\n\n## 📹 Discussion en direct\nLes invités discutent de sujets tels que :\n- Les défis géopolitiques actuels\n- Les implications des conflits internationaux\n- Les réformes nécessaires dans les institutions internationales\n- Les impacts des relations bilatérales et multilatérales\n\n## 📅 Événement\nLa séquence complète de \"Sur le terrain\" est disponible dans la vidéo ci-dessus.",
+    "has_been_pretreat": true,
+    "rating": null,
+    "time_spent": 0,
+    "comments": "",
+    "tags": [
+      "géopolitique",
+      "institutions",
+      "politique",
+      "relations internationales"
+    ],
+    "source": "France Info",
+    "scraped_date": "2025-09-24 10:11:35",
+    "id": 67
   }
 ]

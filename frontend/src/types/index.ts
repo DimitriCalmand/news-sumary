@@ -28,10 +28,11 @@ export interface ArticleTitle {
 }
 
 export interface PaginationInfo {
-  start: number;
-  end: number;
+  page: number;
+  per_page: number;
   total: number;
   returned: number;
+  sort_by: string;
 }
 
 export interface TitlesResponse {

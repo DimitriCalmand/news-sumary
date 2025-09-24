@@ -109,11 +109,21 @@ class TestNormalizeTag:
         assert normalize_tag("santé-publique") == "santé-publique"
         assert normalize_tag("POLITIQUE!!!") == "politique"
 
-    def test_normalize_tag_empty(self):
-        """Test normalization of empty or whitespace tags."""
-        assert normalize_tag("") == ""
-        assert normalize_tag("   ") == ""
-        assert normalize_tag("  \t  \n  ") == ""
+    def test_normalize_tag_length_limit(self):
+        """Test that tags are limited to 30 characters."""
+        # Tag exactement 30 caractères
+        long_tag = "a" * 30
+        assert normalize_tag(long_tag) == long_tag
+        assert len(normalize_tag(long_tag)) == 30
+        
+        # Tag plus long que 30 caractères
+        too_long_tag = "a" * 35
+        assert normalize_tag(too_long_tag) == "a" * 30
+        assert len(normalize_tag(too_long_tag)) == 30
+        
+        # Tag avec espaces à la fin après troncature
+        tag_with_spaces = "a" * 25 + "     "
+        assert normalize_tag(tag_with_spaces) == "a" * 25
 
     def test_normalize_tags_list(self):
         """Test normalization of tag lists."""

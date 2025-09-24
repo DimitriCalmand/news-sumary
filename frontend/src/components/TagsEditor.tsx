@@ -35,7 +35,7 @@ export function TagsEditor({
 
     const addTag = (tagToAdd: string) => {
         const cleanTag = tagToAdd.trim().toLowerCase();
-        if (cleanTag && !tags.includes(cleanTag)) {
+        if (cleanTag && !tags.includes(cleanTag) && cleanTag.length <= 30) {
             const newTags = [...tags, cleanTag];
             setTags(newTags);
             if (onTagsChange) {
@@ -119,13 +119,25 @@ export function TagsEditor({
                         <input
                             type="text"
                             value={newTag}
-                            onChange={(e) => setNewTag(e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                if (value.length <= 30) {
+                                    setNewTag(value);
+                                }
+                            }}
                             onKeyDown={handleKeyPress}
                             onBlur={handleInputBlur}
                             placeholder="Nouveau tag..."
-                            className="px-2 py-1 border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none w-32"
+                            className={`px-2 py-1 border rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none w-32 ${
+                                newTag.length > 25 ? 'border-orange-300' : 'border-slate-300'
+                            }`}
                             autoFocus
                         />
+                        {newTag.length > 20 && (
+                            <div className="absolute -top-6 right-0 text-xs text-slate-500">
+                                {newTag.length}/30
+                            </div>
+                        )}
 
                         {/* Suggestions dropdown */}
                         {suggestions.length > 0 && (
