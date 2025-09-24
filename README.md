@@ -8,7 +8,7 @@
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![AI](https://img.shields.io/badge/AI_Powered-FF6B6B?style=for-the-badge&logo=openai&logoColor=white)
 
-**Application web intelligente de gestion et résumé d'articles avec IA conversationnelle**
+**Application web qui améliore vos articles avec l'IA**
 
 [🚀 Démarrage rapide](#-démarrage-rapide) • [� Fonctionnalités](#-fonctionnalités) • [🛠️ Architecture](#️-architecture)
 
@@ -16,100 +16,61 @@
 
 ---
 
-## 📖 À propos
+## ✨ Ce que fait l'app
 
-News Summary est une application moderne qui transforme la façon dont vous lisez et interagissez avec les articles. Grâce à l'intelligence artificielle, elle offre des résumés automatiques, un chat contextuel et une organisation intelligente de votre contenu.
+News Summary transforme vos articles ennuyeux en contenu beau et agréable à lire. L'IA réécrit vos articles pour les rendre plus clairs, ajoute des emojis et une belle mise en forme.
 
-## 🌟 Fonctionnalités
+## 🌟 Fonctionnalités principales
 
-- **🤖 Résumés IA** : Génération automatique de résumés clairs et structurés
-- **💬 Chat intelligent** : Posez des questions directement sur vos articles
-- **🏷️ Organisation** : Tags automatiques et système de notation
-- **📱 Interface moderne** : Design responsive et intuitif
-- **⚙️ Personnalisation** : Configuration flexible des modèles IA
+- **✨ Réécritures IA** : Transforme les articles en versions plus belles et lisibles
+- **💬 Chat intelligent** : Posez des questions sur vos articles
+- **🏷️ Organisation** : Tags et notes pour classer vos articles
+- **📱 Mobile-friendly** : Fonctionne parfaitement sur téléphone
+- **⚙️ Personnalisable** : Choisissez votre modèle IA préféré
 
-## 🛠️ Architecture
+## � Aperçu technique
 
-### Backend (Python/Flask)
-API RESTful pour le traitement des articles et l'intégration IA
-- Scraping automatique d'articles
-- Traitement et résumé par IA
-- Gestion des conversations
-- Cache intelligent
+- **Backend** : Python qui gère les articles et l'IA
+- **Frontend** : Interface web moderne en React
+- **Déploiement** : Tout en Docker pour simplicité
 
-### Frontend (React/TypeScript)
-Interface utilisateur moderne et réactive
-- Navigation fluide des articles
-- Chat en temps réel
-- Paramètres personnalisables
-- Design mobile-first
+## 🚀 Comment démarrer
 
-## 🚀 Démarrage rapide
+### Ce dont vous avez besoin
+- Docker (installé sur votre machine)
 
-### Prérequis
-- Docker et Docker Compose
-- Clé API pour les services IA (Mistral, DeepSeek, etc.)
+### Installation en 3 étapes
 
-### Installation
-
-1. **Clonez le repository**
+1. **Téléchargez le projet**
    ```bash
-   git clone <repository-url>
+   git clone <votre-repo>
    cd news-summary
    ```
 
-2. **Configuration**
-   ```bash
-   # Copiez et éditez le fichier de configuration
-   cp backend/data/settings.json.example backend/data/settings.json
-   # Ajoutez vos clés API dans settings.json
-   ```
+2. **Configurez votre clé IA**
+   - Ouvrez `backend/data/settings.json`
+   - Ajoutez votre clé API Mistral
 
-3. **Démarrage**
+3. **Lancez l'application**
    ```bash
-   # Démarrage complet (backend + frontend)
-   docker-compose up --build
-
-   # Ou démarrage simplifié
    ./full-deploy.sh
    ```
 
-4. **Accès**
-   - Frontend : http://localhost:3000
-   - Backend API : http://localhost:5000
+C'est tout ! Votre app sera disponible sur http://localhost:3000
 
-## 🔧 Configuration IA
+## 🤖 Configuration IA
 
-L'application supporte plusieurs modèles IA :
-- **Mistral AI** : Modèles performants et économiques
-- **DeepSeek** : Alternative open-source
-- **Configuration flexible** : Ajoutez vos propres modèles via l'interface
+L'app fonctionne avec **Mistral AI**. Vous pouvez utiliser différents modèles :
+- Mistral Small (rapide et économique)
+- Mistral Large (plus performant)
 
-Configurez vos clés API dans `backend/data/settings.json` ou via l'interface web.
-
-## 📂 Structure du projet
-
-```
-news-summary/
-├── backend/          # API Python/Flask
-├── frontend/         # Interface React/TypeScript
-├── tests/           # Tests automatisés
-├── docker-compose.yml
-└── full-deploy.sh   # Script de déploiement
-```
-
-## 🤝 Contribution
-
-Les contributions sont les bienvenues ! N'hésitez pas à :
-- Ouvrir une issue pour signaler un bug
-- Proposer des améliorations via les pull requests
-- Partager vos idées pour de nouvelles fonctionnalités
+Ajoutez votre clé API dans les paramètres de l'app pour commencer.
 
 ---
 
 <div align="center">
 
-**Fait avec ❤️ pour les passionnés de lecture intelligente**
+**Rendez vos articles plus agréables à lire ! 📚✨**
 
 </div>
 - ✅ **Recherche et filtrage** par tags et notes
