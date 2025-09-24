@@ -8,69 +8,75 @@
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![AI](https://img.shields.io/badge/AI_Powered-FF6B6B?style=for-the-badge&logo=openai&logoColor=white)
 
-**Application web qui améliore vos articles avec l'IA**
+**Web app that enhances your articles with AI**
 
-[🚀 Démarrage rapide](#-démarrage-rapide) • [� Fonctionnalités](#-fonctionnalités) • [🛠️ Architecture](#️-architecture)
+[🚀 Quick Start](#-how-to-get-started) • [🌟 Features](#-main-features) • [� Tech Overview](#-technical-overview)
 
 </div>
 
 ---
 
-## ✨ Ce que fait l'app
+## ✨ What the app does
 
-News Summary transforme vos articles ennuyeux en contenu beau et agréable à lire. L'IA réécrit vos articles pour les rendre plus clairs, ajoute des emojis et une belle mise en forme.
+News Summary transforms your boring articles into beautiful, enjoyable content. The AI rewrites your articles to make them clearer, adds emojis and beautiful formatting.
 
-## 🌟 Fonctionnalités principales
+## 🌟 Main features
 
-- **✨ Réécritures IA** : Transforme les articles en versions plus belles et lisibles
-- **💬 Chat intelligent** : Posez des questions sur vos articles
-- **🏷️ Organisation** : Tags et notes pour classer vos articles
-- **📱 Mobile-friendly** : Fonctionne parfaitement sur téléphone
-- **⚙️ Personnalisable** : Choisissez votre modèle IA préféré
+- **✨ AI Rewrites** : Transforms articles into more beautiful and readable versions
+- **💬 Smart Chat** : Ask questions about your articles
+- **🏷️ Organization** : Tags and ratings to classify your articles
+- **📱 Mobile-friendly** : Works perfectly on phone
+- **⚙️ Customizable** : Choose your preferred AI model
 
-## � Aperçu technique
+## 📂 Technical overview
 
-- **Backend** : Python qui gère les articles et l'IA
-- **Frontend** : Interface web moderne en React
-- **Déploiement** : Tout en Docker pour simplicité
+- **Backend** : Python that handles articles and AI
+- **Frontend** : Modern web interface in React
+- **Deployment** : Everything in Docker for simplicity
 
-## 🚀 Comment démarrer
+## 🚀 How to get started
 
-### Ce dont vous avez besoin
-- Docker (installé sur votre machine)
+### What you need
+- Docker (installed on your machine)
 
-### Installation en 3 étapes
+### Installation in 3 steps
 
-1. **Téléchargez le projet**
+1. **Download the project**
    ```bash
-   git clone <votre-repo>
+   git clone <your-repo>
    cd news-summary
    ```
 
-2. **Configurez votre clé IA**
-   - Ouvrez `backend/data/settings.json`
-   - Ajoutez votre clé API Mistral
+2. **Configure your AI key**
+   - Open `backend/data/settings.json`
+   - Add your Mistral API key
 
-3. **Lancez l'application**
+3. **Launch the application**
    ```bash
    ./full-deploy.sh
    ```
 
-C'est tout ! Votre app sera disponible sur http://localhost:3000
+That's it! Your app will be available at http://localhost:3000
 
-## 🤖 Configuration IA
+## 🤖 AI Configuration
 
-L'app fonctionne avec **Mistral AI**. Vous pouvez utiliser différents modèles :
-- Mistral Small (rapide et économique)
-- Mistral Large (plus performant)
+The app works with **Mistral AI**. You can use different models:
+- Mistral Small (fast and economical)
+- Mistral Large (more powerful)
 
-Ajoutez votre clé API dans les paramètres de l'app pour commencer.
+Add your API key in the app settings to get started.
+
+## 📂 Technical overview
+
+- **Backend** : Python that handles articles and AI
+- **Frontend** : Modern web interface in React
+- **Deployment** : Everything in Docker for simplicity
 
 ---
 
 <div align="center">
 
-**Rendez vos articles plus agréables à lire ! 📚✨**
+**Make your articles more enjoyable to read! 📚✨**
 
 </div>
 - ✅ **Recherche et filtrage** par tags et notes
