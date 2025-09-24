@@ -1,53 +1,117 @@
-# 📰 News Summary - Gestionnaire d'Articles Intelligent avec IA
+# 📰 News Summary
 
 <div align="center">
 
-![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![AI](https://img.shields.io/badge/AI_Powered-FF6B6B?style=for-the-badge&logo=openai&logoColor=white)
 
-**Une application moderne de gestion et résumé d'articles avec IA personnalisable, interface React et API Flask**
+**Application web intelligente de gestion et résumé d'articles avec IA conversationnelle**
 
-[🚀 Fonctionnalités](#-fonctionnalités) • 
-[🤖 IA Intégrée](#-ia-intégrée) • 
-[📋 Installation](#-installation) • 
-[🛠️ Technologies](#️-technologies) • 
-[🔧 Configuration](#-configuration-ia) • 
-[📚 Documentation](#-documentation-api)
+[🚀 Démarrage rapide](#-démarrage-rapide) • [� Fonctionnalités](#-fonctionnalités) • [🛠️ Architecture](#️-architecture)
 
 </div>
 
 ---
 
-## 📖 Description
+## 📖 À propos
 
-News Summary est une application web complète alimentée par l'IA permettant de gérer, organiser, résumer et discuter d'articles de presse. Elle offre une interface utilisateur moderne avec des fonctionnalités avancées de traitement par IA, chat interactif, système de configuration personnalisable, notation, commentaires, tags, et suivi du temps de lecture.
+News Summary est une application moderne qui transforme la façon dont vous lisez et interagissez avec les articles. Grâce à l'intelligence artificielle, elle offre des résumés automatiques, un chat contextuel et une organisation intelligente de votre contenu.
 
 ## 🌟 Fonctionnalités
 
-### 🤖 **Intelligence Artificielle Intégrée**
-- ✅ **Traitement automatique d'articles** avec résumés et reformatage IA
-- ✅ **Chat intelligent** pour poser des questions sur les articles
-- ✅ **Configuration IA personnalisable** via interface graphique
-- ✅ **Support multi-modèles** (Mistral, DeepSeek, etc.)
-- ✅ **Prompts personnalisables** pour le traitement et le chat
-- ✅ **Tags automatiques** générés par l'IA
+- **🤖 Résumés IA** : Génération automatique de résumés clairs et structurés
+- **💬 Chat intelligent** : Posez des questions directement sur vos articles
+- **🏷️ Organisation** : Tags automatiques et système de notation
+- **📱 Interface moderne** : Design responsive et intuitif
+- **⚙️ Personnalisation** : Configuration flexible des modèles IA
 
-### ⚙️ **Système de Configuration Avancé**
-- ✅ **Interface de paramètres** avec icône d'engrenage
-- ✅ **Gestion des modèles IA** (ajout, suppression, modification)
-- ✅ **Édition des prompts** en temps réel
-- ✅ **Sélection du modèle par défaut** via liste déroulante
-- ✅ **Sauvegarde persistante** des configurations
-- ✅ **Validation automatique** des paramètres
+## 🛠️ Architecture
 
-### 📰 **Gestion d'Articles Intelligente**
-- ✅ **Lecture d'articles** avec traitement IA intégré
-- ✅ **Pagination intelligente** côté serveur et client
+### Backend (Python/Flask)
+API RESTful pour le traitement des articles et l'intégration IA
+- Scraping automatique d'articles
+- Traitement et résumé par IA
+- Gestion des conversations
+- Cache intelligent
+
+### Frontend (React/TypeScript)
+Interface utilisateur moderne et réactive
+- Navigation fluide des articles
+- Chat en temps réel
+- Paramètres personnalisables
+- Design mobile-first
+
+## 🚀 Démarrage rapide
+
+### Prérequis
+- Docker et Docker Compose
+- Clé API pour les services IA (Mistral, DeepSeek, etc.)
+
+### Installation
+
+1. **Clonez le repository**
+   ```bash
+   git clone <repository-url>
+   cd news-summary
+   ```
+
+2. **Configuration**
+   ```bash
+   # Copiez et éditez le fichier de configuration
+   cp backend/data/settings.json.example backend/data/settings.json
+   # Ajoutez vos clés API dans settings.json
+   ```
+
+3. **Démarrage**
+   ```bash
+   # Démarrage complet (backend + frontend)
+   docker-compose up --build
+
+   # Ou démarrage simplifié
+   ./full-deploy.sh
+   ```
+
+4. **Accès**
+   - Frontend : http://localhost:3000
+   - Backend API : http://localhost:5000
+
+## 🔧 Configuration IA
+
+L'application supporte plusieurs modèles IA :
+- **Mistral AI** : Modèles performants et économiques
+- **DeepSeek** : Alternative open-source
+- **Configuration flexible** : Ajoutez vos propres modèles via l'interface
+
+Configurez vos clés API dans `backend/data/settings.json` ou via l'interface web.
+
+## 📂 Structure du projet
+
+```
+news-summary/
+├── backend/          # API Python/Flask
+├── frontend/         # Interface React/TypeScript
+├── tests/           # Tests automatisés
+├── docker-compose.yml
+└── full-deploy.sh   # Script de déploiement
+```
+
+## 🤝 Contribution
+
+Les contributions sont les bienvenues ! N'hésitez pas à :
+- Ouvrir une issue pour signaler un bug
+- Proposer des améliorations via les pull requests
+- Partager vos idées pour de nouvelles fonctionnalités
+
+---
+
+<div align="center">
+
+**Fait avec ❤️ pour les passionnés de lecture intelligente**
+
+</div>
 - ✅ **Recherche et filtrage** par tags et notes
 - ✅ **Résumés automatiques** générés par IA
 - ✅ **Support Markdown** avec highlighting de code

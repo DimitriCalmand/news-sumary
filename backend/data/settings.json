@@ -22,13 +22,6 @@
       "llm": "mistral",
       "name": "mistral small",
       "url": "https://api.mistral.ai/v1/chat/completions"
-    },
-    {
-      "apikey": "sk-6060f1b2ef87432e8b157fd178c557d7",
-      "id": "deepseek-chat",
-      "llm": "deepseek",
-      "name": "deep seek v3",
-      "url": "https://api.deepseek.com/chat/completions"
     }
   ],
   "prompts": {
